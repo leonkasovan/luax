@@ -41,11 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)lib\</OutDir>
-    <IncludePath>E:\Projects\luax\ext-library\iup-3.30;E:\Projects\luax\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)ext-library\iup-3.30;$(SolutionDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)lib\</OutDir>
-    <IncludePath>E:\Projects\luax\ext-library\iup-3.30;E:\Projects\luax\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)ext-library\iup-3.30;$(SolutionDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
