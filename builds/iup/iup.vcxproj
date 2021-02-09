@@ -1,0 +1,334 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1402E7E5-AF13-4187-9F1D-A3DAAF47BC62}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>iup</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>E:\Projects\luax\ext-library\iup-3.30;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)lib\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>E:\Projects\luax\ext-library\iup-3.30;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)lib\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;IUP_ASSERT;_WIN32_WINNT=0x0601;_WIN32_IE=0x0900;COBJMACROS;WINVER=0x0601;NOTREEVIEW;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;IUP_ASSERT;_WIN32_WINNT=0x0601;_WIN32_IE=0x0900;COBJMACROS;WINVER=0x0601;NOTREEVIEW;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ext-library\iup-3.30\backend-d2d.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\backend-dwrite.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\backend-gdix.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\backend-wic.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\bitblt.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\brush.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\cachedimage.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\canvas.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\draw.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\fill.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\font.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\image.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\init.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwindows_help.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwindows_info.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwindows_main.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_brush.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_button.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_calendar.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_canvas.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_clipboard.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_common.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_datepick.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_dialog.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_dragdrop.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_draw.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_draw_gdi.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_draw_wdl.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_filedlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_focus.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_font.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_fontdlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_frame.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_globalattrib.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_handle.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_image.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_image_wdl.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_info.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_key.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_label.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_list.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_loop.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_menu.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_messagedlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_open.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_progressbar.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_str.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_tabs.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_text.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_timer.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_tips.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_toggle.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_touch.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_tree.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iupwin_val.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_animatedlabel.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_array.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_assert.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_attrib.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_backgroundbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_box.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_button.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_callback.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_canvas.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_cbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_childtree.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_class.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_classattrib.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_classbase.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_classinfo.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_colorbar.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_colorbrowser.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_colordlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_colorhsi.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_config.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_detachbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_dial.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_dialog.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_dlglist.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_draw.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_dropbutton.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_elempropdlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_expander.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_export.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_filedlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_fill.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flatbutton.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flatframe.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flatlabel.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flatlist.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flatscrollbar.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flatscrollbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flatseparator.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flattabs.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flattoggle.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flattree.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_flatval.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_focus.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_font.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_fontdlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_frame.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_func.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_gauge.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_getparam.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_globalattrib.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_globalsdlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_gridbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_hbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_image.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_key.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_label.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_layout.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_layoutdlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_ledlex.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_ledparse.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_linefile.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_link.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_list.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_loop.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_mask.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_maskmatch.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_maskparse.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_menu.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_messagedlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_multibox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_names.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_normalizer.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_object.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_open.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_predialogs.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_progressbar.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_progressdlg.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_radio.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_recplay.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_register.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_sbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_scanf.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_scrollbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_show.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_space.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_spin.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_split.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_str.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_strmessage.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_table.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_tabs.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_text.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_thread.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_timer.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_toggle.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_tree.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_user.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_val.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_vbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\iup_zbox.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\memstream.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\misc.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\path.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\string.c" />
+    <ClCompile Include="..\..\ext-library\iup-3.30\strokestyle.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\ext-library\iup-3.30\backend-d2d.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\backend-dwrite.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\backend-gdix.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\backend-wic.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupcbs.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupcontrols.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupdef.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupdraw.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupkey.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupwin_brush.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupwin_draw.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupwin_drv.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupwin_handle.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupwin_info.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iupwin_str.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_array.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_assert.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_attrib.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_box.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_button.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_canvas.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_childtree.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_class.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_classbase.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_class_cbs.hpp" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_colorhsi.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_config.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_dialog.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_dlglist.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_draw.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_drv.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_drvdraw.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_drvfont.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_drvinfo.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_export.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_flatscrollbar.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_flattree.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_focus.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_frame.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_func.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_globalattrib.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_image.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_key.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_label.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_layout.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_ledlex.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_linefile.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_list.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_lng_english.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_loop.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_mask.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_maskmatch.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_maskparse.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_menu.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_names.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_normalizer.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_object.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_plus.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_predialogs.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_progressbar.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_register.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_stdcontrols.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_str.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_strmessage.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_table.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_tabs.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_text.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_timer.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_toggle.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_tree.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_val.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\iup_varg.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\lock.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\memstream.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\misc.h" />
+    <ClInclude Include="..\..\ext-library\iup-3.30\wdl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\ext-library\iup-3.30\copy_from_source.bat" />
+    <None Include="..\..\ext-library\iup-3.30\copy_from_source_iupwin.bat" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

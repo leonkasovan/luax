@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B648F7C1-091B-4D34-8043-56A297529FD2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libcurl</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)lib\</OutDir>
+    <IncludePath>E:\Projects\luax\ext-library\zlib-1.2.11;E:\Projects\luax\ext-library\tiny-curl-7.72.0;E:\Projects\luax\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)lib\</OutDir>
+    <IncludePath>E:\Projects\luax\ext-library\zlib-1.2.11;E:\Projects\luax\ext-library\tiny-curl-7.72.0;E:\Projects\luax\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;BUILDING_LIBCURL;USE_IPV6;USE_WINDOWS_SSPI;USE_SCHANNEL;USE_ZLIB;HAVE_ZLIB;HAVE_LIBZ;HAVE_ZLIB_H;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;BUILDING_LIBCURL;USE_IPV6;USE_WINDOWS_SSPI;USE_SCHANNEL;USE_ZLIB;HAVE_ZLIB;HAVE_LIBZ;HAVE_ZLIB_H;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\altsvc.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\amigaos.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\asyn-ares.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\asyn-thread.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\base64.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\conncache.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\connect.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\content_encoding.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\cookie.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_addrinfo.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_ctype.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_des.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_endian.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_fnmatch.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_gethostname.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_get_line.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_gssapi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_memrchr.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_multibyte.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_ntlm_core.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_ntlm_wb.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_path.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_range.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_rtmp.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_sasl.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_sspi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_threads.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\dict.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\doh.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\dotdot.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\dynbuf.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\easy.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\escape.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\file.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\fileinfo.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\formdata.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\ftp.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\ftplistparser.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\getenv.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\getinfo.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\gopher.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hash.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hmac.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hostasyn.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hostcheck.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hostip.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hostip4.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hostip6.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hostsyn.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\http.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\http2.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\http_chunks.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\http_digest.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\http_negotiate.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\http_ntlm.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\http_proxy.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\idn_win32.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\if2ip.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\imap.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\inet_ntop.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\inet_pton.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\krb5.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\ldap.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\llist.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\md4.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\md5.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\memdebug.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\mime.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\mprintf.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\mqtt.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\multi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\netrc.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\non-ascii.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\nonblock.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\nwlib.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\nwos.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\openldap.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\parsedate.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\pingpong.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\pop3.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\progress.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\psl.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\rand.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\rename.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\rtsp.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\security.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\select.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\sendf.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\setopt.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\sha256.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\share.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\slist.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\smb.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\smtp.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\socketpair.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\socks.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\socks_gssapi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\socks_sspi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\speedcheck.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\splay.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\strcase.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\strdup.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\strerror.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\strtok.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\strtoofft.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\system_win32.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\telnet.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\tftp.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\timeval.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\transfer.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\url.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\urlapi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\cleartext.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\cram.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\digest.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\digest_sspi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\krb5_gssapi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\krb5_sspi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\ntlm.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\ntlm_sspi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\oauth2.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\spnego_gssapi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\spnego_sspi.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vauth\vauth.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\version.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\version_win32.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vquic\ngtcp2.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vquic\quiche.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vquic\vquic.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vssh\libssh.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vssh\libssh2.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\bearssl.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\gskit.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\gtls.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\keylog.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\mbedtls.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\mbedtls_threadlock.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\mesalink.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\nss.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\openssl.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\schannel.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\schannel_verify.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\sectransp.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\vtls.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\vtls\wolfssl.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\warnless.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\wildcard.c" />
+    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\x509asn1.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
