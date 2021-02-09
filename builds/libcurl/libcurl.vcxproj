@@ -41,11 +41,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)lib\</OutDir>
-    <IncludePath>E:\Projects\luax\ext-library\zlib-1.2.11;E:\Projects\luax\ext-library\tiny-curl-7.72.0;E:\Projects\luax\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)ext-library\zlib-1.2.11;$(SolutionDir)ext-library\tiny-curl-7.72.0;$(SolutionDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)lib\</OutDir>
-    <IncludePath>E:\Projects\luax\ext-library\zlib-1.2.11;E:\Projects\luax\ext-library\tiny-curl-7.72.0;E:\Projects\luax\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)ext-library\zlib-1.2.11;$(SolutionDir)ext-library\tiny-curl-7.72.0;$(SolutionDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
