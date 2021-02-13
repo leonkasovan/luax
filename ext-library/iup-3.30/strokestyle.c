@@ -24,38 +24,13 @@
 
 #include "misc.h"
 #include "lock.h"
-#include "backend-d2d.h"
 #include "backend-gdix.h"
 
 
 static WD_HSTROKESTYLE
 wdCreateStrokeStyleImpl(UINT dashStyle, const float* dashes, UINT dashesCount, UINT lineCap, UINT lineJoin)
 {
-    if(d2d_enabled()) {
-        HRESULT hr;
-        dummy_D2D1_STROKE_STYLE_PROPERTIES p;
-        dummy_ID2D1StrokeStyle *s;
-
-        p.startCap = lineCap;
-        p.endCap = lineCap;
-        p.dashCap = lineCap;
-        p.lineJoin = lineJoin;
-        p.miterLimit = 1.0f;
-        p.dashStyle = dashStyle;
-        p.dashOffset = 0.0f;
-
-        wd_lock();
-        hr = dummy_ID2D1Factory_CreateStrokeStyle(d2d_factory, &p, dashes, dashesCount, &s);
-        wd_unlock();
-        if (FAILED(hr)) {
-            WD_TRACE_HR("wdCreateStrokeStyleImpl: "
-                        "ID2D1Factory::CreateStrokeStyle() failed.");
-            return NULL;
-        }
-
-        return (WD_HSTROKESTYLE)s;
-    }
-    else {
+    {
         gdix_strokestyle_t* s;
 
         s = (gdix_strokestyle_t*) malloc(
@@ -115,9 +90,7 @@ wdCreateStrokeStyleCustom(const float* dashes, UINT dashesCount, UINT lineCap, U
 void
 wdDestroyStrokeStyle(WD_HSTROKESTYLE hStrokeStyle)
 {
-    if(d2d_enabled()) {
-        dummy_ID2D1StrokeStyle_Release((dummy_ID2D1StrokeStyle*) hStrokeStyle);
-    } else {
+    {
         free((gdix_strokestyle_t*) hStrokeStyle);
     }
 }

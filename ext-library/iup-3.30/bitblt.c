@@ -22,8 +22,6 @@
  */
 
 #include "misc.h"
-#include "backend-d2d.h"
-#include "backend-wic.h"
 #include "backend-gdix.h"
 #include "lock.h"
 
@@ -32,34 +30,7 @@ void
 wdBitBltImage(WD_HCANVAS hCanvas, const WD_HIMAGE hImage,
                const WD_RECT* pDestRect, const WD_RECT* pSourceRect)
 {
-    if(d2d_enabled()) {
-        d2d_canvas_t* c = (d2d_canvas_t*) hCanvas;
-        IWICBitmapSource* bitmap = (IWICBitmapSource*) hImage;
-        dummy_ID2D1Bitmap* b;
-        HRESULT hr;
-
-        /* Compensation for the translation in the base transformation matrix.
-         * This is to fit the image precisely into the pixel grid the canvas
-         * when there is no custom transformation applied.
-         */
-        dummy_D2D1_RECT_F dest = {
-                pDestRect->x0 - D2D_BASEDELTA_X,
-                pDestRect->y0 - D2D_BASEDELTA_Y,
-                pDestRect->x1 - D2D_BASEDELTA_X,
-                pDestRect->y1 - D2D_BASEDELTA_Y
-        };
-
-        hr = dummy_ID2D1RenderTarget_CreateBitmapFromWicBitmap(c->target, bitmap, NULL, &b);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdBitBltImage: "
-                        "ID2D1RenderTarget::CreateBitmapFromWicBitmap() failed.");
-            return;
-        }
-
-        dummy_ID2D1RenderTarget_DrawBitmap(c->target, b, &dest, 1.0f,
-                dummy_D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, (dummy_D2D1_RECT_F*) pSourceRect);
-        dummy_ID2D1Bitmap_Release(b);
-    } else {
+    {
         gdix_canvas_t* c = (gdix_canvas_t*) hCanvas;
         dummy_GpImage* b = (dummy_GpImage*) hImage;
         float dx, dy, dw, dh;
@@ -96,22 +67,7 @@ void
 wdBitBltCachedImage(WD_HCANVAS hCanvas, const WD_HCACHEDIMAGE hCachedImage,
                     float x, float y)
 {
-    if(d2d_enabled()) {
-        d2d_canvas_t* c = (d2d_canvas_t*) hCanvas;
-        dummy_ID2D1Bitmap* b = (dummy_ID2D1Bitmap*) hCachedImage;
-        dummy_D2D1_SIZE_U sz;
-        dummy_D2D1_RECT_F dest;
-
-        dummy_ID2D1Bitmap_GetPixelSize(b, &sz);
-
-        dest.left = x - D2D_BASEDELTA_X;
-        dest.top = y - D2D_BASEDELTA_X;
-        dest.right = (x + sz.width) - D2D_BASEDELTA_X;
-        dest.bottom = (y + sz.height) - D2D_BASEDELTA_X;
-
-        dummy_ID2D1RenderTarget_DrawBitmap(c->target, b, &dest, 1.0f,
-                dummy_D2D1_BITMAP_INTERPOLATION_MODE_LINEAR, NULL);
-    } else {
+    {
         gdix_canvas_t* c = (gdix_canvas_t*) hCanvas;
         dummy_GpCachedBitmap* cb = (dummy_GpCachedBitmap*) hCachedImage;
 
@@ -123,43 +79,7 @@ void
 wdBitBltHICON(WD_HCANVAS hCanvas, HICON hIcon,
               const WD_RECT* pDestRect, const WD_RECT* pSourceRect)
 {
-    if(d2d_enabled()) {
-        IWICBitmap* bitmap;
-        IWICFormatConverter* converter;
-        HRESULT hr;
-
-        hr = IWICImagingFactory_CreateBitmapFromHICON(wic_factory, hIcon, &bitmap);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdBitBltHICON: "
-                        "IWICImagingFactory::CreateBitmapFromHICON() failed.");
-            goto err_CreateBitmapFromHICON;
-        }
-
-        hr = IWICImagingFactory_CreateFormatConverter(wic_factory, &converter);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdBitBltHICON: "
-                        "IWICImagingFactory::CreateFormatConverter() failed.");
-            goto err_CreateFormatConverter;
-        }
-
-        hr = IWICFormatConverter_Initialize(converter,
-                (IWICBitmapSource*) bitmap, &wic_pixel_format,
-                WICBitmapDitherTypeNone, NULL, 0.0f, WICBitmapPaletteTypeCustom);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdBitBltHICON: "
-                        "IWICFormatConverter::Initialize() failed.");
-            goto err_Initialize;
-        }
-
-        wdBitBltImage(hCanvas, (WD_HIMAGE) converter, pDestRect, pSourceRect);
-
-err_Initialize:
-        IWICFormatConverter_Release(converter);
-err_CreateFormatConverter:
-        IWICBitmap_Release(bitmap);
-err_CreateBitmapFromHICON:
-        ;  /* noop */
-    } else {
+    {
         dummy_GpBitmap* b;
         int status;
 

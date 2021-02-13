@@ -27,8 +27,6 @@
 #include "iupwin_str.h"
 
 #include "wdl.h"
-#include "backend-d2d.h"
-#include "backend-wic.h"
 #include "backend-gdix.h"
 
 
@@ -149,63 +147,7 @@ static void wdBufferMap2Bitmap(BYTE* Scan0, INT dstStride, INT srcStride, UINT c
 
 static WD_HIMAGE wdlCreateImageFromBuffer(UINT uWidth, UINT uHeight, UINT srcStride, const BYTE* pBuffer, int pixelFormat, const iupColor* cPalette, const char* bgcolor, int make_inactive)
 {
-  if (d2d_enabled()) {
-    IWICBitmap* bitmap = NULL;
-    HRESULT hr;
-    WICRect rect;
-    IWICBitmapLock *bitmap_lock = NULL;
-    UINT cbBufferSize = 0;
-    UINT dstStride = 0;
-    BYTE *Scan0 = NULL;
-
-    if (wic_factory == NULL) {
-      WD_TRACE("wdlCreateImageFromBuffer: Image API disabled.");
-      return NULL;
-    }
-
-    hr = IWICImagingFactory_CreateBitmap(wic_factory, uWidth, uHeight, &wic_pixel_format, WICBitmapCacheOnDemand, &bitmap);   /* GUID_WICPixelFormat32bppPBGRA - pre-multiplied alpha, BGRA order */
-    if (FAILED(hr)) {
-      WD_TRACE_HR("wdlCreateImageFromBuffer: "
-                  "IWICImagingFactory::CreateBitmap() failed.");
-      return NULL;
-    }
-
-    rect.X = 0;
-    rect.Y = 0;
-    rect.Width = uWidth;
-    rect.Height = uHeight;
-
-    hr = IWICBitmap_Lock(bitmap, &rect, WICBitmapLockWrite, &bitmap_lock);
-    if (FAILED(hr)) {
-      WD_TRACE_HR("wdlCreateImageFromBuffer: "
-                  "IWICBitmap::Lock() failed.");
-      IWICBitmap_Release(bitmap);
-      return NULL;
-    }
-
-    IWICBitmapLock_GetStride(bitmap_lock, &dstStride);
-    IWICBitmapLock_GetDataPointer(bitmap_lock, &cbBufferSize, &Scan0);
-
-    if (pixelFormat == WD_PIXELFORMAT_PALETTE) {
-      if (srcStride == 0) srcStride = uWidth * 1;
-      wdBufferMap2Bitmap(Scan0, dstStride, srcStride, 4, uWidth, uHeight, pBuffer, cPalette);
-    }
-    else
-    {
-      if (pixelFormat == WD_PIXELFORMAT_R8G8B8) {
-        if (srcStride == 0) srcStride = uWidth * 3;
-        wdBufferRGB2Bitmap(Scan0, dstStride, srcStride, 4, uWidth, uHeight, pBuffer, bgcolor, make_inactive);
-      }
-      else if (pixelFormat == WD_PIXELFORMAT_R8G8B8A8) {
-        if (srcStride == 0) srcStride = uWidth * 4;
-        wdBufferRGBA2Bitmap(Scan0, dstStride, srcStride, TRUE, uWidth, uHeight, pBuffer, bgcolor, make_inactive);
-      }
-    }
-
-    IWICBitmapLock_Release(bitmap_lock);
-    return (WD_HIMAGE)bitmap;
-  }
-  else {
+  {
     dummy_GpPixelFormat format;
     int status;
     dummy_GpBitmap *bitmap = NULL;

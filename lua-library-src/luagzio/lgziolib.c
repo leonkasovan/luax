@@ -146,15 +146,15 @@ static gzFile *newfile (lua_State *L) {
 ** correct __close for 'popen' files
 */
 static int io_pclose (lua_State *L) {
-  gzFile *p = topfile(L);
-  int ok = lua_pclose(L, *p);
+  gzFile *p = (gzFile *)topfile(L);
+  int ok = lua_pclose(L, (FILE *)*p);
   *p = NULL;
   return pushresult(L, ok, NULL);
 }
 
 
 static int io_fclose (lua_State *L) {
-  gzFile *p = topfile(L);
+  gzFile *p = (gzFile *)topfile(L);
   int ok = (gzclose(*p) == 0);
   *p = NULL;
   return pushresult(L, ok, NULL);
@@ -179,7 +179,7 @@ static int io_close (lua_State *L) {
 static int io_gc (lua_State *L) {
   gzFile f = *topfile(L);
   /* ignore closed files and standard files */
-  if (f != NULL && f != stdin && f != stdout && f != stderr)
+  if (f != NULL && (FILE *)f != stdin && (FILE *)f != stdout && (FILE *)f != stderr)
     aux_close(L);
   return 0;
 }
@@ -208,14 +208,14 @@ static int io_popen (lua_State *L) {
   const char *filename = luaL_checkstring(L, 1);
   const char *mode = luaL_optstring(L, 2, "r");
   gzFile *pf = newfile(L);
-  *pf = lua_popen(L, filename, mode);
+  *pf = (gzFile)lua_popen(L, filename, mode);
   return (*pf == NULL) ? pushresult(L, 0, filename) : 1;
 }
 
 
 static int io_tmpfile (lua_State *L) {
   gzFile *pf = newfile(L);
-  *pf = tmpfile();
+  *pf = (gzFile)tmpfile();
   return (*pf == NULL) ? pushresult(L, 0, NULL) : 1;
 }
 
@@ -305,7 +305,7 @@ static int io_lines (lua_State *L) {
 
 static int read_number (lua_State *L, gzFile f) {
   lua_Number d;
-  if (fscanf(f, LUA_NUMBER_SCAN, &d) == 1) {
+  if (fscanf((FILE *)f, LUA_NUMBER_SCAN, &d) == 1) {
     lua_pushnumber(L, d);
     return 1;
   }
@@ -449,7 +449,7 @@ static int g_write (lua_State *L, gzFile f, int arg) {
     if (lua_type(L, arg) == LUA_TNUMBER) {
       /* optimization: could be done exactly as for strings */
       status = status &&
-          fprintf(f, LUA_NUMBER_FMT, lua_tonumber(L, arg)) > 0;
+          fprintf((FILE *)f, LUA_NUMBER_FMT, lua_tonumber(L, arg)) > 0;
     }
     else {
       size_t l;
@@ -493,7 +493,7 @@ static int f_setvbuf (lua_State *L) {
   gzFile f = tofile(L);
   int op = luaL_checkoption(L, 2, NULL, modenames);
   lua_Integer sz = luaL_optinteger(L, 3, LUAL_BUFFERSIZE);
-  int res = setvbuf(f, NULL, mode[op], sz);
+  int res = setvbuf((FILE *)f, NULL, mode[op], sz);
   return pushresult(L, res == 0, NULL);
 }
 
@@ -581,9 +581,9 @@ LUALIB_API int luaopen_gzio (lua_State *L) {
   lua_settable (L, -3);
 
   /* create (and set) default files */
-  createstdfile(L, stdin, IO_INPUT, "stdin");
-  createstdfile(L, stdout, IO_OUTPUT, "stdout");
-  createstdfile(L, stderr, 0, "stderr");
+  createstdfile(L, (gzFile)stdin, IO_INPUT, "stdin");
+  createstdfile(L, (gzFile)stdout, IO_OUTPUT, "stdout");
+  createstdfile(L, (gzFile)stderr, 0, "stderr");
 
   /* create environment for 'popen' */
   lua_getfield(L, -1, "popen");

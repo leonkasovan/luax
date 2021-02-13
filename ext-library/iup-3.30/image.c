@@ -22,8 +22,6 @@
  */
 
 #include "misc.h"
-#include "backend-d2d.h"
-#include "backend-wic.h"
 #include "backend-gdix.h"
 #include "lock.h"
 #include "memstream.h"
@@ -32,32 +30,7 @@
 WD_HIMAGE
 wdCreateImageFromHBITMAP(HBITMAP hBmp)
 {
-    if(d2d_enabled()) {
-        IWICBitmap* bitmap;
-        IWICBitmapSource* converted_bitmap;
-        HRESULT hr;
-
-        if(wic_factory == NULL) {
-            WD_TRACE("wdCreateImageFromHBITMAP: Image API disabled.");
-            return NULL;
-        }
-
-        hr = IWICImagingFactory_CreateBitmapFromHBITMAP(wic_factory, hBmp,
-                                                        NULL, WICBitmapUsePremultipliedAlpha, &bitmap);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdCreateImageFromHBITMAP: "
-                        "IWICImagingFactory::CreateBitmapFromHBITMAP() failed.");
-            return NULL;
-        }
-
-        converted_bitmap = wic_convert_bitmap((IWICBitmapSource*) bitmap);
-        if(converted_bitmap == NULL)
-            WD_TRACE("wdCreateImageFromHBITMAP: wic_convert_bitmap() failed.");
-
-        IWICBitmap_Release(bitmap);
-
-        return (WD_HIMAGE) converted_bitmap;
-    } else {
+    {
         dummy_GpBitmap* b;
         int status;
 
@@ -76,42 +49,7 @@ wdCreateImageFromHBITMAP(HBITMAP hBmp)
 WD_HIMAGE
 wdLoadImageFromFile(const WCHAR* pszPath)
 {
-    if(d2d_enabled()) {
-        IWICBitmapDecoder* decoder;
-        IWICBitmapFrameDecode* bitmap;
-        IWICBitmapSource* converted_bitmap = NULL;
-        HRESULT hr;
-
-        if(wic_factory == NULL) {
-            WD_TRACE("wdLoadImageFromFile: Image API disabled.");
-            return NULL;
-        }
-
-        hr = IWICImagingFactory_CreateDecoderFromFilename(wic_factory, pszPath,
-                NULL, GENERIC_READ, WICDecodeMetadataCacheOnLoad, &decoder);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdLoadImageFromFile: "
-                        "IWICImagingFactory::CreateDecoderFromFilename() failed.");
-            goto err_CreateDecoderFromFilename;
-        }
-
-        hr = IWICBitmapDecoder_GetFrame(decoder, 0, &bitmap);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdLoadImageFromFile: "
-                        "IWICBitmapDecoder::GetFrame() failed.");
-            goto err_GetFrame;
-        }
-
-        converted_bitmap = wic_convert_bitmap((IWICBitmapSource*) bitmap);
-        if(converted_bitmap == NULL)
-            WD_TRACE("wdLoadImageFromFile: wic_convert_bitmap() failed.");
-
-        IWICBitmapFrameDecode_Release(bitmap);
-err_GetFrame:
-        IWICBitmapDecoder_Release(decoder);
-err_CreateDecoderFromFilename:
-        return (WD_HIMAGE) converted_bitmap;
-    } else {
+    {
         dummy_GpImage* img;
         int status;
 
@@ -129,42 +67,7 @@ err_CreateDecoderFromFilename:
 WD_HIMAGE
 wdLoadImageFromIStream(IStream* pStream)
 {
-    if(d2d_enabled()) {
-        IWICBitmapDecoder* decoder;
-        IWICBitmapFrameDecode* bitmap;
-        IWICBitmapSource* converted_bitmap = NULL;
-        HRESULT hr;
-
-        if(wic_factory == NULL) {
-            WD_TRACE("wdLoadImageFromIStream: Image API disabled.");
-            return NULL;
-        }
-
-        hr = IWICImagingFactory_CreateDecoderFromStream(wic_factory, pStream,
-                NULL, WICDecodeMetadataCacheOnLoad, &decoder);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdLoadImageFromIStream: "
-                        "IWICImagingFactory::CreateDecoderFromFilename() failed.");
-            goto err_CreateDecoderFromFilename;
-        }
-
-        hr = IWICBitmapDecoder_GetFrame(decoder, 0, &bitmap);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdLoadImageFromIStream: "
-                        "IWICBitmapDecoder::GetFrame() failed.");
-            goto err_GetFrame;
-        }
-
-        converted_bitmap = wic_convert_bitmap((IWICBitmapSource*) bitmap);
-        if(converted_bitmap == NULL)
-            WD_TRACE("wdLoadImageFromIStream: wic_convert_bitmap() failed.");
-
-        IWICBitmapFrameDecode_Release(bitmap);
-err_GetFrame:
-        IWICBitmapDecoder_Release(decoder);
-err_CreateDecoderFromFilename:
-        return (WD_HIMAGE) converted_bitmap;
-    } else {
+    {
         dummy_GpImage* img;
         int status;
 
@@ -205,9 +108,7 @@ wdLoadImageFromResource(HINSTANCE hInstance, const WCHAR* pszResType,
 void
 wdDestroyImage(WD_HIMAGE hImage)
 {
-    if(d2d_enabled()) {
-        IWICBitmapSource_Release((IWICBitmapSource*) hImage);
-    } else {
+    {
         gdix_vtable->fn_DisposeImage((dummy_GpImage*) hImage);
     }
 }
@@ -215,15 +116,7 @@ wdDestroyImage(WD_HIMAGE hImage)
 void
 wdGetImageSize(WD_HIMAGE hImage, UINT* puWidth, UINT* puHeight)
 {
-    if(d2d_enabled()) {
-        UINT w, h;
-
-        IWICBitmapSource_GetSize((IWICBitmapSource*) hImage, &w, &h);
-        if(puWidth != NULL)
-            *puWidth = w;
-        if(puHeight != NULL)
-            *puHeight = h;
-    } else {
+    {
         if(puWidth != NULL)
             gdix_vtable->fn_GetImageWidth((dummy_GpImage*) hImage, puWidth);
         if(puHeight != NULL)
@@ -325,67 +218,7 @@ WD_HIMAGE
 wdCreateImageFromBuffer(UINT uWidth, UINT uHeight, UINT srcStride, const BYTE* pBuffer,
                         int pixelFormat, const COLORREF* cPalette, UINT uPaletteSize)
 {
-    if (d2d_enabled()) {
-        IWICBitmap* bitmap = NULL;
-        HRESULT hr;
-        WICRect rect = { 0, 0, uWidth, uHeight};
-        IWICBitmapLock *bitmap_lock = NULL;
-        UINT cbBufferSize = 0;
-        UINT dstStride = 0;
-        BYTE *Scan0 = NULL;
-
-        if(wic_factory == NULL) {
-            WD_TRACE("wdCreateImageFromBuffer: Image API disabled.");
-            return NULL;
-        }
-
-        /* wic_pixel_format is GUID_WICPixelFormat32bppPBGRA;
-         * i.e. pre-multiplied alpha, BGRA order */
-        hr = IWICImagingFactory_CreateBitmap(wic_factory, uWidth, uHeight,
-                                &wic_pixel_format, WICBitmapCacheOnDemand, &bitmap);
-        if(FAILED(hr)) {
-            WD_TRACE_HR("wdCreateImageFromBuffer: "
-                        "IWICImagingFactory::CreateBitmap() failed.");
-            return NULL;
-        }
-
-        hr = IWICBitmap_Lock(bitmap, &rect, WICBitmapLockWrite, &bitmap_lock);
-        if (FAILED(hr)) {
-            WD_TRACE_HR("wdCreateImageFromBuffer: "
-                        "IWICBitmap::Lock() failed.");
-            IWICBitmap_Release(bitmap);
-            return NULL;
-        }
-
-        IWICBitmapLock_GetStride(bitmap_lock, &dstStride);
-        IWICBitmapLock_GetDataPointer(bitmap_lock, &cbBufferSize, &Scan0);
-
-        switch(pixelFormat) {
-            case WD_PIXELFORMAT_PALETTE:
-                colormap_buffer_to_bitmap_data(uWidth, uHeight, Scan0, dstStride, 4,
-                                pBuffer, srcStride, cPalette, uPaletteSize);
-                break;
-
-            case WD_PIXELFORMAT_R8G8B8:
-                raw_buffer_to_bitmap_data(uWidth, uHeight, Scan0, dstStride, 4,
-                                pBuffer, srcStride, 3, 0, 1, 2, 0, 0);
-                break;
-
-            case WD_PIXELFORMAT_R8G8B8A8:
-                raw_buffer_to_bitmap_data(uWidth, uHeight, Scan0, dstStride, 4,
-                                pBuffer, srcStride, 4, 0, 1, 2, 3, RAW_BUFFER_FLAG_HASALPHA | RAW_BUFFER_FLAG_PREMULTIPLYALPHA);
-                break;
-
-            case WD_PIXELFORMAT_B8G8R8A8:
-                raw_buffer_to_bitmap_data(uWidth, uHeight, Scan0, dstStride, 4,
-                                pBuffer, srcStride, 4, 2, 1, 0, 3, RAW_BUFFER_FLAG_HASALPHA | RAW_BUFFER_FLAG_BOTTOMUP);
-                break;
-        }
-
-        IWICBitmapLock_Release(bitmap_lock);
-        return (WD_HIMAGE)bitmap;
-    }
-    else {
+    {
         dummy_GpPixelFormat format;
         int status;
         dummy_GpBitmap *bitmap = NULL;

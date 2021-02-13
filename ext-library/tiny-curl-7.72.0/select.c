@@ -258,8 +258,8 @@ int Curl_socket_check(curl_socket_t readfd0, /* two sockets to read from */
   struct pollfd pfd[3];
   int num;
 #else
-  struct timeval pending_tv;
-  struct timeval *ptimeout;
+  //struct timeval pending_tv;
+  //struct timeval *ptimeout;
   curl_fd_set fds_read;
   curl_fd_set fds_write;
   curl_fd_set fds_err;

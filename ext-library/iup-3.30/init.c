@@ -22,9 +22,6 @@
  */
 
 #include "misc.h"
-#include "backend-d2d.h"
-#include "backend-dwrite.h"
-#include "backend-wic.h"
 #include "backend-gdix.h"
 #include "lock.h"
 
@@ -47,11 +44,6 @@ wdPreInitialize(void (*fnLock)(void), void (*fnUnlock)(void), DWORD dwFlags)
 static int
 wd_init_core_api(void)
 {
-    if(!(wd_preinit_flags & WD_DISABLE_D2D)) {
-        if(d2d_init() == 0)
-            return 0;
-    }
-
     if(!(wd_preinit_flags & WD_DISABLE_GDIPLUS)) {
         if(gdix_init() == 0)
             return 0;
@@ -63,18 +55,13 @@ wd_init_core_api(void)
 static void
 wd_fini_core_api(void)
 {
-    if(d2d_enabled())
-        d2d_fini();
-    else
-        gdix_fini();
+   gdix_fini();
 }
 
 static int
 wd_init_image_api(void)
 {
-    if(d2d_enabled()) {
-        return wic_init();
-    } else {
+	{
         /* noop */
         return 0;
     }
@@ -83,9 +70,7 @@ wd_init_image_api(void)
 static void
 wd_fini_image_api(void)
 {
-    if(d2d_enabled()) {
-        wic_fini();
-    } else {
+    {
         /* noop */
     }
 }
@@ -93,9 +78,7 @@ wd_fini_image_api(void)
 static int
 wd_init_string_api(void)
 {
-    if(d2d_enabled()) {
-        return dwrite_init();
-    } else {
+    {
         /* noop */
         return 0;
     }
@@ -104,9 +87,7 @@ wd_init_string_api(void)
 static void
 wd_fini_string_api(void)
 {
-    if(d2d_enabled()) {
-        dwrite_fini();
-    } else {
+    {
         /* noop */
     }
 }
@@ -212,10 +193,7 @@ wdTerminate(DWORD dwFlags)
 int
 wdBackend(void)
 {
-    if(d2d_enabled()) {
-        return WD_BACKEND_D2D;
-    } 
-    
+  
     if(gdix_enabled()) {
         return WD_BACKEND_GDIPLUS;
     }

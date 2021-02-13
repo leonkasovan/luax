@@ -327,25 +327,13 @@
     <ClCompile Include="..\..\ext-library\iup-3.30\iupwindows_main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ext-library\iup-3.30\backend-d2d.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ext-library\iup-3.30\backend-dwrite.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ext-library\iup-3.30\backend-gdix.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ext-library\iup-3.30\backend-wic.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\iup-3.30\bitblt.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\iup-3.30\brush.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ext-library\iup-3.30\cachedimage.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\iup-3.30\canvas.c">
@@ -683,16 +671,7 @@
     <ClInclude Include="..\..\ext-library\iup-3.30\iupkey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\ext-library\iup-3.30\backend-d2d.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ext-library\iup-3.30\backend-dwrite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ext-library\iup-3.30\backend-gdix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ext-library\iup-3.30\backend-wic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ext-library\iup-3.30\iup_lng_english.h">
@@ -734,13 +713,5 @@
     <ClInclude Include="..\..\ext-library\iup-3.30\wdl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\ext-library\iup-3.30\copy_from_source.bat">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\..\ext-library\iup-3.30\copy_from_source_iupwin.bat">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

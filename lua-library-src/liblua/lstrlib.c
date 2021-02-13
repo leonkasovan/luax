@@ -823,6 +823,7 @@ static int str_format (lua_State *L) {
   return 1;
 }
 
+LUALIB_API int str_split (lua_State *L);	//defined in lcsvlib.c -> in function "l_parse"
 
 static const luaL_Reg strlib[] = {
   {"byte", str_byte},
@@ -840,6 +841,7 @@ static const luaL_Reg strlib[] = {
   {"reverse", str_reverse},
   {"sub", str_sub},
   {"upper", str_upper},
+  {"split", str_split},
   {NULL, NULL}
 };
 

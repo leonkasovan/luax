@@ -25,7 +25,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v110_xp</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -53,7 +53,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;IUP_ASSERT;_WIN32_WINNT=0x0601;_WIN32_IE=0x0900;COBJMACROS;WINVER=0x0601;NOTREEVIEW;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;IUP_ASSERT;_WIN32_WINNT=0x0601;_WIN32_IE=0x0900;COBJMACROS;WINVER=0x0601;NOTREEVIEW;USE_NEW_DRAW;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -69,7 +69,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;IUP_ASSERT;_WIN32_WINNT=0x0601;_WIN32_IE=0x0900;COBJMACROS;WINVER=0x0601;NOTREEVIEW;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;_WIN32_WINNT=0x0601;_WIN32_IE=0x0900;WINVER=0x0601;COBJMACROS;NOTREEVIEW;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -83,13 +83,9 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\ext-library\iup-3.30\backend-d2d.c" />
-    <ClCompile Include="..\..\ext-library\iup-3.30\backend-dwrite.c" />
     <ClCompile Include="..\..\ext-library\iup-3.30\backend-gdix.c" />
-    <ClCompile Include="..\..\ext-library\iup-3.30\backend-wic.c" />
     <ClCompile Include="..\..\ext-library\iup-3.30\bitblt.c" />
     <ClCompile Include="..\..\ext-library\iup-3.30\brush.c" />
-    <ClCompile Include="..\..\ext-library\iup-3.30\cachedimage.c" />
     <ClCompile Include="..\..\ext-library\iup-3.30\canvas.c" />
     <ClCompile Include="..\..\ext-library\iup-3.30\draw.c" />
     <ClCompile Include="..\..\ext-library\iup-3.30\fill.c" />
@@ -246,10 +242,7 @@
     <ClCompile Include="..\..\ext-library\iup-3.30\strokestyle.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\ext-library\iup-3.30\backend-d2d.h" />
-    <ClInclude Include="..\..\ext-library\iup-3.30\backend-dwrite.h" />
     <ClInclude Include="..\..\ext-library\iup-3.30\backend-gdix.h" />
-    <ClInclude Include="..\..\ext-library\iup-3.30\backend-wic.h" />
     <ClInclude Include="..\..\ext-library\iup-3.30\iup.h" />
     <ClInclude Include="..\..\ext-library\iup-3.30\iupcbs.h" />
     <ClInclude Include="..\..\ext-library\iup-3.30\iupcontrols.h" />
@@ -323,10 +316,6 @@
     <ClInclude Include="..\..\ext-library\iup-3.30\memstream.h" />
     <ClInclude Include="..\..\ext-library\iup-3.30\misc.h" />
     <ClInclude Include="..\..\ext-library\iup-3.30\wdl.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\ext-library\iup-3.30\copy_from_source.bat" />
-    <None Include="..\..\ext-library\iup-3.30\copy_from_source_iupwin.bat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

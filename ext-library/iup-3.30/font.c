@@ -22,8 +22,6 @@
  */
 
 #include "misc.h"
-#include "backend-d2d.h"
-#include "backend-dwrite.h"
 #include "backend-gdix.h"
 #include "lock.h"
 
@@ -45,57 +43,7 @@ wd_get_default_gui_fontface(WCHAR buffer[LF_FACESIZE])
 WD_HFONT
 wdCreateFont(const LOGFONTW* pLogFont)
 {
-    if(d2d_enabled()) {
-        static WCHAR no_locale[] = L"";
-        static WCHAR enus_locale[] = L"en-us";
-
-        WCHAR user_locale[LOCALE_NAME_MAX_LENGTH];
-        WCHAR* locales[] = { user_locale, no_locale, enus_locale };
-        WCHAR default_fontface[LF_FACESIZE];
-        dwrite_font_t* font;
-        int i;
-
-        font = (dwrite_font_t*) malloc(sizeof(dwrite_font_t));
-        if(font == NULL) {
-            WD_TRACE("wdCreateFont: malloc() failed.");
-            return NULL;
-        }
-
-        dwrite_default_user_locale(user_locale);
-
-        /* Direct 2D seems to not understand "MS Shell Dlg" and "MS Shell Dlg 2"
-         * so we skip the attempts to use it. */
-        if(wcscmp(pLogFont->lfFaceName, L"MS Shell Dlg") != 0  &&
-           wcscmp(pLogFont->lfFaceName, L"MS Shell Dlg 2") != 0) {
-            for(i = 0; i < WD_SIZEOF_ARRAY(locales); i++) {
-                font->tf = dwrite_create_text_format(locales[i], pLogFont, &font->metrics);
-                if(font->tf != NULL)
-                    return (WD_HFONT) font;
-            }
-        }
-
-        /* In case of a failure, we retry with a default GUI font face. */
-        wd_get_default_gui_fontface(default_fontface);
-        if(wcscmp(default_fontface, pLogFont->lfFaceName) != 0) {
-            /* Make a temporary copy of pLogFont to not overwrite caller's
-             * data. */
-            LOGFONTW tmp;
-
-            memcpy(&tmp, pLogFont, sizeof(LOGFONTW));
-            wcsncpy(tmp.lfFaceName, default_fontface, LF_FACESIZE);
-
-            for(i = 0; i < WD_SIZEOF_ARRAY(locales); i++) {
-                font->tf = dwrite_create_text_format(locales[i], &tmp, &font->metrics);
-                if(font->tf != NULL)
-                    return (WD_HFONT) font;
-            }
-        }
-
-        WD_TRACE("wdCreateFont: dwrite_create_text_format(%S, %S) failed.",
-                 pLogFont->lfFaceName, user_locale);
-        free(font);
-        return NULL;
-    } else {
+    {
         HDC dc;
         dummy_GpFont* f;
         int status;
@@ -139,12 +87,7 @@ wdCreateFontWithGdiHandle(HFONT hGdiFont)
 void
 wdDestroyFont(WD_HFONT hFont)
 {
-    if(d2d_enabled()) {
-        dwrite_font_t* font = (dwrite_font_t*) hFont;
-
-        dummy_IDWriteTextFormat_Release(font->tf);
-        free(font);
-    } else {
+    {
         gdix_vtable->fn_DeleteFont((dummy_GpFont*) hFont);
     }
 }
@@ -159,19 +102,7 @@ wdFontMetrics(WD_HFONT hFont, WD_FONTMETRICS* pMetrics)
         goto err;
     }
 
-    if(d2d_enabled()) {
-        dwrite_font_t* font = (dwrite_font_t*) hFont;
-        float factor;
-
-        pMetrics->fEmHeight = dummy_IDWriteTextFormat_GetFontSize(font->tf);
-
-        factor = (pMetrics->fEmHeight / (float)font->metrics.designUnitsPerEm);
-
-        pMetrics->fAscent = factor * (float)font->metrics.ascent;
-        pMetrics->fDescent = factor * (float)WD_ABS(font->metrics.descent);
-        pMetrics->fLeading = factor * (float)(font->metrics.ascent +
-                WD_ABS(font->metrics.descent) + font->metrics.lineGap);
-    } else {
+    {
         int font_style;
         float font_size;
         void* font_family;

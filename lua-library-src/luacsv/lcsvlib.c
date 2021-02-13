@@ -389,3 +389,8 @@ LUALIB_API int luaopen_csv(lua_State *L)
     luaL_openlib (L, LUA_CSVLIBNAME, csv, 0);
     return 1;
 }
+
+LUALIB_API int str_split(lua_State *L)
+{
+	return l_parse(L);
+}

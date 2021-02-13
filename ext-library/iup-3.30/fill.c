@@ -22,7 +22,6 @@
  */
 
 #include "misc.h"
-#include "backend-d2d.h"
 #include "backend-gdix.h"
 #include "lock.h"
 
@@ -30,13 +29,7 @@
 void
 wdFillEllipse(WD_HCANVAS hCanvas, WD_HBRUSH hBrush, float cx, float cy, float rx, float ry)
 {
-    if(d2d_enabled()) {
-        d2d_canvas_t* c = (d2d_canvas_t*) hCanvas;
-        dummy_ID2D1Brush* b = (dummy_ID2D1Brush*) hBrush;
-        dummy_D2D1_ELLIPSE e = { { cx, cy }, rx, ry };
-
-        dummy_ID2D1RenderTarget_FillEllipse(c->target, &e, b);
-    } else {
+    {
         gdix_canvas_t* c = (gdix_canvas_t*) hCanvas;
         float dx = 2.0f * rx;
         float dy = 2.0f * ry;
@@ -48,13 +41,7 @@ wdFillEllipse(WD_HCANVAS hCanvas, WD_HBRUSH hBrush, float cx, float cy, float rx
 void
 wdFillPath(WD_HCANVAS hCanvas, WD_HBRUSH hBrush, const WD_HPATH hPath)
 {
-    if(d2d_enabled()) {
-        d2d_canvas_t* c = (d2d_canvas_t*) hCanvas;
-        dummy_ID2D1Geometry* g = (dummy_ID2D1Geometry*) hPath;
-        dummy_ID2D1Brush* b = (dummy_ID2D1Brush*) hBrush;
-
-        dummy_ID2D1RenderTarget_FillGeometry(c->target, g, b, NULL);
-    } else {
+    {
         gdix_canvas_t* c = (gdix_canvas_t*) hCanvas;
 
         gdix_vtable->fn_FillPath(c->graphics, (void*) hBrush, (void*) hPath);
@@ -65,20 +52,7 @@ void
 wdFillEllipsePie(WD_HCANVAS hCanvas, WD_HBRUSH hBrush, float cx, float cy, float rx, float ry,
           float fBaseAngle, float fSweepAngle)
 {
-    if(d2d_enabled()) {
-        d2d_canvas_t* c = (d2d_canvas_t*) hCanvas;
-        dummy_ID2D1Brush* b = (dummy_ID2D1Brush*) hBrush;
-        dummy_ID2D1Geometry* g;
-
-        g = d2d_create_arc_geometry(cx, cy, rx, ry, fBaseAngle, fSweepAngle, TRUE);
-        if(g == NULL) {
-            WD_TRACE("wdFillPie: d2d_create_arc_geometry() failed.");
-            return;
-        }
-
-        dummy_ID2D1RenderTarget_FillGeometry(c->target, g, b, NULL);
-        dummy_ID2D1Geometry_Release(g);
-    } else {
+    {
         gdix_canvas_t* c = (gdix_canvas_t*) hCanvas;
         float dx = 2.0f * rx;
         float dy = 2.0f * ry;
@@ -92,13 +66,7 @@ void
 wdFillRect(WD_HCANVAS hCanvas, WD_HBRUSH hBrush,
            float x0, float y0, float x1, float y1)
 {
-    if(d2d_enabled()) {
-        d2d_canvas_t* c = (d2d_canvas_t*) hCanvas;
-        dummy_ID2D1Brush* b = (dummy_ID2D1Brush*) hBrush;
-        dummy_D2D1_RECT_F r = { x0, y0, x1, y1 };
-
-        dummy_ID2D1RenderTarget_FillRectangle(c->target, &r, b);
-    } else {
+    {
         gdix_canvas_t* c = (gdix_canvas_t*) hCanvas;
         float tmp;
 
