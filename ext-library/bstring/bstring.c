@@ -27,7 +27,11 @@
 #define bBlockCopy(D,S,L) { if ((L) > 0) memmove ((D),(S),(L)); }
 
 /* Give MSVC some latitude for their non-support of vsnprintf */
+#ifdef WIN32
 #define exvsnprintf(r,b,n,f,a) {r = _vsnprintf (b,n,f,a);}
+#else
+#define exvsnprintf(r,b,n,f,a) {r = vsnprintf (b,n,f,a);}
+#endif
 #define START_VSNBUFF (16)
 
 /* Reference building macros */

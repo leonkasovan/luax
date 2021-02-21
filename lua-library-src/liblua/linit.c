@@ -28,7 +28,9 @@ static const luaL_Reg lualibs[] = {
   {LUA_JSONSAFELIBNAME, luaopen_cjson_safe},
   {REX_LIBNAME, luaopen_rex_pcre},
   {LUA_CSVLIBNAME, luaopen_csv},
+#ifdef WIN32  
   {LUA_IUPLIBNAME, luaopen_iuplua},
+#endif  
   {LUA_GZIOLIBNAME, luaopen_gzio},
   {LUA_LFSLIBNAME, luaopen_lfs},
   {NULL, NULL}

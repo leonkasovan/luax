@@ -190,7 +190,7 @@ static CsvData *new_data(lua_State *L, const char *metaname, FILE *file, char de
 }
 
 static int l_writer (lua_State *L) {
-    CsvData *data;
+    //CsvData *data;
     const char *file = luaL_optstring(L,1,"stdout");
     char delim = *luaL_optstring(L,2,",");
     FILE *out = EQ(file,"stdout") ? stdout : fopen(file,"w");
@@ -199,7 +199,8 @@ static int l_writer (lua_State *L) {
         lua_pushstring(L,"cannot open file");
         return 2;
     }
-    data = new_data(L,CSV_META_WRITER,out,delim);
+    //data = new_data(L,CSV_META_WRITER,out,delim);
+	new_data(L,CSV_META_WRITER,out,delim);
     return 1;
 }
 

@@ -599,6 +599,7 @@ static int make_link(lua_State * L)
 {
   const char *oldpath = luaL_checkstring(L, 1);
   const char *newpath = luaL_checkstring(L, 2);
+#ifdef _WIN32
   int result, symbolic;
   int is_dir = 0;
   STAT_STRUCT oldpathinfo;
@@ -607,12 +608,6 @@ static int make_link(lua_State * L)
 
   mbstowcs(loldpath, oldpath, LFS_MAXPATHLEN);
   mbstowcs(lnewpath, newpath, LFS_MAXPATHLEN);
-#ifndef _WIN32
-  return pushresult(L,
-                    (lua_toboolean(L, 3) ? symlink : link) (oldpath,
-                                                            newpath),
-                    NULL);
-#else
   symbolic = lua_toboolean(L, 3);
   if (STAT_FUNC(oldpath, &oldpathinfo) == 0) {
     is_dir = S_ISDIR(oldpathinfo.st_mode) != 0;
@@ -635,6 +630,11 @@ static int make_link(lua_State * L)
                    : "make_link CreateHardLink() failed");
     return 2;
   }
+#else
+    return pushresult(L,
+                    (lua_toboolean(L, 3) ? symlink : link) (oldpath,
+                                                            newpath),
+                    NULL);
 #endif
 }
 
@@ -1092,14 +1092,14 @@ static int file_info(lua_State * L)
 */
 static int push_link_target(lua_State * L)
 {
+  int ok = 0;
+  char *target = NULL;
   const char *file = luaL_checkstring(L, 1);
+  int tsize, size = 256;        /* size = initial buffer capacity */
 #ifdef _WIN32
   WCHAR lfile[LFS_MAXPATHLEN+1];
   WCHAR ltarget[LFS_MAXPATHLEN+1];
   HANDLE h;
-  char *target = NULL;
-  int tsize, size = 256;        /* size = initial buffer capacity */
-  int ok = 0;
 
   mbstowcs(lfile, file, LFS_MAXPATHLEN);
   h = CreateFile(lfile, GENERIC_READ,

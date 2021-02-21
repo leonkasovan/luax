@@ -34,9 +34,16 @@ Dont forget to define CURL_STATICLIB while building liblua
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-//#define false 0
-//#define true 1
-#define bool int
+#ifndef WIN32
+#include <stdbool.h>
+#include <ctype.h>
+#include <linux/limits.h>
+#define _stat64 stat
+#define MAX_PATH PATH_MAX
+#define _snprintf_c snprintf
+#define _stricmp strcasecmp
+#define _strdup strdup
+#endif
 
 /* DEFINE is here ============================================================ */
 
@@ -93,7 +100,6 @@ static const struct feat feats[] = {
   {"IDN",            CURL_VERSION_IDN},
   {"IPv6",           CURL_VERSION_IPV6},
   {"Largefile",      CURL_VERSION_LARGEFILE},
-  {"Unicode",        CURL_VERSION_UNICODE},
   {"SSPI",           CURL_VERSION_SSPI},
   {"GSS-API",        CURL_VERSION_GSSAPI},
   {"Kerberos",       CURL_VERSION_KERBEROS5},
@@ -103,16 +109,19 @@ static const struct feat feats[] = {
   {"SSL",            CURL_VERSION_SSL},
   {"libz",           CURL_VERSION_LIBZ},
   {"brotli",         CURL_VERSION_BROTLI},
-  {"zstd",           CURL_VERSION_ZSTD},
   {"CharConv",       CURL_VERSION_CONV},
   {"TLS-SRP",        CURL_VERSION_TLSAUTH_SRP},
   {"HTTP2",          CURL_VERSION_HTTP2},
-  {"HTTP3",          CURL_VERSION_HTTP3},
   {"UnixSockets",    CURL_VERSION_UNIX_SOCKETS},
   {"HTTPS-proxy",    CURL_VERSION_HTTPS_PROXY},
   {"MultiSSL",       CURL_VERSION_MULTI_SSL},
   {"PSL",            CURL_VERSION_PSL},
+#ifdef WIN32
   {"alt-svc",        CURL_VERSION_ALTSVC},
+  {"Unicode",        CURL_VERSION_UNICODE},
+  {"HTTP3",          CURL_VERSION_HTTP3},
+  {"zstd",           CURL_VERSION_ZSTD},
+#endif
 };
 
 #define FIRST_ARG 1
@@ -185,37 +194,6 @@ static union luaValueT get_boolean(lua_State* L, int n)
 	}
 	v.nval=(int)lua_toboolean(L, n);
 	return v;
-}
-
-static void stackDump (lua_State *L) {
-	int i;
-	int top = lua_gettop(L);
-
-	printf("%d: ", top);
-	for (i = 1; i <= top; i++) {  /* repeat for each level */
-		int t = lua_type(L, i);
-		switch (t) {
-
-		case LUA_TSTRING:  /* strings */
-			printf("'%s'", lua_tostring(L, i));
-			break;
-
-		case LUA_TBOOLEAN:  /* booleans */
-			printf(lua_toboolean(L, i) ? "true" : "false");
-			break;
-
-		case LUA_TNUMBER:  /* numbers */
-			printf("%g", lua_tonumber(L, i));
-			break;
-
-		default:  /* other values */
-			printf("%s", lua_typename(L, t));
-			break;
-
-		}
-		printf("  ");  /* put a separator */
-	}
-	printf("\n");  /* end the listing */
 }
 
 static int hl_version (lua_State *L) {
@@ -352,10 +330,10 @@ const char *find_url (const char *tag_element, const char *tag_attr, const char 
 						if (*ii) ii++;	//skip closing '
 					}else if(*ii=='"'){ //use double quote
 						ii++;	//skip "
-						while(*ii && *ii!='"') *ii++;
+						while(*ii && *ii!='"') ii++;
 						if (*ii) ii++;	//skip closing "
 					}else{	//no quote
-						while(*ii && !isspace(*ii)  && *ii!='>') *ii++;
+						while(*ii && !isspace(*ii)  && *ii!='>') ii++;
 					}
 				}
 			}
@@ -387,7 +365,7 @@ static char *concat_url(const char *base, const char *relurl)
 	char *protsep;
 	char *pathsep;
 	size_t newlen;
-	bool host_changed = FALSE;
+	BOOL host_changed = FALSE;
 	char *url_clone;
 	const char *useurl = relurl;
 	size_t urllen;
@@ -507,7 +485,7 @@ static char *concat_url(const char *base, const char *relurl)
 	*/
 	{
 	const char *ptr;	
-	bool left = TRUE; /* left side of the ? */
+	BOOL left = TRUE; /* left side of the ? */
 	const char *host_sep = (const char *) useurl;
 	
 	newlen = 0;
@@ -570,7 +548,7 @@ static char *concat_url(const char *base, const char *relurl)
 
 	/* then append the new piece on the right side */
 	{
-	bool left = TRUE;
+	BOOL left = TRUE;
 	const char *iptr;
 	char *optr = &newest[urllen];
 	const char *host_sep = useurl;
@@ -660,7 +638,6 @@ static int hl_get_url (lua_State *L) {
 	const char *url = NULL;
 	const char *fname = NULL;
 	const char *header_fname = "http_header.txt";
-	const char *range = NULL;
 	FILE *fb = NULL;	//Body
 	FILE *fh = NULL;	//Header
 	struct MemoryStruct body_chunk;

@@ -49,11 +49,13 @@
 #include <lualib.h>
 #include <float.h>
 
+#ifdef WIN32
 #define snprintf _snprintf
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
 #define isnan(x) _isnan(x)
 #define isinf(x) (!_finite(x))
+#endif
 
 #define FPCONV_G_FMT_BUFSIZE   32
 void fpconv_init();
@@ -95,7 +97,6 @@ extern char *strbuf_free_to_string(strbuf_t *s, int *len);
 /* Management */
 extern void strbuf_resize(strbuf_t *s, int len);
 static int strbuf_empty_length(strbuf_t *s);
-static int strbuf_length(strbuf_t *s);
 static char *strbuf_string(strbuf_t *s, int *len);
 static void strbuf_ensure_empty_length(strbuf_t *s, int len);
 static char *strbuf_empty_ptr(strbuf_t *s);
@@ -115,10 +116,6 @@ static void strbuf_reset(strbuf_t *s)
     s->length = 0;
 }
 
-static int strbuf_allocated(strbuf_t *s)
-{
-    return s->buf != NULL;
-}
 
 /* Return bytes remaining in the string buffer
  * Ensure there is space for a NULL terminator. */
@@ -141,11 +138,6 @@ static char *strbuf_empty_ptr(strbuf_t *s)
 static void strbuf_extend_length(strbuf_t *s, int len)
 {
     s->length += len;
-}
-
-static int strbuf_length(strbuf_t *s)
-{
-    return s->length;
 }
 
 static void strbuf_append_char(strbuf_t *s, const char c)
