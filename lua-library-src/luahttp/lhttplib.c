@@ -27,14 +27,13 @@ Dont forget to define CURL_STATICLIB while building liblua
 #include "lauxlib.h"
 #include "lualib.h"
 #include "bstring.h"
-#include "curl/curl.h"
-//#include "curl/mprintf.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifndef WIN32
+#include <curl/curl.h>
 #include <stdbool.h>
 #include <ctype.h>
 #include <linux/limits.h>
@@ -43,6 +42,11 @@ Dont forget to define CURL_STATICLIB while building liblua
 #define _snprintf_c snprintf
 #define _stricmp strcasecmp
 #define _strdup strdup
+#define BOOL bool
+#define TRUE true
+#define FALSE false
+#else
+#include "curl/curl.h"
 #endif
 
 /* DEFINE is here ============================================================ */
