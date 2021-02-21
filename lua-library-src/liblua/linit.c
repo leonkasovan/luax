@@ -32,7 +32,7 @@ static const luaL_Reg lualibs[] = {
   {LUA_IUPLIBNAME, luaopen_iuplua},
 #endif  
   {LUA_GZIOLIBNAME, luaopen_gzio},
-  {LUA_LFSLIBNAME, luaopen_lfs},
+  //{LUA_LFSLIBNAME, luaopen_lfs},
   {NULL, NULL}
 };
 
