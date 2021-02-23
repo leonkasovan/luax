@@ -235,6 +235,7 @@ static const luaL_Reg syslib[] = {
   	{"getfilesize",   os_getfilesize},
 	{"checksum",   os_checksum},
 	{"getcwd",   os_getcwd},
+	{"info", os_info},
   {NULL, NULL}
 };
 

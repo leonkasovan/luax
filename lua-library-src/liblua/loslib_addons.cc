@@ -266,3 +266,12 @@ static int os_getcwd (lua_State *L) {
 	lua_pushstring(L, GetCurrentDir(path, 1024));
 	return 1;
 }
+
+static int os_info (lua_State *L) {
+#ifdef WIN32
+	lua_pushstring(L, "Windows");
+#else
+	lua_pushstring(L, "Linux");
+#endif
+	return 1;
+}
