@@ -26,7 +26,7 @@ end
 if os.info() == "Windows" then
 	os.execute('dir /A:-D /O:D > files.txt')
 else
-	os.execute('ls -l > files.txt')
+	os.execute('ls --sort=time -l multi_host_downloader > files.txt')
 end
 
 local gist = dofile('/home/pi/shared/luax/lua-script/github/gist.lua')
