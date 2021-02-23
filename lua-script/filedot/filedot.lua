@@ -2,7 +2,7 @@
 -- Interpreter : luaX https://drive.google.com/file/d/1gaDQVusrvp78HfQbswVx4Wr-4-plA4Ke/view?usp=sharing
 -- 15/01/2021 Jakarta Rawamangun, dhani.novan@gmail.com
 
-require('strict')
+-- require('strict')
 local LOG_FILE = "filedot.log"
 -- local DEBUG = true	-- write all log to a file (LOG_FILE)
 local DEBUG = false	-- write all log to console output
