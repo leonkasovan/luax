@@ -85,9 +85,9 @@ function download_vidio(url, callback_function_write_log, callback_function_on_s
 	if resolution == nil then resolution = "none" end
 	--download vidio: step 3
 	if DEBUG then
-		rc = os.execute('youtube-dl.exe --cookies vidio_cookies.txt --no-progress --restrict-filenames --hls-prefer-native --output '..title..'.mp4 '..url1..' >> '..LOG_FILE)
+		rc = os.execute('youtube-dl --cookies vidio_cookies.txt --no-progress --restrict-filenames --hls-prefer-native --output '..title..'.mp4 '..url1..' >> '..LOG_FILE)
 	else
-		rc = os.execute('youtube-dl.exe --cookies vidio_cookies.txt --restrict-filenames --hls-prefer-native --output '..title..'.mp4 '..url1)
+		rc = os.execute('youtube-dl --cookies vidio_cookies.txt --restrict-filenames --hls-prefer-native --output '..title..'.mp4 '..url1)
 	end
 	
 	if rc ~= 0 then

@@ -113,9 +113,9 @@ function download_audio_youtube(url, callback_function_write_log, callback_funct
 		
 	http.set_conf(http.OPT_COOKIEFILE, "youtube_cookies.txt")
 	if DEBUG then
-		rc = os.execute('youtube-dl.exe --add-metadata --cookies youtube_cookies.txt --restrict-filenames -x --audio-format mp3 -o "%(artist)s - %(title)s.%(ext)s" '..url..' >> '..LOG_FILE)
+		rc = os.execute('youtube-dl --add-metadata --cookies youtube_cookies.txt --restrict-filenames -x --audio-format mp3 -o "%(artist)s - %(title)s.%(ext)s" '..url..' >> '..LOG_FILE)
 	else
-		rc = os.execute('youtube-dl.exe --add-metadata --cookies youtube_cookies.txt --restrict-filenames -x --audio-format mp3 -o "%(artist)s - %(title)s.%(ext)s" '..url)
+		rc = os.execute('youtube-dl --add-metadata --cookies youtube_cookies.txt --restrict-filenames -x --audio-format mp3 -o "%(artist)s - %(title)s.%(ext)s" '..url)
 	end
 	
 	if rc ~= 0 then

@@ -54,7 +54,7 @@ end
 -- 		https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110/raw/c5716b82cacfb263cb4ee0f5cdf84a9912f35af6/success.log
 -- output : string of content, return nil if fail
 function read_gist(url)
-	local rc, content
+	local rc, content, result
 	
 	result = string.match(url, 'https://gist.github.com/%w+/%w+')
 	if result == nil then

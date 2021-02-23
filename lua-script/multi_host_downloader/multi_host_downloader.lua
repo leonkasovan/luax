@@ -80,20 +80,24 @@ function general_download(url, callback_function_write_log, callback_function_on
 end
 
 --- Import Library
-local gist = import_library('https://gist.github.com/dhaninovan/c99bf60b414d902a447b90633c8dd9d4/raw/')
-local gdrive = import_library('https://gist.github.com/dhaninovan/d94d938e96b3171a42e47aa1f8c0c22b/raw/')
-local solidfiles = import_library('https://gist.github.com/dhaninovan/44a8586f3ec91ad479a690ecfdb608a7/raw/')
-local racaty = import_library('https://gist.github.com/dhaninovan/d883c5513627c5b8ae4711b5ecf87486/raw/')
-local letsupload = import_library('https://gist.github.com/dhaninovan/311d56a792c6b98cb277cb6bca47396b/raw/')
-local vidio = import_library('https://gist.github.com/dhaninovan/f5dcfa5f411b026f5bcaa646a922514f/raw/')
-local youtube = import_library('https://gist.github.com/dhaninovan/5d858219718de619428a3ebb2f6f34d9/raw/')
+--local gist = import_library('https://gist.github.com/dhaninovan/c99bf60b414d902a447b90633c8dd9d4/raw/')
+--local gdrive = import_library('https://gist.github.com/dhaninovan/d94d938e96b3171a42e47aa1f8c0c22b/raw/')
+--local solidfiles = import_library('https://gist.github.com/dhaninovan/44a8586f3ec91ad479a690ecfdb608a7/raw/')
+--local racaty = import_library('https://gist.github.com/dhaninovan/d883c5513627c5b8ae4711b5ecf87486/raw/')
+--local letsupload = import_library('https://gist.github.com/dhaninovan/311d56a792c6b98cb277cb6bca47396b/raw/')
+--local vidio = import_library('https://gist.github.com/dhaninovan/f5dcfa5f411b026f5bcaa646a922514f/raw/')
+--local youtube = import_library('https://gist.github.com/dhaninovan/5d858219718de619428a3ebb2f6f34d9/raw/')
 
 
---local gist = dofile('..\\github\\github.lua')
---local gdrive = dofile('..\\Google Drive\\gdrive.lua')
---local solidfiles = dofile('..\\Solidfiles\\solidfiles.lua')
---local racaty = dofile('..\\Racaty\\racaty.lua')
---local letsupload = dofile('..\\Letsupload\\letsupload.lua')
+local gist = dofile('../github/gist.lua')
+local gdrive = dofile('../gdrive/gdrive.lua')
+local solidfiles = dofile('../solidfiles/solidfiles.lua')
+local racaty = dofile('../racaty/racaty.lua')
+local letsupload = dofile('../letsupload/letsupload.lua')
+local vidio = dofile('../vidio/vidio.lua')
+local youtube = dofile('../youtube/youtube.lua')
+local filedot = dofile('../filedot/filedot.lua')
+
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
@@ -119,6 +123,8 @@ function verify(url)
 			return vidio.download
 		elseif youtube.verify(url) then
 			return youtube.download
+		elseif filedot.verify(url) then
+			return filedot.download
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		else

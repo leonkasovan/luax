@@ -4,7 +4,7 @@
 --			https://drive.google.com/file/d/<<FILE_ID>>/view?usp=sharing
 -- Interpreter : luaX https://drive.google.com/file/d/1gaDQVusrvp78HfQbswVx4Wr-4-plA4Ke/view?usp=sharing
 -- 13:25 16 Jan 2021, Rawamangun
-require('strict')
+-- require('strict')
 
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
@@ -218,35 +218,35 @@ end
 -- https://drive.google.com/file/d/1tRsLrRhXGKZbqwV1R5MOlpf6o4-cUvU3/view	Jet cave Adventure
 
 -- Movie Finding Ohana
-content = [[
-https://drive.google.com/uc?id=1kgzgnYfTnogMcXkrVIuaA8l3-RLkWB1K&export=download
-]]
+-- content = [[
+-- https://drive.google.com/uc?id=1kgzgnYfTnogMcXkrVIuaA8l3-RLkWB1K&export=download
+-- ]]
 
-for url in content:gmatch("[^\r\n]+") do
-	if verify_gdrive(url) then
-		res = download_gdrive(url)
-	else
-		my_write_log('[error][gdrive] invalid URL')
-	end
-end
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_gdrive(url) then
+		-- res = download_gdrive(url)
+	-- else
+		-- my_write_log('[error][gdrive] invalid URL')
+	-- end
+-- end
 
-local MAXTRY = 10
-for url in content:gmatch("[^\r\n]+") do
-	--if gdrive.verify(url) then
-	if verify_gdrive(url) then
-		--done = gdrive.download(url, my_write_log, print)
-		done = download_gdrive(url)
-		try = 1
-		while ((try <= MAXTRY) and (done == false)) do
-			write_log('Retry '..try)
-			--done = gdrive.download(url)
-			done = download_gdrive(url)
-			try = try + 1
-		end
-	else
-		print('URL not valid for Google Drive')
-	end
-end
+-- local MAXTRY = 10
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if gdrive.verify(url) then
+	-- if verify_gdrive(url) then
+		-- done = gdrive.download(url, my_write_log, print)
+		-- done = download_gdrive(url)
+		-- try = 1
+		-- while ((try <= MAXTRY) and (done == false)) do
+			-- write_log('Retry '..try)
+			-- done = gdrive.download(url)
+			-- done = download_gdrive(url)
+			-- try = try + 1
+		-- end
+	-- else
+		-- print('URL not valid for Google Drive')
+	-- end
+-- end
 
 -------------------------------------------------------------------------------
 --	Library Interface

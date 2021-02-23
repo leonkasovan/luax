@@ -130,18 +130,18 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
-content = [[
-http://filedot.xyz/a2xpyuk6wy7b
-http://filedot.xyz/3glqb9dfislk
-]]
+-- content = [[
+-- http://filedot.xyz/a2xpyuk6wy7b
+-- http://filedot.xyz/3glqb9dfislk
+-- ]]
 
-for url in content:gmatch("[^\r\n]+") do
-	if verify_filedot(url) then
-		download_filedot(url)
-	else
-		my_write_log('[error][filedot] invalid URL')
-	end
-end
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_filedot(url) then
+		-- download_filedot(url)
+	-- else
+		-- my_write_log('[error][filedot] invalid URL')
+	-- end
+-- end
 
 
 -------------------------------------------------------------------------------
