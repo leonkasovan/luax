@@ -1,6 +1,6 @@
 -- Lua Script : Update log in gist.github.com
 -- Using modified Lua 5.1 https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=sharing
-local LOG_FILE = "multi_host_downloader.log"
+local LOG_FILE = "multi_host_downloader/multi_host_downloader.log"
 local LOG_FILE2 = "youtube-dl.log"
 
 function myload_file(filename)
@@ -23,11 +23,12 @@ if os.date("%d")%2 == 0 then
 	if os.date("%H") == "22" then os.remove('multi_host_downloader.log') end
 end
 
+gist = require('github/gist')
 if os.info() == "Windows" then
-	os.execute('dir /A:-D /O:D > files.txt')
+	os.execute('dir /A:-D /O:D > files.txt')	
 else
-	os.execute('ls --sort=time -l multi_host_downloader > files.txt')
+	os.execute("ls -lt multi_host_downloader > files.txt")
 end
 
-local gist = dofile('/home/pi/shared/luax/lua-script/github/gist.lua')
-gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', string.format("Time:%s\n %s\n\nLOG LUA Downloader:\n%s\n\nLOG Youtube-DL:\n%s", os.date(), myload_file('files.txt'), myload_file(LOG_FILE), myload_file(LOG_FILE2)))
+res = gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', string.format("Time:%s\n %s\n\nLOG LUA Downloader:\n%s\n\nLOG Youtube-DL:\n%s", os.date(), myload_file('files.txt'), myload_file(LOG_FILE), myload_file(LOG_FILE2)))
+
