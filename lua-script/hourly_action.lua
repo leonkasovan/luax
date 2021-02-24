@@ -23,10 +23,11 @@ if os.date("%d")%2 == 0 then
 	if os.date("%H") == "22" then os.remove('multi_host_downloader.log') end
 end
 
-gist = require('github/gist')
 if os.info() == "Windows" then
+	gist = require('github/gist')
 	os.execute('dir /A:-D /O:D > files.txt')	
 else
+	gist = require('github\gist')
 	os.execute("ls -lt multi_host_downloader > files.txt")
 end
 
