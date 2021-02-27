@@ -1521,6 +1521,7 @@ LUALIB_API int luaopen_http (lua_State *L) {
 	curl = curl_easy_init();
 	curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
 	curl_easy_setopt(curl, CURLOPT_AUTOREFERER, 1);
+	curl_easy_setopt(curl, CURLOPT_BUFFERSIZE, 100000);
 	curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, "Opera/9.80 (J2ME/MIDP; Opera Mini/7.1.32052/29.3417; U; en) Presto/2.8.119 Version/11.10");
 	curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");
