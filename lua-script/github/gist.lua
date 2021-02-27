@@ -6,7 +6,7 @@ local DEBUG = true	-- write all log to a file (LOG_FILE)
 --local DEBUG = false	-- write all log to console output
 local LOG_FILE = "github.log"
 local GITHUB_USER = "dhaninovan"
-local GITHUB_TOKEN = "9e39003a512d18de035c6a8c03c37217b95fe2bc"
+local GITHUB_TOKEN = "956e0f2c68ad4ff9f26ba6738a36d7c8a166f179"
 local MAXTIMEOUT = 30
 
 local function escape_str(s)

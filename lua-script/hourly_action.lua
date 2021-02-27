@@ -24,12 +24,12 @@ if os.date("%d")%2 == 0 then
 end
 
 if os.info() == "Windows" then
-	gist = require('github/gist')
+	gist = require('github\gist')
 	os.execute('dir /A:-D /O:D > files.txt')	
 else
-	gist = require('github\gist')
+	gist = require('github/gist')
 	os.execute("ls -lt multi_host_downloader > files.txt")
 end
 
 res = gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', string.format("Time:%s\n %s\n\nLOG LUA Downloader:\n%s\n\nLOG Youtube-DL:\n%s", os.date(), myload_file('files.txt'), myload_file(LOG_FILE), myload_file(LOG_FILE2)))
-
+print(res)
