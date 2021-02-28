@@ -6,7 +6,7 @@ require('strict')
 require('common')
 
 local GITHUB_USER = "dhaninovan"
-local GITHUB_TOKEN = "800ae2b306f1c1fb6eccd758178354e0b08265c4"
+local GITHUB_TOKEN = "21363eef3ab90d1156021b34ee0333e0b70cd47e"
 local MAXTIMEOUT = 30
 
 local function escape_str(s)
