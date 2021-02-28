@@ -15,7 +15,7 @@ local YOUTUBE_DL = ""
 if os.info() == "Windows" then
 	YOUTUBE_DL = "youtube-dl.exe"
 else
-	YOUTUBE_DL = "/usr/share/bin/youtube-dl"
+	YOUTUBE_DL = "/usr/local/bin/youtube-dl"
 end
 
 -- Output :

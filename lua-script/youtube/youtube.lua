@@ -15,7 +15,7 @@ local YOUTUBE_DL = ""
 if os.info() == "Windows" then
 	YOUTUBE_DL = "youtube-dl.exe"
 else
-	YOUTUBE_DL = "/usr/share/bin/youtube-dl"
+	YOUTUBE_DL = "/usr/local/bin/youtube-dl"
 end
 
 http.set_conf(http.OPT_USERAGENT, 'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.181 Mobile Safari/537.36')
