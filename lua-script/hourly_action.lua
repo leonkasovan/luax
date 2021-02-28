@@ -1,7 +1,9 @@
 -- Lua Script : Update log in gist.github.com
 -- Using modified Lua 5.1 https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=sharing
+-- Install in crontab : 0 * * * * cd /home/pi/shared/luax/lua-script && lua hourly_action.lua
+
 local LOG_FILE = "multi_host_downloader/multi_host_downloader.log"
-local LOG_FILE2 = "youtube-dl.log"
+local LOG_FILE2 = "multi_host_downloader/youtube-dl.log"
 
 function myload_file(filename)
     local fi, content
@@ -24,12 +26,11 @@ if os.date("%d")%2 == 0 then
 end
 
 if os.info() == "Windows" then
-	gist = require('github\gist')
+	gist = require('github\\gist')
 	os.execute('dir /A:-D /O:D > files.txt')	
 else
-	gist = require('github/gist')
+	gist = dofile('github/gist.lua')
 	os.execute("ls -lt multi_host_downloader > files.txt")
 end
 
 res = gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', string.format("Time:%s\n %s\n\nLOG LUA Downloader:\n%s\n\nLOG Youtube-DL:\n%s", os.date(), myload_file('files.txt'), myload_file(LOG_FILE), myload_file(LOG_FILE2)))
-print(res)

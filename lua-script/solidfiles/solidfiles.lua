@@ -5,8 +5,9 @@
 --			http://www.solidfiles.com/d/b007fccb0d/
 -- Interpreter : modified lua https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=drivesdk
 -- 4:36 19 July 2020, Rawamangun
-require('strict')
-require('common')
+
+dofile('../strict.lua')
+dofile('../common.lua')
 
 -- GLOBAL SETTING
 local MAXTIMEOUT = 1800	-- set max timeout 30 minutes

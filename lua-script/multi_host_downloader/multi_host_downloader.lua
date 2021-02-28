@@ -8,24 +8,9 @@ local MAXTRY = 10
 local TEMP_FILE = "file.tmp"
 local MAXTIMEOUT = 1800	-- set max timeout 30 minutes
 local LOG_FILE = "multi_host_downloader.log"
-local DEBUG = true	-- write all log to a file (LOG_FILE)
--- local DEBUG = false	-- write all log to console output
 
 function write_log(data)
-	local fo
-	if DEBUG then 
-		fo = io.open(LOG_FILE, "a")
-		if fo == nil then
-			print("Can not open "..LOG_FILE)
-			return nil
-		end
-		fo:write(table.concat{os.date(), " ", data, "\n"})
-		fo:close()
-		return true
-	else
-		print(os.date()..data)
-		return true
-	end
+	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
 end
 
 function general_download(url, callback_function_write_log, callback_function_on_success)
@@ -75,8 +60,6 @@ end
 --local letsupload = import_library('https://gist.github.com/dhaninovan/311d56a792c6b98cb277cb6bca47396b/raw/')
 --local vidio = import_library('https://gist.github.com/dhaninovan/f5dcfa5f411b026f5bcaa646a922514f/raw/')
 --local youtube = import_library('https://gist.github.com/dhaninovan/5d858219718de619428a3ebb2f6f34d9/raw/')
-
-
 local gist = dofile('../github/gist.lua')
 local gdrive = dofile('../gdrive/gdrive.lua')
 local solidfiles = dofile('../solidfiles/solidfiles.lua')
@@ -85,7 +68,6 @@ local letsupload = dofile('../letsupload/letsupload.lua')
 local vidio = dofile('../vidio/vidio.lua')
 local youtube = dofile('../youtube/youtube.lua')
 local filedot = dofile('../filedot/filedot.lua')
-
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
@@ -130,6 +112,7 @@ end
 -- Get list of url
 local urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
 if urls == nil then
+	write_log('Fail to grab list of url')
 	return -1
 end
 

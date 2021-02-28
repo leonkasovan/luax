@@ -4,8 +4,9 @@
 --			https://racaty.net/wzevnbbgfvhk
 -- Interpreter : modified lua https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=drivesdk
 -- 5:30 04 August 2020, Rawamangun
-require('strict')
-require('common')
+
+dofile('../strict.lua')
+dofile('../common.lua')
 
 -- GLOBAL SETTING
 local MAXTIMEOUT = 1800	-- set max timeout 30 minutes

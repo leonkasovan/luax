@@ -2,11 +2,8 @@
 -- Using modified Lua 5.1 https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=sharing
 -- Dhani.Novan@gmail.com 21:17 25 July 2020
 
-require('strict')
-require('common')
-
 local GITHUB_USER = "dhaninovan"
-local GITHUB_TOKEN = "21363eef3ab90d1156021b34ee0333e0b70cd47e"
+local GITHUB_TOKEN = "f46c53ce8bda7deca9496ae3d58ccc8285714c32"
 local MAXTIMEOUT = 30
 
 local function escape_str(s)
@@ -20,7 +17,7 @@ local function escape_str(s)
 end
 
 local function write_log(data)
-	my_write_log(data)
+	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
 end
 
 -- input : URL
