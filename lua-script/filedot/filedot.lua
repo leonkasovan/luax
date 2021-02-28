@@ -78,7 +78,7 @@ function download_filedot(url, callback_function_write_log, callback_function_on
 	rc = 0
 	http.set_conf(http.OPT_REFERER, url)
 	http.set_conf(http.OPT_TIMEOUT, 1800)
-	http.set_conf(http.OPT_NOPROGRESS, false)
+	-- http.set_conf(http.OPT_NOPROGRESS, false)
 	rc, headers = http.request{url = url2, output_filename = filename}
 	if rc ~= 0 then
 		write_log("[error][filedot] "..http.error(rc), rc)
@@ -96,11 +96,19 @@ function verify_filedot(url)
 	return url:match('https://filedot%.xyz/%w') or url:match('http://filedot%.xyz/%w')
 end
 
+function show_verified_filedot()
+	return 
+[[
+http://filedot.xyz/fky4zh5v0e1r
+https://filedot.xyz/fky4zh5v0e1r
+]]
+end
+
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
 -- content = [[
--- https://filedot.xyz/64q6okt3uj2q
+-- https://filedot.xyz/fky4zh5v0e1r
 -- ]]
 
 -- for url in content:gmatch("[^\r\n]+") do
@@ -117,6 +125,7 @@ end
 -------------------------------------------------------------------------------
 return {
 	download = download_filedot,
+	verified = show_verified_filedot,
 	verify = verify_filedot
 }
 

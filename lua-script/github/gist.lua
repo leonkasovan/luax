@@ -2,11 +2,11 @@
 -- Using modified Lua 5.1 https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=sharing
 -- Dhani.Novan@gmail.com 21:17 25 July 2020
 
-local DEBUG = true	-- write all log to a file (LOG_FILE)
---local DEBUG = false	-- write all log to console output
-local LOG_FILE = "github.log"
+require('strict')
+require('common')
+
 local GITHUB_USER = "dhaninovan"
-local GITHUB_TOKEN = "956e0f2c68ad4ff9f26ba6738a36d7c8a166f179"
+local GITHUB_TOKEN = "0f3fc324e4a3972cdb16ebadafa1982bbeeccfa5"
 local MAXTIMEOUT = 30
 
 local function escape_str(s)
@@ -20,33 +20,7 @@ local function escape_str(s)
 end
 
 local function write_log(data)
-	local fo
-	if DEBUG then 
-		fo = io.open(LOG_FILE, "a")
-		if fo == nil then
-			print("Can not open "..LOG_FILE)
-			return nil
-		end
-		fo:write(table.concat{os.date(), " ", data, "\n"})
-		fo:close()
-		return true
-	else
-		print(data)
-		return true
-	end
-end
-
-local function load_file(filename)
-	local fi, content
-
-	fi = io.open(filename, "r")
-	if fi == nil then
-		write_log("[error][github.load_file] Can't open file "..filename)
-		return nil
-	end
-	content = fi:read("*a")
-	fi:close()
-	return content
+	my_write_log(data)
 end
 
 -- input : URL

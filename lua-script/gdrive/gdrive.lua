@@ -4,59 +4,12 @@
 --			https://drive.google.com/file/d/<<FILE_ID>>/view?usp=sharing
 -- Interpreter : luaX https://drive.google.com/file/d/1gaDQVusrvp78HfQbswVx4Wr-4-plA4Ke/view?usp=sharing
 -- 13:25 16 Jan 2021, Rawamangun
--- require('strict')
+require('strict')
+require('common')
 
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
 local MAXTIMEOUT = 3600	-- set max timeout 30 minutes
-local LOG_FILE = "gdrive.log"
--- local DEBUG = true	-- write all log to a file (LOG_FILE)
-local DEBUG = false	-- write all log to console output
-
-function format_number(s)
-    local pos = string.len(s) % 3
-
-    if pos == 0 then pos = 3 end
-    return string.sub(s, 1, pos).. string.gsub(string.sub(s, pos+1), "(...)", ".%1")
-end
-
-function my_write_log(data)
-	local fo
-	if DEBUG then 
-		fo = io.open(LOG_FILE, "a")
-		if fo == nil then
-			print("Can not open "..LOG_FILE)
-			return nil
-		end
-		fo:write(table.concat{os.date(), " ", data, "\n"})
-		fo:close()
-		return true
-	else
-		print(os.date()..data)
-		return true
-	end
-end
-
-function save_file(content, filename)
-	local fo
-	
-	fo = io.open(filename, "w")
-	fo:write(content)
-	fo:close()
-end
-
-function load_file(filename)
-	local fi, content
-
-	fi = io.open(filename, "r")
-	if fi == nil then
-		write_log("[error][gdrive.load_file] Can't open "..filename)
-		return nil
-	end
-	content = fi:read("*a")
-	fi:close()
-	return content
-end
 
 -- Output :
 --	true : on success
@@ -86,10 +39,11 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	if rc ~= 0 then
 		write_log("[error][gdrive.1] "..http.error(rc))
 		os.remove(TEMP_FILE)
-		return nil
+		if rc == 28 then return false else return nil end
 	end
+	print(header)
 	
-	filename = string.match(header, 'filename="(.-)"')
+	filename = string.match(header, '[Ff]ilename%s*=%s*"(.-)"')
 	if filename ~= nil then
 		filename = filename:gsub('[%/%\%:%?%*%"%<%>%|]', "")
 		os.rename(TEMP_FILE, filename)
@@ -193,6 +147,14 @@ function verify_gdrive(url)
 		or url:match('https://drive%.google%.com/uc%?id=.-&export=download')
 end
 
+function show_verified_gdrive()
+	return 
+[[
+https://drive.google.com/uc?id=1kgzgnYfTnogMcXkrVIuaA8l3-RLkWB1K&export=download
+https://drive.google.com/file/d/1tRsLrRhXGKZbqwV1R5MOlpf6o4-cUvU3/view
+]]
+end
+
 -------------------------------------------------------------------------------
 --	Library Testing
 --	Method 1:
@@ -253,6 +215,7 @@ end
 -------------------------------------------------------------------------------
 return {
 	download = download_gdrive,
+	verified = show_verified_gdrive,
 	verify = verify_gdrive
 }
 

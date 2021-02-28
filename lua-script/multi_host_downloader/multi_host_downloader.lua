@@ -9,7 +9,7 @@ local TEMP_FILE = "file.tmp"
 local MAXTIMEOUT = 1800	-- set max timeout 30 minutes
 local LOG_FILE = "multi_host_downloader.log"
 local DEBUG = true	-- write all log to a file (LOG_FILE)
---local DEBUG = false	-- write all log to console output
+-- local DEBUG = false	-- write all log to console output
 
 function write_log(data)
 	local fo
@@ -23,24 +23,13 @@ function write_log(data)
 		fo:close()
 		return true
 	else
-		print(data)
+		print(os.date()..data)
 		return true
 	end
 end
 
-function import_library(url)
-	local rc, code
-
-	rc, code = http.get_url(url)
-	if rc ~= 0 then
-		write_log("[error][import_library] "..http.error(rc))
-		return nil
-	end
-	return loadstring(code)()
-end
-
 function general_download(url, callback_function_write_log, callback_function_on_success)
-	local rc, filename, server_filesize, server_filename
+	local rc, filename, server_filesize, server_filename, header
 	local write_log
 	
 	if callback_function_write_log ~= nil then
@@ -54,22 +43,21 @@ function general_download(url, callback_function_write_log, callback_function_on
 		filename = TEMP_FILE
 	end
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	rc = http.get_url(url, filename)
+	rc, header = http.request{url = url, output_filename = filename}
+	if rc ~= 0 then
+		print("Error: "..http.error(rc), rc)
+		return false
+	end
 	if rc ~= 0 then
 		write_log("[error][general_download] "..http.error(rc))
 		return false
 	end
 	
-	header = load_file('http_header.txt')
-	server_filename = string.match(header, 'filename="(.-)"')
-	server_filesize = string.match(header, 'Content%-Length: (%d+)')
-	os.remove('http_header.txt')
+	server_filename = string.match(header, '[Ff]ilename%s*=%s*"(.-)"')
+	server_filesize = string.match(header, '[Cc]ontent%-[Ll]ength%s*:%s*(%d+)')
 	if server_filename ~= nil and server_filesize ~= nil then
 		server_filename = server_filename:gsub('[%/%\%:%?%*%"%<%>%|]', "")
---		write_log('[info][general_download] Filename: '..server_filename)
---		write_log('[info][general_download] Filesize: '..server_filesize)
 		os.rename(filename, server_filename)
-		-- Update success list of URL
 		if callback_function_on_success ~= nil then callback_function_on_success(string.format("%s %s; %s (%s)", os.date(), url, server_filename, server_filesize)) end
 		write_log(string.format("[info][general_download] Success and renamed with filename: %s (%s bytes)"), server_filename, server_filesize)
 		return true
@@ -123,6 +111,8 @@ function verify(url)
 			return vidio.download
 		elseif youtube.verify(url) then
 			return youtube.download
+		elseif youtube.verify_music(url) then
+			return youtube.download_audio
 		elseif filedot.verify(url) then
 			return filedot.download
 		elseif url:match('^https?://.-/.+$') then
@@ -138,14 +128,14 @@ function verify(url)
 end
 
 -- Get list of url
-local urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
-if urls == nil then
-	return -1
-end
+-- local urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+-- if urls == nil then
+	-- return -1
+-- end
 
---urls = [[
---http://www.solidfiles.com/d/ea8a0b5af4/
---]]
+urls = [[
+https://www.youtube.com/watch?v=P4Oc-RmXbL0
+]]
 
 -- Download url(s)
 local nurl, url, try, done, download_library
@@ -167,5 +157,5 @@ for url in urls:gmatch("[^\r\n]+") do
 		nurl = nurl + 1
 	end
 end
-
+return 0
 --if not DEBUG then os.execute("pause") end

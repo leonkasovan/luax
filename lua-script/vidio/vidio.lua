@@ -4,35 +4,18 @@
 -- Interpreter : modified lua https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=drivesdk
 -- 5:44 20 August 2020, Rawamangun
 
+require('strict')
+require('common')
+
 -- GLOBAL SETTING
-local MAXTIMEOUT = 900	-- set max timeout 15 minutes
+local MAXTIMEOUT = 1800	-- set max timeout 30 minutes
 local LOG_FILE = "youtube-dl.log"
---local DEBUG = true	-- write all log to a file (LOG_FILE)
---local DEBUG = false	-- write all log to console output
+local YOUTUBE_DL = ""
 
-function my_write_log(data)
-	local fo
-	if DEBUG then 
-		fo = io.open(LOG_FILE, "a")
-		if fo == nil then
-			print("Can not open "..LOG_FILE)
-			return nil
-		end
-		fo:write(table.concat{os.date(), " ", data, "\n"})
-		fo:close()
-		return true
-	else
-		print(data)
-		return true
-	end
-end
-
-function save_file(content, filename)
-	local fo
-	
-	fo = io.open(filename, "w")
-	fo:write(content)
-	fo:close()
+if os.info() == "Windows" then
+	YOUTUBE_DL = "youtube-dl.exe"
+else
+	YOUTUBE_DL = "/usr/share/bin/youtube-dl"
 end
 
 -- Output :
@@ -84,12 +67,7 @@ function download_vidio(url, callback_function_write_log, callback_function_on_s
 	if codecs == nil then codecs = "none" end
 	if resolution == nil then resolution = "none" end
 	--download vidio: step 3
-	if DEBUG then
-		rc = os.execute('youtube-dl --cookies vidio_cookies.txt --no-progress --restrict-filenames --hls-prefer-native --output '..title..'.mp4 '..url1..' >> '..LOG_FILE)
-	else
-		rc = os.execute('youtube-dl --cookies vidio_cookies.txt --restrict-filenames --hls-prefer-native --output '..title..'.mp4 '..url1)
-	end
-	
+	rc = os.execute(YOUTUBE_DL..' --cookies vidio_cookies.txt --no-progress --restrict-filenames --hls-prefer-native --output '..title..'.mp4 '..url1..' >> '..LOG_FILE)
 	if rc ~= 0 then
 		write_log("[error][vidio.download] Failed")
 		return false
