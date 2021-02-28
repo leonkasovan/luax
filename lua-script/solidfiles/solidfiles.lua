@@ -67,7 +67,6 @@ function download_solidfiles(url, callback_function_write_log, callback_function
         return nil
     end
     http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	-- http.set_conf(http.OPT_NOPROGRESS, false)
 	rc, headers = http.request{url = action_url, output_filename = filename}
     if rc ~= 0 then
         write_log("[error][solidfiles.download] "..http.error(rc))

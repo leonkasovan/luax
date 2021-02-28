@@ -8,7 +8,7 @@ require('strict')
 require('common')
 
 -- GLOBAL SETTING
-local MAXTIMEOUT = 1800	-- set max timeout 15 minutes
+local MAXTIMEOUT = 1800	-- set max timeout 30 minutes
 
 local char_to_hex = function(c)
   return string.format("%%%02X", string.byte(c))
@@ -72,7 +72,6 @@ function download_racaty(url, callback_function_write_log, callback_function_on_
 	end
 	direct_url = urlencode(direct_url)
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	-- http.set_conf(http.OPT_NOPROGRESS, false)
 	rc, headers = http.request{url = direct_url, output_filename = filename}
 	if rc ~= 0 then
 		write_log("[error][racaty.download] "..http.error(rc))

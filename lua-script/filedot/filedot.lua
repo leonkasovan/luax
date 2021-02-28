@@ -6,6 +6,8 @@
 require('strict')
 require('common')
 
+local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
+
 -- Output :
 --	true : on success
 --	false : timeout
@@ -77,8 +79,7 @@ function download_filedot(url, callback_function_write_log, callback_function_on
 	n = 0
 	rc = 0
 	http.set_conf(http.OPT_REFERER, url)
-	http.set_conf(http.OPT_TIMEOUT, 1800)
-	-- http.set_conf(http.OPT_NOPROGRESS, false)
+	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	rc, headers = http.request{url = url2, output_filename = filename}
 	if rc ~= 0 then
 		write_log("[error][filedot] "..http.error(rc), rc)

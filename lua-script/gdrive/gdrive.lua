@@ -9,7 +9,7 @@ require('common')
 
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
-local MAXTIMEOUT = 3600	-- set max timeout 30 minutes
+local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
 
 -- Output :
 --	true : on success

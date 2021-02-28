@@ -82,9 +82,7 @@ function download_letsupload(url, callback_function_write_log, callback_function
 	end
 	http.set_conf(http.OPT_REFERER, url)
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	http.set_conf(http.OPT_NOPROGRESS, false)
 	rc, headers = http.request{url = direct_url, output_filename = filename}
-	http.set_conf(http.OPT_NOPROGRESS, true)
 	if rc ~= 0 then
 		write_log("[error][letsupload.download] "..http.error(rc))
 		return false
