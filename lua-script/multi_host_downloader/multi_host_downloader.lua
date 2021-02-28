@@ -128,14 +128,14 @@ function verify(url)
 end
 
 -- Get list of url
--- local urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
--- if urls == nil then
-	-- return -1
--- end
+local urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+if urls == nil then
+	return -1
+end
 
-urls = [[
-https://www.youtube.com/watch?v=P4Oc-RmXbL0
-]]
+-- urls = [[
+-- https://www.youtube.com/watch?v=P4Oc-RmXbL0
+-- ]]
 
 -- Download url(s)
 local nurl, url, try, done, download_library
