@@ -4,8 +4,9 @@
 --			https://drive.google.com/file/d/<<FILE_ID>>/view?usp=sharing
 -- Interpreter : luaX https://drive.google.com/file/d/1gaDQVusrvp78HfQbswVx4Wr-4-plA4Ke/view?usp=sharing
 -- 13:25 16 Jan 2021, Rawamangun
-require('strict')
-require('common')
+
+dofile('../strict.lua')
+dofile('../common.lua')
 
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
