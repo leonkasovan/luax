@@ -88,18 +88,18 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
-content = [[
-https://cyberdrop.me/a/FKTTaPQZ
-https://cyberdrop.me/a/nY0LCDNk
-]]
+-- content = [[
+-- https://cyberdrop.me/a/FKTTaPQZ
+-- https://cyberdrop.me/a/nY0LCDNk
+-- ]]
 
-for url in content:gmatch("[^\r\n]+") do
-	if verify_cyberdrop(url) then
-		download_cyberdrop(url)
-	else
-		my_write_log('[error][cyberdrop] invalid URL')
-	end
-end
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_cyberdrop(url) then
+		-- download_cyberdrop(url)
+	-- else
+		-- my_write_log('[error][cyberdrop] invalid URL')
+	-- end
+-- end
 
 -------------------------------------------------------------------------------
 --	Library Interface
