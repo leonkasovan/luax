@@ -188,42 +188,19 @@ end
 -- https://drive.google.com/uc?id=1kgzgnYfTnogMcXkrVIuaA8l3-RLkWB1K&export=download
 -- ]]
 
-content = [[
-https://drive.google.com/file/d/0BxjPkoVoNqw7NzJLZ1c4bEhhSWM/view?usp=sharing
-]]
+-- content = [[
+-- https://drive.google.com/file/d/0BxjPkoVoNqw7NzJLZ1c4bEhhSWM/view?usp=sharing
+-- ]]
 
 -- instant test internal library
-local MAXTRY = 10
-for url in content:gmatch("[^\r\n]+") do
-	if verify_gdrive(url) then
-		done = download_gdrive(url)
-		try = 1
-		while ((try <= MAXTRY) and (done == false)) do
-			print('Retry '..try)
-			done = download_gdrive(url)
-			try = try + 1
-		end
-	else
-		print('URL not valid for Google Drive')
-	end
-end
-
--- rc, headers = http.request{url = 'https://drive.google.com/file/d/0BxTdp26K4cYvSXE2SGxFY2VFLVk/view?usp=sharing', output_filename = 'content.htm'}
--- if rc ~= 0 then
-	-- print("Error: "..http.error(rc), rc)
-	-- return false
--- end
--- print(headers)
-
--- Test via dofile / require
 -- local MAXTRY = 10
 -- for url in content:gmatch("[^\r\n]+") do
-	-- if gdrive.verify(url) then
-		-- done = gdrive.download(url, my_write_log, print)
+	-- if verify_gdrive(url) then
+		-- done = download_gdrive(url)
 		-- try = 1
 		-- while ((try <= MAXTRY) and (done == false)) do
 			-- print('Retry '..try)
-			-- done = gdrive.download(url)
+			-- done = download_gdrive(url)
 			-- try = try + 1
 		-- end
 	-- else
@@ -234,9 +211,9 @@ end
 -------------------------------------------------------------------------------
 --	Library Interface
 -------------------------------------------------------------------------------
--- return {
-	-- download = download_gdrive,
-	-- verified = show_verified_gdrive,
-	-- verify = verify_gdrive
--- }
+return {
+	download = download_gdrive,
+	verified = show_verified_gdrive,
+	verify = verify_gdrive
+}
 
