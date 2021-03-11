@@ -69,7 +69,7 @@ function download_cyberdrop(url, callback_function_write_log, callback_function_
 	end
 	
 	if callback_function_on_success ~= nil then
-		callback_function_on_success(string.format("%s: %s %d success. %d fail", os.date(), url, ndownloaded, nfail))
+		callback_function_on_success(string.format("%s: %s(%s) %d success. %d fail", os.date(), url, title, ndownloaded, nfail))
 	end
 	return true
 end

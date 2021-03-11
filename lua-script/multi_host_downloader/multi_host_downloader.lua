@@ -68,6 +68,7 @@ local letsupload = dofile('../letsupload/letsupload.lua')
 local vidio = dofile('../vidio/vidio.lua')
 local youtube = dofile('../youtube/youtube.lua')
 local filedot = dofile('../filedot/filedot.lua')
+local cyberdrop = dofile('../cyberdrop/cyberdrop.lua')
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
@@ -97,6 +98,8 @@ function verify(url)
 			return youtube.download_audio
 		elseif filedot.verify(url) then
 			return filedot.download
+		elseif cyberdrop.verify(url) then
+			return cyberdrop.download
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		else
