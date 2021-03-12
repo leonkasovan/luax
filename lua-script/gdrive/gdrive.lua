@@ -24,7 +24,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	if callback_function_write_log ~= nil then
 		write_log = callback_function_write_log
 	else
-		write_log = my_write_log
+		write_log = print
 	end
 	
 	write_log('[info][gdrive] Processing '..url)
@@ -36,13 +36,15 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	
 	http.set_conf(http.OPT_COOKIEFILE, "gdrive_cookies.txt")
 	os.remove(TEMP_FILE)
+	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	rc, header = http.request{url = url, output_filename = TEMP_FILE}
+	-- print(rc, header)
 	if rc ~= 0 then
 		write_log("[error][gdrive.1] "..http.error(rc))
 		os.remove(TEMP_FILE)
 		if rc == 28 then return false else return nil end
 	end
-	print(header)
+	-- print(header)
 	
 	filename = string.match(header, '[Ff]ilename%s*=%s*"(.-)"')
 	if filename ~= nil then
@@ -58,40 +60,40 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	end
 	
 	-- Extract Filename
-	content = load_file(TEMP_FILE)
-	os.remove(TEMP_FILE)
-	filename = string.match(content, '<a href=".-">(.-)</a>')
-	if filename == nil then
-		write_log("[error][gdrive.2] Can't find it's filename. Invalid response from Google Drive")
-		save_file(content,"gdrive_invalid_content.htm")
-		return nil
-	end
-	filename = filename:gsub('[%/%\%:%?%*%"%<%>%|]', "")
+	-- content = load_file(TEMP_FILE)
+	-- os.remove(TEMP_FILE)
+	-- filename = string.match(content, '<a href=".-">(.-)</a>')
+	-- if filename == nil then
+		-- write_log("[error][gdrive.2] Can't find it's filename. Invalid response from Google Drive")
+		-- save_file(content,"gdrive_invalid_content.htm")
+		-- return nil
+	-- end
+	-- filename = filename:gsub('[%/%\%:%?%*%"%<%>%|]', "")
  
-	direct_url = nil
-	links = http.collect_link(content, url)
-	for i, v in ipairs(links) do
-		if string.find(v, "confirm=") then
-			direct_url = v
-		end
-	end
+	-- direct_url = nil
+	-- links = http.collect_link(content, url)
+	-- for i, v in ipairs(links) do
+		-- if string.find(v, "confirm=") then
+			-- direct_url = v
+		-- end
+	-- end
  
-	if direct_url == nil then
-		save_file(content,"gdrive_invalid_content.htm")
-		write_log("[error][gdrive.3] Can't find direct link to download. Invalid response from Google Drive")
-		return nil
-	end
+	-- if direct_url == nil then
+		-- save_file(content,"gdrive_invalid_content.htm")
+		-- write_log("[error][gdrive.3] Can't find direct link to download. Invalid response from Google Drive")
+		-- return nil
+	-- end
  
-	direct_url = direct_url:gsub( "&amp;", "&")
-	write_log('[info][gdrive] Request direct URL '..direct_url)
-	http.set_conf(http.OPT_REFERER, url)
-	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	rc, header = http.request{url = direct_url, output_filename = TEMP_FILE}
-	if rc ~= 0 then
-		write_log("[error][gdrive.4] "..http.error(rc), rc)
-		os.remove(TEMP_FILE)
-		return nil
-	end
+	-- direct_url = direct_url:gsub( "&amp;", "&")
+	-- write_log('[info][gdrive] Request direct URL '..direct_url)
+	-- http.set_conf(http.OPT_REFERER, url)
+	-- http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
+	-- rc, header = http.request{url = direct_url, output_filename = TEMP_FILE}
+	-- if rc ~= 0 then
+		-- write_log("[error][gdrive.4] "..http.error(rc), rc)
+		-- os.remove(TEMP_FILE)
+		-- return nil
+	-- end
 	
 
 	-- Extract Filename
@@ -119,7 +121,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 		return nil
 	end
  
-	direct_url = direct_url:gsub( "&amp;", "&")
+	direct_url = direct_url:gsub( "&amp;", "&") print(direct_url)
 	write_log('[info][gdrive] Downloading '..filename..' from '..format_number(os.getfilesize(filename)))
 	http.set_conf(http.OPT_REFERER, url)
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
@@ -152,7 +154,7 @@ function show_verified_gdrive()
 	return 
 [[
 https://drive.google.com/uc?id=1kgzgnYfTnogMcXkrVIuaA8l3-RLkWB1K&export=download
-https://drive.google.com/file/d/1tRsLrRhXGKZbqwV1R5MOlpf6o4-cUvU3/view
+https://drive.google.com/file/d/0BxTdp26K4cYvSXE2SGxFY2VFLVk/view?usp=sharing
 ]]
 end
 
@@ -179,30 +181,25 @@ end
 -- https://drive.google.com/file/d/1bD0Htxf0PA9H6amkdpGjcs5BwPgAbg4U/view -- The room 4 part 2
 -- https://drive.google.com/file/d/1MFpdoyxwDkUX72IwdG8iRR2f2HiUuov9/view	Gi Joe Part 1
 -- https://drive.google.com/file/d/1tRsLrRhXGKZbqwV1R5MOlpf6o4-cUvU3/view	Jet cave Adventure
+-- https://drive.google.com/file/d/1Q87AuA2vRBy_rQ8mh6aemfrnTnj0MSE2/view Neon Abyss Launch Edition-GOG 390.42 MB
 
 -- Movie Finding Ohana
 -- content = [[
 -- https://drive.google.com/uc?id=1kgzgnYfTnogMcXkrVIuaA8l3-RLkWB1K&export=download
 -- ]]
 
--- for url in content:gmatch("[^\r\n]+") do
-	-- if verify_gdrive(url) then
-		-- res = download_gdrive(url)
-	-- else
-		-- my_write_log('[error][gdrive] invalid URL')
-	-- end
--- end
+-- content = [[
+-- https://drive.google.com/file/d/0BxjPkoVoNqw7NzJLZ1c4bEhhSWM/view?usp=sharing
+-- ]]
 
+-- instant test internal library
 -- local MAXTRY = 10
 -- for url in content:gmatch("[^\r\n]+") do
-	-- if gdrive.verify(url) then
 	-- if verify_gdrive(url) then
-		-- done = gdrive.download(url, my_write_log, print)
 		-- done = download_gdrive(url)
 		-- try = 1
 		-- while ((try <= MAXTRY) and (done == false)) do
-			-- write_log('Retry '..try)
-			-- done = gdrive.download(url)
+			-- print('Retry '..try)
 			-- done = download_gdrive(url)
 			-- try = try + 1
 		-- end
