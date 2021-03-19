@@ -10,7 +10,7 @@ function myload_file(filename)
  
     fi = io.open(filename, "r")
     if fi == nil then
-        return ""
+        return "nil"
     end
     content = fi:read("*a")
     fi:close()
@@ -33,4 +33,7 @@ else
 	os.execute("ls -lt multi_host_downloader > files.txt")
 end
 
-res = gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', string.format("Time:%s\n %s\n\nLOG LUA Downloader:\n%s\n\nLOG Youtube-DL:\n%s", os.date(), myload_file('files.txt'), myload_file(LOG_FILE), myload_file(LOG_FILE2)))
+content = string.format("Time:%s\n %s\n\nLOG LUA Downloader:\n%s\n\nLOG Youtube-DL:\n%s", os.date(), myload_file('files.txt'), myload_file(LOG_FILE), myload_file(LOG_FILE2))
+--print(content)
+res = gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', content)
+print(res)

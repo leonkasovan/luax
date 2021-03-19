@@ -23,14 +23,14 @@ function download_letsupload(url, callback_function_write_log, callback_function
 	if callback_function_write_log ~= nil then
 		write_log = callback_function_write_log
 	else
-		write_log = my_write_log
+		write_log = print
 	end
 	
 	if url:match('^https://www.letsupload.io/%w+') then	--Normalize URL
 		url = 'https://letsupload.io/'..string.match(url, 'letsupload.io/(%w+)')
 	end
 	
-	rc, content = http.get_url(url)
+	rc, headers, content = http.request(url)
 	if rc ~= 0 then
 		write_log("[error][letsupload.download] "..http.error(rc))
 		return false
@@ -51,7 +51,7 @@ function download_letsupload(url, callback_function_write_log, callback_function
 		return nil
 	end
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	rc, content = http.get_url(url)
+	rc, headers, content = http.request(url)
 	if rc ~= 0 then
 		write_log("[error][letsupload.download] "..http.error(rc))
 		return false
@@ -106,6 +106,21 @@ https://letsupload.io/27bTf
 https://www.letsupload.io/28egf/
 ]]
 end
+
+-------------------------------------------------------------------------------
+--	Library Testing
+-------------------------------------------------------------------------------
+-- content = [[
+-- https://letsupload.io/27chz
+-- ]]
+
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_letsupload(url) then
+		-- download_letsupload(url)
+	-- else
+		-- my_write_log('[error][filedot] invalid URL')
+	-- end
+-- end
 
 return {
 	download = download_letsupload,

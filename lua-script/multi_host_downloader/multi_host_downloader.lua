@@ -7,7 +7,6 @@
 local MAXTRY = 10
 local TEMP_FILE = "file.tmp"
 local MAXTIMEOUT = 1800	-- set max timeout 30 minutes
-local LOG_FILE = "multi_host_downloader.log"
 
 function write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)

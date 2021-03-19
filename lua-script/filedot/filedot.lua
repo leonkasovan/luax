@@ -28,14 +28,14 @@ function download_filedot(url, callback_function_write_log, callback_function_on
 	write_log('[info][filedot] Process '..url)
 	rc, headers, content = http.request(url)
 	if rc ~= 0 then
-		write_log("[error][filedot] "..http.error(rc), rc)
+		write_log("[error][filedot] "..http.error(rc))
 		return false
 	end
 	
 	filename = string.match(content, 'fname" value="(.-)">')
 	rc, headers, content = http.request(url,'op=download1&usr_login=&referer=https://nnsets.fr/&method_free=Free+Download+>>&id='..id..'&fname='..filename)
 	if rc ~= 0 then
-		print("Error: "..http.error(rc), rc)
+		write_log("Error: "..http.error(rc))
 		return false
 	end
 	-- print(content)
@@ -69,7 +69,7 @@ function download_filedot(url, callback_function_write_log, callback_function_on
 	post_data = string.format("op=download2&id=%s&rand=%s&referer=&method_free=Free+Download+>>&method_premium=&adblock_detected=0&code=%s", id, rand, code)	
 	rc, headers, content = http.request(url, post_data)
 	if rc ~= 0 then
-		write_log("[error][filedot] "..http.error(rc), rc)
+		write_log("[error][filedot] "..http.error(rc))
 		return false
 	end
 	size = content:match('<span style="font%-size%:12px; color%:%#4c4c4c%;">(.-)<small>')
@@ -82,7 +82,7 @@ function download_filedot(url, callback_function_write_log, callback_function_on
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	rc, headers = http.request{url = url2, output_filename = filename}
 	if rc ~= 0 then
-		write_log("[error][filedot] "..http.error(rc), rc)
+		write_log("[error][filedot] "..http.error(rc))
 		return false
 	end
 

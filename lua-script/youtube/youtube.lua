@@ -91,7 +91,7 @@ end
 --	false : fail, timeout or network problem (can be retried)
 --	nil : fail, invalid response
 function download_audio_youtube(url, callback_function_write_log, callback_function_on_success)
-	local rc, content, title, headers, write_log
+	local rc, content, title, headers, write_log, new_url
  
 	if callback_function_write_log ~= nil then
 		write_log = callback_function_write_log
@@ -99,8 +99,8 @@ function download_audio_youtube(url, callback_function_write_log, callback_funct
 		write_log = my_write_log
 	end
 	
-	url = url:gsub('&(.-)$','')	-- remove any additional parameter
-	rc, headers, content = http.request(url:gsub('music','www'))	-- grab title in www.youtube.com
+	new_url = url:gsub('&(.-)$','')	-- remove any additional parameter
+	rc, headers, content = http.request(new_url:gsub('music','www'))	-- grab title in www.youtube.com
 	if rc ~= 0 then
 		write_log("[error][youtube] "..http.error(rc), rc)
 		return false
@@ -110,7 +110,7 @@ function download_audio_youtube(url, callback_function_write_log, callback_funct
 	-- title = title:gsub("[^%.%w%s%-%_%(%)%[%]]","")
 
 	http.set_conf(http.OPT_COOKIEFILE, "youtube_cookies.txt")
-	rc = os.execute(YOUTUBE_DL..' --add-metadata --cookies youtube_cookies.txt --restrict-filenames -x --audio-format mp3 -o "%(artist)s - %(title)s.%(ext)s" '..url..' >> '..LOG_FILE)
+	rc = os.execute(YOUTUBE_DL..' --add-metadata --cookies youtube_cookies.txt --restrict-filenames -x --audio-format mp3 -o "%(artist)s - %(title)s.%(ext)s" '..new_url..' >> '..LOG_FILE)
 	if rc ~= 0 then
 		write_log("[error][youtube.download] Failed")
 		return false

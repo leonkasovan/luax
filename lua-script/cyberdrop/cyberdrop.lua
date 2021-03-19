@@ -2,8 +2,8 @@
 -- Interpreter : luaX https://drive.google.com/file/d/1gaDQVusrvp78HfQbswVx4Wr-4-plA4Ke/view?usp=sharing
 -- 15/01/2021 Jakarta Rawamangun, dhani.novan@gmail.com
 
-require('strict')
-require('common')
+--require('strict')
+--require('common')
 
 local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
 local FAIL_FILENAME = "cyberdrop_failed.txt"
