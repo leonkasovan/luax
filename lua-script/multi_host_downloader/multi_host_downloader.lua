@@ -43,7 +43,7 @@ function general_download(url, callback_function_write_log, callback_function_on
 		server_filename = server_filename:gsub('[%/%\%:%?%*%"%<%>%|]', "")
 		os.rename(filename, server_filename)
 		if callback_function_on_success ~= nil then callback_function_on_success(string.format("%s %s; %s (%s)", os.date(), url, server_filename, server_filesize)) end
-		write_log(string.format("[info][general_download] Success and renamed with filename: %s (%s bytes)"), server_filename, server_filesize)
+		write_log(string.format("[info][general_download] Success and renamed with filename: %s (%s bytes)", server_filename, server_filesize))
 		return true
 	end
 	if callback_function_on_success ~= nil then callback_function_on_success(string.format("%s %s; %s", os.date(), url, filename)) end
