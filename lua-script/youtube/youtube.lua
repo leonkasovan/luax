@@ -35,7 +35,7 @@ function download_youtube(url, callback_function_write_log, callback_function_on
 	
 	rc, headers, content = http.request(url)
 	if rc ~= 0 then
-		write_log("[error][youtube] "..http.error(rc), rc)
+		write_log("[error][youtube] "..http.error(rc))
 		return false
 	end
 	title = string.match(content, 'title":"(.-)",')
@@ -68,7 +68,7 @@ function download_raw_youtube(url, callback_function_write_log, callback_functio
 	
 	rc, headers, content = http.request(url)
 	if rc ~= 0 then
-		write_log("[error][youtube] "..http.error(rc), rc)
+		write_log("[error][youtube] "..http.error(rc))
 		return false
 	end
 	title = string.match(content, 'title":"(.-)",')
@@ -102,7 +102,7 @@ function download_audio_youtube(url, callback_function_write_log, callback_funct
 	new_url = url:gsub('&(.-)$','')	-- remove any additional parameter
 	rc, headers, content = http.request(new_url:gsub('music','www'))	-- grab title in www.youtube.com
 	if rc ~= 0 then
-		write_log("[error][youtube] "..http.error(rc), rc)
+		write_log("[error][youtube] "..http.error(rc))
 		return false
 	end
 	title = string.match(content, 'title":"(.-)",')
