@@ -593,6 +593,7 @@ static CURLcode chop_write(struct connectdata *conn,
         return pausewrite(data, type, ptr, len);
       }
       if(wrote != chunklen) {
+        printf("Olen = %d, wrote=%d, chunklen=%d \n", olen, wrote, chunklen);
         failf(data, "Failure writing output to destination");
         return CURLE_WRITE_ERROR;
       }
