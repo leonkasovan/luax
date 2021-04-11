@@ -30,14 +30,6 @@ function strip_html(filename)
 	return filename..':\n'..content:gsub("<style.->.-</style>",""):gsub("<script.->.-</script>",""):gsub("<!%-%-.-%-%->",""):gsub("<.->",""):gsub("%s+"," ")..'\n\n'
 end
 
-if os.date("%H") == "05" or os.date("%H") == "22" or os.date("%H") == "17" then
-	os.remove('file.tmp')
-end
-
-if os.date("%d")%2 == 0 then
-	if os.date("%H") == "22" then os.remove('multi_host_downloader.log') end
-end
-
 if os.info() == "Windows" then
 	gist = require('github\\gist')
 	os.execute('dir /A:-D /O:D > files.txt')	
@@ -57,3 +49,12 @@ table.insert(tcontent, strip_html('multi_host_downloader/videobin_invalid_conten
 table.insert(tcontent, strip_html('multi_host_downloader/filedot_invalid_content.htm'))
 table.insert(tcontent, strip_html('multi_host_downloader/letsupload_invalid_content.htm'))
 res = gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', table.concat(tcontent))
+
+if os.date("%d")%2 == 0 then
+	if os.info() == "Windows" then 
+		os.execute('type multi_host_downloader\\multi_host_downloader.log >> multi_host_downloader\\multi_host_downloader_history.log')
+	else
+		os.execute('cat multi_host_downloader/multi_host_downloader.log >> multi_host_downloader/multi_host_downloader_history.log')
+	end
+	if os.date("%H") == "23" then os.remove('multi_host_downloader/multi_host_downloader.log') end
+end
