@@ -51,10 +51,13 @@ table.insert(tcontent, strip_html('multi_host_downloader/letsupload_invalid_cont
 res = gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', table.concat(tcontent))
 
 if os.date("%d")%2 == 0 then
-	if os.info() == "Windows" then 
-		os.execute('type multi_host_downloader\\multi_host_downloader.log >> multi_host_downloader\\multi_host_downloader_history.log')
-	else
-		os.execute('cat multi_host_downloader/multi_host_downloader.log >> multi_host_downloader/multi_host_downloader_history.log')
+	if os.date("%H") == "23" then
+		if os.info() == "Windows" then 
+			os.execute('type multi_host_downloader\\multi_host_downloader.log >> multi_host_downloader\\multi_host_downloader_history.log')
+			os.remove('multi_host_downloader\\multi_host_downloader.log') 
+		else
+			os.execute('cat multi_host_downloader/multi_host_downloader.log >> multi_host_downloader/multi_host_downloader_history.log')
+			os.remove('multi_host_downloader/multi_host_downloader.log') 
+		end
 	end
-	if os.date("%H") == "23" then os.remove('multi_host_downloader/multi_host_downloader.log') end
 end
