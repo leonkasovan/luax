@@ -40,10 +40,10 @@ end
 
 tcontent = {}
 table.insert(tcontent, string.format("Time:%s\n", os.date()))
-table.insert(tcontent, myload_file('files.txt'))
-table.insert(tcontent, myload_file('multi_host_downloader/multi_host_downloader.log'))
-table.insert(tcontent, myload_file('multi_host_downloader/lua_error.log'))
-table.insert(tcontent, myload_file('multi_host_downloader/bash_error.log'))
+table.insert(tcontent, load_file('files.txt'))
+table.insert(tcontent, load_file('multi_host_downloader/multi_host_downloader.log'))
+table.insert(tcontent, load_file('multi_host_downloader/lua_error.log'))
+table.insert(tcontent, load_file('multi_host_downloader/bash_error.log'))
 table.insert(tcontent, strip_html('multi_host_downloader/gdrive_invalid_content.htm'))
 table.insert(tcontent, strip_html('multi_host_downloader/videobin_invalid_content.htm'))
 table.insert(tcontent, strip_html('multi_host_downloader/filedot_invalid_content.htm'))
