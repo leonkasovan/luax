@@ -7,7 +7,7 @@
 PLAT= none
 
 CC= gcc
-CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude
+CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64
 AR= ar -r
 RANLIB= ranlib
 RM= rm -f
