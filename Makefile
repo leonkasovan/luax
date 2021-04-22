@@ -7,7 +7,7 @@
 PLAT= none
 
 CC= gcc
-CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude
+CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64
 AR= ar -r
 RANLIB= ranlib
 RM= rm -f
@@ -39,31 +39,31 @@ $(MYLIBSDIR)liblua.a: $(LIBLUA_OBJS) $(MYOBJDIR)lcsvlib.o $(MYOBJDIR)lgziolib.o 
 	$(RANLIB) $@
 
 $(MYOBJDIR)lpcre.o: lua-library-src/luapcre/lpcre.c lua-library-src/luapcre/common.h lua-library-src/luapcre/algo.h
-	$(CC) -O2 -Wall -c -o $@ lua-library-src/luapcre/lpcre.c -Iinclude
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -o $@ lua-library-src/luapcre/lpcre.c -Iinclude
 	
 $(MYOBJDIR)lpcre_f.o: lua-library-src/luapcre/lpcre_f.c lua-library-src/luapcre/common.h lua-library-src/luapcre/algo.h
-	$(CC) -O2 -Wall -c -o $@ lua-library-src/luapcre/lpcre_f.c -Iinclude
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -o $@ lua-library-src/luapcre/lpcre_f.c -Iinclude
 	
 $(MYOBJDIR)common.o: lua-library-src/luapcre/common.c lua-library-src/luapcre/common.h lua-library-src/luapcre/algo.h	
-	$(CC) -O2 -Wall -c -o $@ lua-library-src/luapcre/common.c -Iinclude
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -o $@ lua-library-src/luapcre/common.c -Iinclude
 
 $(MYOBJDIR)lhttplib.o: lua-library-src/luahttp/lhttplib.c
-	$(CC) -O2 -Wall -c -DLUA_USE_LINUX -o $@ $< -Iinclude
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -DLUA_USE_LINUX -o $@ $< -Iinclude
 
 $(MYOBJDIR)lcsvlib.o: lua-library-src/luacsv/lcsvlib.c
-	$(CC) -O2 -Wall -c -o $@ $< -Iinclude
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -o $@ $< -Iinclude
 
 $(MYOBJDIR)lua_cjson.o: lua-library-src/luajson/lua_cjson.c
-	$(CC) -O2 -Wall -c -o $@ $< -Iinclude
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -o $@ $< -Iinclude
 
 $(MYOBJDIR)lgziolib.o: lua-library-src/luagzio/lgziolib.c
-	$(CC) -O2 -Wall -c -o $@ $< -Iinclude
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -o $@ $< -Iinclude
 
 $(MYOBJDIR)lfs.o: lua-library-src/luafilesystem/lfs.c
-	$(CC) -O2 -Wall -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic -c -o $@ $< -Iinclude
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -fPIC -W -Waggregate-return -Wcast-align -Wmissing-prototypes -Wnested-externs -Wshadow -Wwrite-strings -pedantic -c -o $@ $< -Iinclude
 
 $(MYOBJDIR)lua.o: lua-interpreter-src/lua.c
-	$(CC) -O2 -Wall -c -DLUA_USE_LINUX -o $@ $< -Iinclude
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -DLUA_USE_LINUX -o $@ $< -Iinclude
 
 clean:
 	$(RM) $(BSTRINGSRCDIR)*.o

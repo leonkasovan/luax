@@ -61,3 +61,4 @@ if os.date("%d")%2 == 0 then
 		end
 	end
 end
+print(res)

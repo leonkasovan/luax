@@ -130,19 +130,21 @@ local nurl, url, try, done, download_library
 nurl = 1
 for url in urls:gmatch("[^\r\n]+") do
 	if #url ~= 0 then	-- url is not empty string
-		write_log("---------------------------------------------------------------------------")
-		write_log("Processing URL "..nurl..": "..url)
-		download_library = verify(url)
-		if download_library ~= nil then
-			done = download_library(url, write_log, update_success_log)
-			try = 1
-			while ((try <= MAXTRY) and (done == false)) do
-				write_log('Retry '..try)
+		if url:byte(1) ~= 35 then	-- skip char #
+			write_log("---------------------------------------------------------------------------")
+			write_log("Processing URL "..nurl..": "..url)
+			download_library = verify(url)
+			if download_library ~= nil then
 				done = download_library(url, write_log, update_success_log)
-				try = try + 1
+				try = 1
+				while ((try <= MAXTRY) and (done == false)) do
+					write_log('Retry '..try)
+					done = download_library(url, write_log, update_success_log)
+					try = try + 1
+				end
 			end
+			nurl = nurl + 1
 		end
-		nurl = nurl + 1
 	end
 end
 return 0
