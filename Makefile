@@ -1,4 +1,5 @@
 # makefile for building LuaX in Linux
+# in 32bit Linux, need to define _FILE_OFFSET_BITS=64 to access file with size more than 2^32 byte (https://digital-domain.net/largefiles.html)
 # prepare other libs: apt install libreadline-dev libcurl4-openssl-dev libpcre3-dev libz-dev
 
 # == CHANGE THE SETTINGS BELOW TO SUIT YOUR ENVIRONMENT =======================
