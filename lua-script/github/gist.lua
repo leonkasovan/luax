@@ -3,7 +3,7 @@
 -- Dhani.Novan@gmail.com 21:17 25 July 2020
 
 local GITHUB_USER = "dhaninovan"
-local GITHUB_TOKEN = "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"
+local GITHUB_TOKEN = "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"
 local MAXTIMEOUT = 30
 
 local function escape_str(s)
