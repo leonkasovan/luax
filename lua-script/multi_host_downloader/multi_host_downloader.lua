@@ -102,6 +102,10 @@ function verify(url)
 			return cyberdrop.download
 		elseif videobin.verify(url) then
 			return videobin.download
+		elseif pixeldrain.verify(url) then
+			return pixeldrain.download
+		elseif pixeldrain.verify_list(url) then
+			return pixeldrain.download_list
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		else
