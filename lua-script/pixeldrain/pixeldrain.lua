@@ -67,13 +67,16 @@ function download_pixeldrain_list(url, callback_function_write_log, callback_fun
 		write_log("[error][pixeldrain] "..http.error(rc))
 		return nil
 	end
-	filename = string.match(content, 'og%:title" content="(%S+)"')
-	if filename == nil then write_log('[error][pixeldrain] invalid response. (1)') save_file(content, 'pixeldrain_invalid_content.htm') return nil end
+	title = string.match(content, 'og%:title" content="(.-)"')
+	if title == nil then write_log('[error][pixeldrain] invalid response. (1)') save_file(content, 'pixeldrain_invalid_content.htm') return nil end
+	filename = string.format("%s (%s).zip", title, url:match('pixeldrain%.com/l/(%w+)'))
+	write_log(filename)
 	
 	-- Do processing in here
 	http.set_conf(http.OPT_TIMEOUT, 1800)
 	http.set_conf(http.OPT_REFERER, url)
-	rc, headers = http.request{url = 'https://pixeldrain.com/api/file/'..url:match('pixeldrain%.com/u/(%w+)')..'?download', output_filename = filename}
+	rc, headers = http.request{url = 'https://pixeldrain.com/api/list/'..url:match('pixeldrain%.com/l/(%w+)')..'/zip', output_filename = filename}
+	write_log(filename..' https://pixeldrain.com/api/list/'..url:match('pixeldrain%.com/l/(%w+)')..'/zip')
 	if rc ~= 0 then
 		write_log("[error][pixeldrain] "..http.error(rc))
 		return false
@@ -105,16 +108,19 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
--- content = [[
--- https://pixeldrain.com/u/3UA3qYJY
--- ]]
-
 -- https://pixeldrain.com/u/Nok49TmP
 -- https://pixeldrain.com/u/1rHPNrV8;Bite the Bullet;487MB 
+-- https://pixeldrain.com/u/3UA3qYJY
+
+-- content = [[
+-- https://pixeldrain.com/l/wYSnZfoS
+-- ]]
 
 -- for url in content:gmatch("[^\r\n]+") do
 	-- if verify_pixeldrain(url) then
 		-- download_pixeldrain(url)
+	-- elseif verify_pixeldrain_list(url) then
+		-- download_pixeldrain_list(url)
 	-- else
 		-- my_write_log('[error][pixeldrain] invalid URL')
 	-- end
