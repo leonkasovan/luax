@@ -70,6 +70,7 @@ local filedot = dofile('../filedot/filedot.lua')
 local cyberdrop = dofile('../cyberdrop/cyberdrop.lua')
 local videobin = dofile('../videobin/videobin.lua')
 local pixeldrain = dofile('../pixeldrain/pixeldrain.lua')
+local mediafire = dofile('../mediafire/mediafire.lua')
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
@@ -107,6 +108,8 @@ function verify(url)
 			return pixeldrain.download
 		elseif pixeldrain.verify_list(url) then
 			return pixeldrain.download_list
+		elseif mediafire.verify(url) then
+			return mediafire.download
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		else
