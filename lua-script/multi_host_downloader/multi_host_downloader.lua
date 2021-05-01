@@ -69,6 +69,7 @@ local youtube = dofile('../youtube/youtube.lua')
 local filedot = dofile('../filedot/filedot.lua')
 local cyberdrop = dofile('../cyberdrop/cyberdrop.lua')
 local videobin = dofile('../videobin/videobin.lua')
+local pixeldrain = dofile('../pixeldrain/pixeldrain.lua')
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
