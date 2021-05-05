@@ -124,8 +124,15 @@ end
 
 -- Get list of url
 local urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+local try
+
+try = 1
+while ((urls == nil) and (try < MAXTRY)) do
+	urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+	try = try + 1
+end
 if urls == nil then
-	write_log('Fail to grab list of url')
+	write_log('Fail to grab list of url after '..try..' times trying.')
 	return -1
 end
 
@@ -134,7 +141,7 @@ end
 -- ]]
 
 -- Download url(s)
-local nurl, url, try, done, download_library
+local nurl, url, done, download_library
 nurl = 1
 for url in urls:gmatch("[^\r\n]+") do
 	if #url ~= 0 then	-- url is not empty string
