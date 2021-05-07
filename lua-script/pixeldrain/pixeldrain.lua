@@ -28,7 +28,7 @@ function download_pixeldrain(url, callback_function_write_log, callback_function
 		write_log("[error][pixeldrain] "..http.error(rc))
 		return nil
 	end
-	filename = string.match(content, 'og%:title" content="(%S+)"')
+	filename = string.match(content, 'og%:title" content="(.-)"')
 	if filename == nil then write_log('[error][pixeldrain] invalid response. (1)') save_file(content, 'pixeldrain_invalid_content.htm') return nil end
 	
 	-- Do processing in here
