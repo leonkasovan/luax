@@ -148,13 +148,14 @@ end
 function verify_gdrive(url)
 	return url:match('https://drive%.google%.com/file/%w/.-/view') 
 		or url:match('https://drive%.google%.com/uc%?id=.-&export=download')
-		or url:match('https://drive%.google%.com/u/0/uc%?id=.-&export=download') https://drive.google.com/u/0/uc?id=1Y4EEsy6O9hdIawQVpxvv1PDM76q3k6qs&export=download
+		or url:match('https://drive%.google%.com/././uc%?id=.-&export=download')
 end
 
 function show_verified_gdrive()
 	return 
 [[
 https://drive.google.com/uc?id=1kgzgnYfTnogMcXkrVIuaA8l3-RLkWB1K&export=download
+https://drive.google.com/u/0/uc?id=1Y4EEsy6O9hdIawQVpxvv1PDM76q3k6qs&export=download
 https://drive.google.com/file/d/0BxTdp26K4cYvSXE2SGxFY2VFLVk/view?usp=sharing
 ]]
 end
