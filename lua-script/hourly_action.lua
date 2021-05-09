@@ -48,6 +48,7 @@ table.insert(tcontent, strip_html('multi_host_downloader/gdrive_invalid_content.
 table.insert(tcontent, strip_html('multi_host_downloader/videobin_invalid_content.htm'))
 table.insert(tcontent, strip_html('multi_host_downloader/filedot_invalid_content.htm'))
 table.insert(tcontent, strip_html('multi_host_downloader/letsupload_invalid_content.htm'))
+table.insert(tcontent, strip_html('multi_host_downloader/pixeldrain_invalid_content.htm'))
 res = gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', table.concat(tcontent))
 
 if os.date("%d")%5 == 0 then
@@ -59,6 +60,7 @@ if os.date("%d")%5 == 0 then
 			os.execute('cat multi_host_downloader/multi_host_downloader.log >> multi_host_downloader/multi_host_downloader_history.log')
 			os.remove('multi_host_downloader/multi_host_downloader.log') 
 		end
+		print('Archiving log at '..os.date())
 	end
 end
-print(res)
+--print(res)
