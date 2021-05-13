@@ -119,6 +119,8 @@ function verify(url)
 			return mediafire.download
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
+		elseif url:match('^ftps?://.-/.+$') then
+			return general_download
 		else
 			write_log("[error][verify] Downloader is not defined for "..url)
 			return nil
