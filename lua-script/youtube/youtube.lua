@@ -1,4 +1,7 @@
 -- Lua Library : Download media file from youtube.com
+-- Depends :
+-- 1. youtube-dl (https://github.com/ytdl-org/youtube-dl/releases/download/2021.04.26/youtube-dl.exe) (Linux: sudo apt install youtube-dl)
+-- 2. ffmpeg (Windows: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.7z) (Linux: sudo apt install ffmpeg)
 -- Format Input URL = 
 --		https://www.youtube.com/watch?v=GAyvgz8_zV8
 -- Interpreter : modified lua https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=drivesdk
