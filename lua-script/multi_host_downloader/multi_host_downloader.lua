@@ -74,8 +74,15 @@ local mediafire = dofile('../mediafire/mediafire.lua')
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
+	local try
+
+	try = 1
+	while ((success_log == nil) and (try < MAXTRY)) do
+		success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
+		try = try + 1
+	end
 	
-	if success_log == nil then success_log = "" end
+	if success_log == nil then success_log = "Fail to load previous success log at "..os.date() end
 	gist.update('19611e27b450185cd15241035b5b2110', 'success.log', string.format("%s\n%s", success_log, data))
 end
 
