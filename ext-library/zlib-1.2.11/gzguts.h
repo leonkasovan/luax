@@ -33,6 +33,7 @@
 
 #ifdef _WIN32
 #  include <stddef.h>
+#  define WINAPI_FAMILY
 #endif
 
 #if defined(__TURBOC__) || defined(_MSC_VER) || defined(_WIN32)
