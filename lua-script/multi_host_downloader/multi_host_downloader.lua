@@ -1,6 +1,6 @@
 -- Multi download url : gdrive, solidfiles, general
 -- Interpreter : lua with Xtra Library : http, csv, json, iup
--- Download interpreter https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=sharing
+-- Download interpreter https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 -- 16:55 28 June 2020 (c) dhani.novan@gmail.com
 
 -- GLOBAL SETTING

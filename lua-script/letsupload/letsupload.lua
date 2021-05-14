@@ -2,7 +2,7 @@
 -- Format Input URL = 
 --		https://letsupload.io/%w+
 --		https://letsupload.io/n1lH
--- Interpreter : modified lua https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=drivesdk
+-- Interpreter : https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 -- 5:22 06 August 2020, Rawamangun
 
 dofile('../strict.lua')

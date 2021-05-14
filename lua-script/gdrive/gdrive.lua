@@ -2,7 +2,7 @@
 -- Format Input URL = 
 --			https://drive.google.com/uc?id=<<FILE_ID>>&export=download
 --			https://drive.google.com/file/d/<<FILE_ID>>/view?usp=sharing
--- Interpreter : luaX https://drive.google.com/file/d/1gaDQVusrvp78HfQbswVx4Wr-4-plA4Ke/view?usp=sharing
+-- Interpreter : luaX https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 -- 13:25 16 Jan 2021, Rawamangun
 
 dofile('../strict.lua')

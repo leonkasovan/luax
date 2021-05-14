@@ -1,5 +1,5 @@
 -- Lua Script : Gist Basic Operation in gist.github.com : read, create, upload, update, delete
--- Using modified Lua 5.1 https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=sharing
+-- Using modified Lua 5.1 https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 -- Dhani.Novan@gmail.com 21:17 25 July 2020
 
 local GITHUB_USER = "dhaninovan"

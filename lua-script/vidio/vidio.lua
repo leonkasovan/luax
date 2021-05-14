@@ -1,7 +1,7 @@
 -- Lua Library : Download file from vidio.com
 -- Format Input URL = 
 --		https://www.vidio.com/watch/1994460-god-of-gamblers-part-3-back-to-shanghai
--- Interpreter : modified lua https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=drivesdk
+-- Interpreter : modified lua https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 -- 5:44 20 August 2020, Rawamangun
 
 dofile('../strict.lua')

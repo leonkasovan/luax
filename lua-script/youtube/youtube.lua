@@ -4,7 +4,7 @@
 -- 2. ffmpeg (Windows: https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.7z) (Linux: sudo apt install ffmpeg)
 -- Format Input URL = 
 --		https://www.youtube.com/watch?v=GAyvgz8_zV8
--- Interpreter : modified lua https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=drivesdk
+-- Interpreter : modified lua https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 -- 4:39 24 August 2020, Rawamangun
 
 dofile('../strict.lua')

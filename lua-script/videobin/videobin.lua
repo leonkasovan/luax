@@ -1,5 +1,5 @@
 -- Lua 5.1.5.XL Script for downloading media from https://videobin.com
--- Interpreter : luaX https://drive.google.com/file/d/1gaDQVusrvp78HfQbswVx4Wr-4-plA4Ke/view?usp=sharing
+-- Interpreter : luaX https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 
 dofile('../strict.lua')
 dofile('../common.lua')

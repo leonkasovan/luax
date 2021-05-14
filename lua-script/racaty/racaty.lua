@@ -2,7 +2,7 @@
 -- Format Input URL = 
 --		  https://racaty.net/%w+
 --			https://racaty.net/wzevnbbgfvhk
--- Interpreter : modified lua https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=drivesdk
+-- Interpreter : modified lua https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 -- 5:30 04 August 2020, Rawamangun
 
 dofile('../strict.lua')

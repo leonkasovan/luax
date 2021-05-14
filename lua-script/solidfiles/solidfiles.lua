@@ -3,7 +3,7 @@
 --          http://www.solidfiles.com/%w/%w+
 --			http://www.solidfiles.com/v/nDNxPz27RwYvM
 --			http://www.solidfiles.com/d/b007fccb0d/
--- Interpreter : modified lua https://drive.google.com/file/d/1imqMbflxEEc8OsTCJoHiuMufdAfJTNSg/view?usp=drivesdk
+-- Interpreter : modified lua https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 -- 4:36 19 July 2020, Rawamangun
 
 dofile('../strict.lua')

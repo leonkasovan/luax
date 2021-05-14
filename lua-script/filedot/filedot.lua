@@ -1,6 +1,6 @@
 -- Lua 5.1.5.XL Script for downloading media in https://filedot.xyz/
 -- Host filedot can't accept Range, it really sucks
--- Interpreter : luaX https://drive.google.com/file/d/1gaDQVusrvp78HfQbswVx4Wr-4-plA4Ke/view?usp=sharing
+-- Interpreter : luaX https://github.com/dhaninovan/luax/releases/download/v5.1.5.77/lua.exe
 -- 15/01/2021 Jakarta Rawamangun, dhani.novan@gmail.com
 
 dofile('../strict.lua')
