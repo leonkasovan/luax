@@ -14,7 +14,11 @@ function load_file(filename)
 	end
 	content = fi:read("*a")
 	fi:close()
-	return filename..':\n'..content..'\n\n'
+	if #content ~= 0 then
+		return filename..':\n'..content..'\n\n'
+	else
+		return ""
+	end
 end
 
 function strip_html(filename)
@@ -27,7 +31,11 @@ function strip_html(filename)
 	end
 	content = fi:read("*a")
 	fi:close()
-	return filename..':\n'..content:gsub("<style.->.-</style>",""):gsub("<script.->.-</script>",""):gsub("<!%-%-.-%-%->",""):gsub("<.->",""):gsub("%s+"," ")..'\n\n'
+	if #content ~= 0 then
+		return filename..':\n'..content:gsub("<style.->.-</style>",""):gsub("<script.->.-</script>",""):gsub("<!%-%-.-%-%->",""):gsub("<.->",""):gsub("%s+"," ")..'\n\n'
+	else
+		return ""
+	end
 end
 
 if os.info() == "Windows" then
