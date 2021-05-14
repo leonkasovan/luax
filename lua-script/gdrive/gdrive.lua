@@ -8,6 +8,10 @@
 dofile('../strict.lua')
 dofile('../common.lua')
 
+function my_write_log(data)
+	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
+end
+
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
 local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
@@ -24,7 +28,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	if callback_function_write_log ~= nil then
 		write_log = callback_function_write_log
 	else
-		write_log = print
+		write_log = my_write_log
 	end
 	
 	write_log('[info][gdrive] Processing '..url)

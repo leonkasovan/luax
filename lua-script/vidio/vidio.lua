@@ -7,6 +7,10 @@
 dofile('../strict.lua')
 dofile('../common.lua')
 
+function my_write_log(data)
+	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
+end
+
 -- GLOBAL SETTING
 local MAXTIMEOUT = 1800	-- set max timeout 30 minutes
 local LOG_FILE = "youtube-dl.log"

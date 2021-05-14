@@ -5,6 +5,10 @@
 dofile('../strict.lua')
 dofile('../common.lua')
 
+function my_write_log(data)
+	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
+end
+
 local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
 local FAIL_FILENAME = "cyberdrop_failed.txt"
 
@@ -19,7 +23,7 @@ function download_cyberdrop(url, callback_function_write_log, callback_function_
 	if callback_function_write_log ~= nil then
 		write_log = callback_function_write_log
 	else
-		write_log = print
+		write_log = my_write_log
 	end
 	
 	write_log('[info][cyberdrop] Process '..url)

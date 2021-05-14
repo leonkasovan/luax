@@ -8,6 +8,10 @@
 dofile('../strict.lua')
 dofile('../common.lua')
 
+function my_write_log(data)
+	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
+end
+
 -- GLOBAL SETTING
 local MAXTIMEOUT = 900	-- set max timeout 15 minutes
 
@@ -23,7 +27,7 @@ function download_letsupload(url, callback_function_write_log, callback_function
 	if callback_function_write_log ~= nil then
 		write_log = callback_function_write_log
 	else
-		write_log = print
+		write_log = my_write_log
 	end
 	
 	if url:match('^https://www.letsupload.io/%w+') then	--Normalize URL
