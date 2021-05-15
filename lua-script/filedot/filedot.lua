@@ -29,6 +29,11 @@ function download_filedot(url, callback_function_write_log, callback_function_on
 	id = url:match('xyz/(.-)$')
 	if id == nil then write_log('[error][filedot] invalid input url. Format: https://filedot.xyz/ididididid') return nil end
 
+	if os.info() == "Linux" then
+		os.execute('sleep 60')
+	else
+		os.execute('timeout 60')
+	end
 	write_log('[info][filedot] Process '..url)
 	rc, headers, content = http.request(url)
 	if rc ~= 0 then
