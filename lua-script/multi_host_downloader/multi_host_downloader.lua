@@ -72,6 +72,7 @@ local videobin = dofile('../videobin/videobin.lua')
 local pixeldrain = dofile('../pixeldrain/pixeldrain.lua')
 local mediafire = dofile('../mediafire/mediafire.lua')
 local imx = dofile('../imx/imx.lua')
+local games_db = dofile('../games-database/games_db.lua')
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
@@ -120,6 +121,8 @@ function verify(url)
 			return mediafire.download
 		elseif imx.verify(url) then
 			return imx.download
+		elseif games_db.verify(url) then
+			return games_db.download
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		elseif url:match('^ftps?://.-/.+$') then

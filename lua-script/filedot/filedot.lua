@@ -16,7 +16,7 @@ local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
 --	true : on success
 --	false : timeout
 --	nil : invalid response and other fail status
-function download_filedot(url, callback_function_write_log, callback_function_on_success)
+function download_filedot(url, callback_function_write_log, callback_function_on_success, checkonly)
 	local rc, headers, content, tcode, n, id, code, rand, countdown, filename, post_data, url2, size
 	local write_log
 	
@@ -29,12 +29,14 @@ function download_filedot(url, callback_function_write_log, callback_function_on
 	id = url:match('xyz/(.-)$')
 	if id == nil then write_log('[error][filedot] invalid input url. Format: https://filedot.xyz/ididididid') return nil end
 
+	if checkonly ~= true then
 	if os.info() == "Linux" then
 		os.execute('sleep 60')
 	else
 		os.execute('timeout 60')
 	end
 	write_log('[info][filedot] Process '..url)
+	end
 	rc, headers, content = http.request(url)
 	if rc ~= 0 then
 		write_log("[error][filedot] "..http.error(rc))
@@ -51,7 +53,9 @@ function download_filedot(url, callback_function_write_log, callback_function_on
 	-- print(headers)
 	
 	countdown = content:match('<span class="seconds">(%d-)</span>')
+	size = content:match('<small>(.-)</small>')
 	if countdown == nil then write_log('[error][filedot] invalid response. (1)') save_file(content, 'filedot_invalid_content.htm') return nil end
+	if checkonly ~= nil and checkonly == true then return filename..size end
 	-- write_log('[info][filedot] Waiting '..countdown)
 	if os.info() == "Linux" then
 		os.execute('sleep '..countdown)
@@ -117,17 +121,43 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
--- content = [[
--- https://filedot.xyz/fky4zh5v0e1r
--- ]]
+content = [[
+https://filedot.xyz/0ff972uztwic
+https://filedot.xyz/0mwiz3f6aols
+https://filedot.xyz/5gmmnknvofvr
+https://filedot.xyz/67ntyvnlqc3l
+https://filedot.xyz/7vf5o9v6fttt
+https://filedot.xyz/84pgso5jh8km
+https://filedot.xyz/88axsz8ka96l
+https://filedot.xyz/8ecinkb6ek4z
+https://filedot.xyz/97w27o6bzdmk
+https://filedot.xyz/9exeg3ep6455
+https://filedot.xyz/jlk91gdx8r1w
+https://filedot.xyz/l8bmzkil9i60
+https://filedot.xyz/mz7kcp62dp82
+https://filedot.xyz/nl4pgi2wpeo7
+https://filedot.xyz/nz7fbvdoj05c
+https://filedot.xyz/opf4blaocmdo
+https://filedot.xyz/or2axo32z1i6
+https://filedot.xyz/qxbak9rsmk03
+https://filedot.xyz/rb0w3mnwyrkz
+https://filedot.xyz/t130d0ihjgru
+https://filedot.xyz/uetn1df81weu
+https://filedot.xyz/uh2ra7xzikwo
+https://filedot.xyz/vqb4w4niqoc9
+https://filedot.xyz/yjc2pr9ofmz1
+https://filedot.xyz/yyljbjdokaa5
+]]
 
--- for url in content:gmatch("[^\r\n]+") do
-	-- if verify_filedot(url) then
-		-- download_filedot(url)
-	-- else
-		-- my_write_log('[error][filedot] invalid URL')
-	-- end
--- end
+local fname
+for url in content:gmatch("[^\r\n]+") do
+	if verify_filedot(url) then
+		fname = download_filedot(url, nil, nil, true)
+		if fname ~= nil then print(url, fname) else print(url, 'premium account needed') end
+	else
+		my_write_log('[error][filedot] invalid URL')
+	end
+end
 
 
 -------------------------------------------------------------------------------
@@ -144,3 +174,10 @@ return {
 -- https://nnsets.fr/viewtopic.php?f=6&p=10813	GeorgeModels.com - Heidy Pino 
 -- https://nnsets.fr/viewtopic.php?f=9&t=310 
 -- https://nnsets.fr/viewtopic.php?f=6&t=159&start=325
+
+mytable = {}
+for line in io.lines("") do
+	mytable[] = line
+	table.insert(mytable, line)
+end
+
