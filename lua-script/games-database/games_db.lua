@@ -66,6 +66,7 @@ function show_verified_games_db()
 	return 
 [[
 https://games-database.com/aab
+https://games-database.net/aab
 ]]
 end
 
