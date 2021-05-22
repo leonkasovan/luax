@@ -75,6 +75,7 @@ end
 -- Source : https://repack-games.com/
 content = [[
 https://games-database.com/aab
+https://games-database.net/aab
 ]]
 
 local MAXTRY = 10
