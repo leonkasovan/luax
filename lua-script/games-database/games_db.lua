@@ -59,7 +59,7 @@ function download_games_db(url, callback_function_write_log, callback_function_o
 end
 
 function verify_games_db(url)
-	return url:match('https://games%-database%.com/%S+') or url:match('http://games%-database%.com/%S+')
+	return url:match('https://games%-database%.com/%S+') or url:match('http://games%-database%.com/%S+') or url:match('https://games%-database%.net/%S+') or url:match('http://games%-database%.net/%S+')
 end
 
 function show_verified_games_db()
