@@ -73,25 +73,25 @@ end
 --	Library Testing
 -------------------------------------------------------------------------------
 -- Source : https://repack-games.com/
-content = [[
-https://games-database.com/aab
-]]
+-- content = [[
+-- https://games-database.com/aab
+-- ]]
 
-local MAXTRY = 10
-local done, try
-for url in content:gmatch("[^\r\n]+") do
-	if verify_games_db(url) then
-		done = download_games_db(url)
-		try = 1
-		while ((try <= MAXTRY) and (done == false)) do
-			my_write_log('Retry '..try)
-			done = download_games_db(url)
-			try = try + 1
-		end
-	else
-		my_write_log('[error][games_db] invalid URL')
-	end
-end
+-- local MAXTRY = 10
+-- local done, try
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_games_db(url) then
+		-- done = download_games_db(url)
+		-- try = 1
+		-- while ((try <= MAXTRY) and (done == false)) do
+			-- my_write_log('Retry '..try)
+			-- done = download_games_db(url)
+			-- try = try + 1
+		-- end
+	-- else
+		-- my_write_log('[error][games_db] invalid URL')
+	-- end
+-- end
 
 -------------------------------------------------------------------------------
 --	Library Interface
