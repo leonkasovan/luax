@@ -59,13 +59,14 @@ function download_games_db(url, callback_function_write_log, callback_function_o
 end
 
 function verify_games_db(url)
-	return url:match('https://games%-database%.com/%S+') or url:match('http://games%-database%.com/%S+')
+	return url:match('https://games%-?database%..../%S+') or url:match('http://games%-?database%..../%S+')
 end
 
 function show_verified_games_db()
 	return 
 [[
 https://games-database.com/aab
+https://gamesdatabase.net/aaw
 ]]
 end
 
@@ -75,6 +76,7 @@ end
 -- Source : https://repack-games.com/
 -- content = [[
 -- https://games-database.com/aab
+-- https://gamesdatabase.net/aaw
 -- ]]
 
 -- local MAXTRY = 10
