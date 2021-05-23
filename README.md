@@ -1,6 +1,11 @@
 # Welcome to LuaX
 
-Welcome to GitHub—where millions of developers work together on software. Ready to get started? Let’s learn how this all works by building and publishing your first GitHub Pages website!
+LuaX is lua (v5.1.5) scripting language with eXtra (built-in) Library : http iup json pcre csv gzio lfs
+
+Prerequisite (Linux):
+```
+sudo apt install libreadline-dev libcurl4-openssl-dev libpcre3-dev libz-dev
+```
 
 How to install:
 ```
