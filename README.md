@@ -4,7 +4,7 @@ LuaX is lua (v5.1.5) scripting language with eXtra (built-in) Library : <b>http 
 for both Linux and Windows (Visual Studio 2012).
 
 Simple sample to use <b>http</b> Library:
-```
+```lua
 rc, http_headers, http_content = http.request('https://pixeldrain.com/u/5wMxR7BV')
 if rc ~= 0 then
 	print("Error: "..http.error(rc))
@@ -17,7 +17,7 @@ print(filename)
 ```
 
 Simple sample to use <b>json</b> Library:
-``` 
+```lua
 json_text = '[ true, { "foo": "bar" } ]'
 value= json.decode(json_text)
 
@@ -30,7 +30,7 @@ json_text = json.encode(value)
 ```
 
 Simple sample to use <b>pcre</b> Library:
-```
+```lua
 print(pcre.version())
 subject = "hello:world:lua:hello2:world2:lua2"
 print(pcre.match(subject,'[a-z]+'))
@@ -48,7 +48,7 @@ end
 ```
 
 Simple sample to use <b>csv</b> Library:
-```
+```lua
 data,header = csv.reader('test1.csv', ',')
 if header then print('header', header[1], header[2], header[3], header[4]) end
 for row in data:rows() do
