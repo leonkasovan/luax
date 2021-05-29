@@ -3,6 +3,10 @@
 LuaX is lua (v5.1.5) scripting language with eXtra (built-in) Library : <b>http iup json pcre csv gzio lfs</b>
 for both Linux and Windows (Visual Studio 2012).
 
+Contact:
+e-mail: dhani.novan@gmail.com
+instagram: https://www.instagram.com/dhaninovan/
+
 Simple sample to use <b>http</b> Library:
 ```lua
 rc, http_headers, http_content = http.request('https://pixeldrain.com/u/5wMxR7BV')
