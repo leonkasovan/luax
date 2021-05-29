@@ -1,18 +1,19 @@
 # Welcome to LuaX
 
 LuaX is lua (v5.1.5) scripting language with eXtra (built-in) Library : http iup json pcre csv gzio lfs
+It can be built in both Linux and Windows (Visual Studio 2012).
 
 Simple sample to use <b>http</b> Library:
 ```
-  rc, http_headers, http_content = http.request('https://pixeldrain.com/u/5wMxR7BV')
-	if rc ~= 0 then
-		print("Error: "..http.error(rc))
-		return nil
-	end
-  print(http_headers)
-  print(http_content)
-	filename = string.match(content, 'og%:title" content="(.-)"')
-  print(filename)
+rc, http_headers, http_content = http.request('https://pixeldrain.com/u/5wMxR7BV')
+if rc ~= 0 then
+	print("Error: "..http.error(rc))
+	return nil
+end
+print(http_headers)
+print(http_content)
+filename = string.match(content, 'og%:title" content="(.-)"')
+print(filename)
 ```
   
 Prerequisite (Linux):
@@ -20,10 +21,21 @@ Prerequisite (Linux):
 sudo apt install libreadline-dev libcurl4-openssl-dev libpcre3-dev libz-dev
 ```
 
-How to install:
+How to build (Linux):
 ```
 git clone https://github.com/dhaninovan/luax.git
+make
+bin/lua
 ```
+
+How to build (Windows):
+```
+1. Open file luax.sln
+2. Select lua project
+3. Press build (F7)
+4. Run binary output in bin folder
+```
+
 
 Git commands update and merge from repository:
 ```
