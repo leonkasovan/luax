@@ -36,7 +36,7 @@ function download_games_db(url, callback_function_write_log, callback_function_o
 	media_url = string.match(content, "free' href='(.-)'")
 	filename = string.match(content, 'text"></i> (.-)</div>')
 	if media_url == nil or filename == nil or wait_time == nil then write_log('[error][games_db] invalid response. (1)') save_file(content, 'games_db_invalid_content.htm') return nil end
-	wait_time = tonumber(wait_time) + 1
+	wait_time = tonumber(wait_time) + 2
 	
 	if os.info() == "Linux" then
 		os.execute('sleep '..wait_time)
