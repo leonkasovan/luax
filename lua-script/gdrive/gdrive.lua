@@ -153,6 +153,7 @@ function verify_gdrive(url)
 	return url:match('https://drive%.google%.com/file/%w/.-/view') 
 		or url:match('https://drive%.google%.com/uc%?id=.-&export=download')
 		or url:match('https://drive%.google%.com/././uc%?id=.-&export=download')
+		or url:match('https://drive%.google%.com/uc%?export=download&id=.-')
 end
 
 function show_verified_gdrive()
