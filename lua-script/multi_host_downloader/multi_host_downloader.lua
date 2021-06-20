@@ -73,6 +73,7 @@ local pixeldrain = dofile('../pixeldrain/pixeldrain.lua')
 local mediafire = dofile('../mediafire/mediafire.lua')
 local imx = dofile('../imx/imx.lua')
 local games_db = dofile('../games-database/games_db.lua')
+local girlygirlpic = dofile('../girlygirlpic/girlygirlpic.lua')
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
@@ -123,6 +124,16 @@ function verify(url)
 			return imx.download
 		elseif games_db.verify(url) then
 			return games_db.download
+		elseif girlygirlpic.verify(url) then
+			return girlygirlpic.download
+		elseif girlygirlpic.verify_agency(url) then
+			return girlygirlpic.download_agency
+		elseif girlygirlpic.verify_tag(url) then
+			return girlygirlpic.download_tag
+		elseif girlygirlpic.verify_model(url) then
+			return girlygirlpic.download_model
+		elseif girlygirlpic.verify_country(url) then
+			return girlygirlpic.download_country
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		elseif url:match('^ftps?://.-/.+$') then
@@ -138,7 +149,8 @@ function verify(url)
 end
 
 -- Get list of url
-local urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+-- local urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+local urls = ''
 local try
 
 try = 1
@@ -151,9 +163,13 @@ if urls == nil then
 	return -1
 end
 
--- urls = [[
--- https://www.youtube.com/watch?v=P4Oc-RmXbL0
--- ]]
+urls = [[
+https://www.youtube.com/watch?v=gt_9okOgvUU
+https://www.youtube.com/watch?v=mRYsxQKwi5A
+https://www.youtube.com/watch?v=-r1Ws8nz58k
+https://www.youtube.com/watch?v=CeP9Tuz5X5U
+https://www.youtube.com/watch?v=uKtQiexjDOE
+]]
 
 -- Download url(s)
 local nurl, url, done, download_library
