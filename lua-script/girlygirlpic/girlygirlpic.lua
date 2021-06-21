@@ -101,13 +101,16 @@ function download_girlygirlpic(url, callback_function_write_log, callback_functi
 		if title ~= nil then
 			print('Moving to '..title)
 			os.execute('mkdir '..title)
+			if os.info() == "Windows" then
 			os.execute('move *.jpg '..title)
+			else
+			os.execute('mv *.jpg '..title)
+			end
 		end
 		append_done(url)
-		write_log('[info][girlygirlpic] Gallery ['..title..'] total image saved : '..nsaved)
-	else
-		write_log('[info][girlygirlpic] Gallery ['..title..'] skipped')
 	end
+	write_log('[info][girlygirlpic] Gallery ['..title..'] total image saved : '..nsaved)
+	
 	-- archieving log for done url
 	log_filename = 'girlygirlpic_done.txt'
 	if os.getfilesize(log_filename) > 500000 then
@@ -124,8 +127,13 @@ function download_girlygirlpic(url, callback_function_write_log, callback_functi
 		fo:write(fi:read('*a'))
 		fi:close()
 		fo:close()
+		if os.info() == "Windows" then
 		os.execute('del '..log_filename)
 		os.execute('ren '..log_filename..'.gz.new '..log_filename..'.gz')
+		else
+		os.execute('rm '..log_filename)
+		os.execute('mv '..log_filename..'.gz.new '..log_filename..'.gz')
+		end
 	end
 	
 	if callback_function_on_success ~= nil then
