@@ -73,5 +73,8 @@ clean:
 	$(RM) $(MYOBJDIR)*.o
 	$(RM) $(MYBINDIR)lua
 
+install:
+	install  -C bin/lua /usr/bin/lua
+
 # (end of Makefile)
 
