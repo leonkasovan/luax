@@ -57,6 +57,8 @@ function download_girlygirlpic(url, callback_function_write_log, callback_functi
 	
 	write_log('[info][girlygirlpic] Process '..url)
 	gallery_id = url:match('girlygirlpic%.com/a/(.-)$')
+	http.request(url)
+	http.set_conf(http.OPT_REFERER, url)
 	rc, headers, content = http.request{
 	url = 'https://en.girlygirlpic.com/ax/',
 	formdata = '{"album_id":"'..gallery_id..'"}',
@@ -65,7 +67,8 @@ function download_girlygirlpic(url, callback_function_write_log, callback_functi
 		write_log("[error][girlygirlpic] "..http.error(rc))
 		return false
 	end
-	-- save_file(content, 'girlygirlpic3.htm')
+	print(rc, headers)
+	 save_file(content, 'girlygirlpic3.htm')
 	title = content:match("<li><span>(.-)</span></ul>")
 	title = title:gsub('%[.-%]', '')
 	title = title:gsub('%W','_')
@@ -364,25 +367,26 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
--- content = [[
--- https://en.girlygirlpic.com/t/6xdch0x
--- ]]
+ content = [[
+https://en.girlygirlpic.com/a/79djz5kd
+https://en.girlygirlpic.com/a/4vqjrq2
+ ]]
 
--- for url in content:gmatch("[^\r\n]+") do
-	-- if verify_girlygirlpic(url) then
-		-- download_girlygirlpic(url)
-	-- elseif verify_girlygirlpic_agency(url) then
-		-- download_girlygirlpic_agency(url)
-	-- elseif verify_girlygirlpic_tag(url) then
-		-- download_girlygirlpic_tag(url)
-	-- elseif verify_girlygirlpic_model(url) then
-		-- download_girlygirlpic_model(url)
-	-- elseif verify_girlygirlpic_country(url) then
-		-- download_girlygirlpic_country(url)
-	-- else
-		-- my_write_log('[error][girlygirlpic] invalid URL')
-	-- end
--- end
+ for url in content:gmatch("[^\r\n]+") do
+	 if verify_girlygirlpic(url) then
+		 download_girlygirlpic(url)
+	 elseif verify_girlygirlpic_agency(url) then
+		 download_girlygirlpic_agency(url)
+	 elseif verify_girlygirlpic_tag(url) then
+		 download_girlygirlpic_tag(url)
+	 elseif verify_girlygirlpic_model(url) then
+		 download_girlygirlpic_model(url)
+	 elseif verify_girlygirlpic_country(url) then
+		 download_girlygirlpic_country(url)
+	 else
+		 my_write_log('[error][girlygirlpic] invalid URL')
+	 end
+ end
 
 -- download_girlygirlpic_tag('https://en.girlygirlpic.com/t/6xdch0x')	-- Page 0
 -- download_girlygirlpic_tag('https://en.girlygirlpic.com/t/6xdch0x', nil, nil, 1)	-- Page 1
