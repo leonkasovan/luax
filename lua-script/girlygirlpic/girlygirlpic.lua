@@ -367,26 +367,26 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
- content = [[
-https://en.girlygirlpic.com/a/79djz5kd
-https://en.girlygirlpic.com/a/4vqjrq2
- ]]
-
- for url in content:gmatch("[^\r\n]+") do
-	 if verify_girlygirlpic(url) then
-		 download_girlygirlpic(url)
-	 elseif verify_girlygirlpic_agency(url) then
-		 download_girlygirlpic_agency(url)
-	 elseif verify_girlygirlpic_tag(url) then
-		 download_girlygirlpic_tag(url)
-	 elseif verify_girlygirlpic_model(url) then
-		 download_girlygirlpic_model(url)
-	 elseif verify_girlygirlpic_country(url) then
-		 download_girlygirlpic_country(url)
-	 else
-		 my_write_log('[error][girlygirlpic] invalid URL')
-	 end
- end
+--  content = [[
+-- https://en.girlygirlpic.com/a/79djz5kd
+-- https://en.girlygirlpic.com/a/4vqjrq2
+--  ]]
+-- 
+--  for url in content:gmatch("[^\r\n]+") do
+-- 	 if verify_girlygirlpic(url) then
+-- 		 download_girlygirlpic(url)
+-- 	 elseif verify_girlygirlpic_agency(url) then
+-- 		 download_girlygirlpic_agency(url)
+-- 	 elseif verify_girlygirlpic_tag(url) then
+-- 		 download_girlygirlpic_tag(url)
+-- 	 elseif verify_girlygirlpic_model(url) then
+-- 		 download_girlygirlpic_model(url)
+-- 	 elseif verify_girlygirlpic_country(url) then
+-- 		 download_girlygirlpic_country(url)
+-- 	 else
+-- 		 my_write_log('[error][girlygirlpic] invalid URL')
+-- 	 end
+--  end
 
 -- download_girlygirlpic_tag('https://en.girlygirlpic.com/t/6xdch0x')	-- Page 0
 -- download_girlygirlpic_tag('https://en.girlygirlpic.com/t/6xdch0x', nil, nil, 1)	-- Page 1
