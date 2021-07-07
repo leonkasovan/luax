@@ -43,8 +43,13 @@ rc, headers, content = http.request(API_TELEGRAM_BOT..'getUpdates?offset='..(loc
 resp = json.decode(content)
 for i,v in pairs(resp.result) do
 	print(string.format('%s New text message from %s_%s: %s', os.date(), v.message.from.first_name, v.message.from.last_name, v.message.text))
-	 rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run(v.message.text)))
-	-- rc, headers, content = http.request(API_TELEGRAM_BOT..'sendPhoto?chat_id='..v.message.chat.id..'&photo=https://www.windowscentral.com/sites/wpcentral.com/files/styles/larger/public/field/image/2020/10/netstat-cmd-windows-10.jpg')
+	if v.message.text:find('/show_log') then
+		rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cat multi_host_downloader/multi_host_downloader.log')))
+	elseif v.message.text:find('/show_files') then
+		rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -l multi_host_downloader')))
+	else
+		rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run(v.message.text)))
+	end
 	local_last_update_id = v.update_id
 end
 if #resp.result > 0 then
