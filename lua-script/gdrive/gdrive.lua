@@ -125,7 +125,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 		return nil
 	end
  
-	direct_url = direct_url:gsub( "&amp;", "&") print(direct_url)
+	direct_url = direct_url:gsub( "&amp;", "&")
 	write_log('[info][gdrive] Downloading '..filename..' from '..format_number(os.getfilesize(filename)))
 	http.set_conf(http.OPT_REFERER, url)
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
@@ -134,6 +134,25 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	repeat
 		if rc ~= 0 then write_log('[error][gdrive.7] Retry '..n..': resuming downloading '..filename..' from '..format_number(os.getfilesize(filename))) end
 		rc, header = http.request{url = direct_url, output_filename = filename}
+		if header:find('content-type: text/html',1,true) ~= 0 then
+			save_file(header,"gdrive_invalid_header.txt")
+			direct_url = nil
+			links = http.collect_link(load_file(filename), url)
+			os.remove(filename)
+			for i, v in ipairs(links) do
+				if string.find(v, "confirm=") then
+					direct_url = v
+				end
+			end
+			if direct_url == nil then
+				save_file(content,"gdrive_invalid_content.htm")
+				write_log("[error][gdrive.6] Can't find direct link to download. Invalid response from Google Drive")
+				return nil
+			end
+			direct_url = direct_url:gsub( "&amp;", "&")
+			write_log('[info][gdrive] Re-updating confirmed url '..direct_url)
+			rc = 28
+		end
 		n = n + 1
 	until rc ~= 28	-- until not time out (return code = 28)
 	if rc ~= 0 then
