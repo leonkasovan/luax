@@ -14,7 +14,8 @@ end
 
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
-local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
+-- local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
+local MAXTIMEOUT = 60	-- set max timeout 60 minutes
 
 -- Output :
 --	true : on success
@@ -23,7 +24,7 @@ local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
 function download_gdrive(url, callback_function_write_log, callback_function_on_success)
 	local rc, content, header, filename, id, direct_url, original_url, n
 	local i, v, links
-	local write_log
+	local write_log, ct
  
 	if callback_function_write_log ~= nil then
 		write_log = callback_function_write_log
@@ -64,43 +65,6 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	end
 	
 	-- Extract Filename
-	-- content = load_file(TEMP_FILE)
-	-- os.remove(TEMP_FILE)
-	-- filename = string.match(content, '<a href=".-">(.-)</a>')
-	-- if filename == nil then
-		-- write_log("[error][gdrive.2] Can't find it's filename. Invalid response from Google Drive")
-		-- save_file(content,"gdrive_invalid_content.htm")
-		-- return nil
-	-- end
-	-- filename = filename:gsub('[%/%\%:%?%*%"%<%>%|]', "")
- 
-	-- direct_url = nil
-	-- links = http.collect_link(content, url)
-	-- for i, v in ipairs(links) do
-		-- if string.find(v, "confirm=") then
-			-- direct_url = v
-		-- end
-	-- end
- 
-	-- if direct_url == nil then
-		-- save_file(content,"gdrive_invalid_content.htm")
-		-- write_log("[error][gdrive.3] Can't find direct link to download. Invalid response from Google Drive")
-		-- return nil
-	-- end
- 
-	-- direct_url = direct_url:gsub( "&amp;", "&")
-	-- write_log('[info][gdrive] Request direct URL '..direct_url)
-	-- http.set_conf(http.OPT_REFERER, url)
-	-- http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	-- rc, header = http.request{url = direct_url, output_filename = TEMP_FILE}
-	-- if rc ~= 0 then
-		-- write_log("[error][gdrive.4] "..http.error(rc), rc)
-		-- os.remove(TEMP_FILE)
-		-- return nil
-	-- end
-	
-
-	-- Extract Filename
 	content = load_file(TEMP_FILE)
 	os.remove(TEMP_FILE)
 	filename = string.match(content, '<a href=".-">(.-)</a>')
@@ -127,6 +91,11 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
  
 	direct_url = direct_url:gsub( "&amp;", "&")
 	write_log('[info][gdrive] Downloading '..filename..' from '..format_number(os.getfilesize(filename)))
+	write_log('[info][gdrive] Redirect : '..direct_url)
+	if os.getfilesize(filename) == 0 then
+		write_log('[warning][gdrive] Start downloading '..filename..' from 0 again?? CANCEL CANCEL!!')
+		return nil
+	end
 	http.set_conf(http.OPT_REFERER, url)
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	rc = 0
@@ -134,10 +103,32 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	repeat
 		if rc ~= 0 then write_log('[error][gdrive.7] Retry '..n..': resuming downloading '..filename..' from '..format_number(os.getfilesize(filename))) end
 		rc, header = http.request{url = direct_url, output_filename = filename}
-		if header:find('content-type: text/html',1,true) ~= 0 then
+		write_log('[info][gdrive] rc='..rc..' '..http.error(rc))
+		for w in header:gmatch('[cC]ontent%-[tT]ype%: ([%w%/]+)') do
+			ct = w
+		end
+		if rc == 33 then
+			rc, header, content = http.request(direct_url)
+			links = http.collect_link(content, url)
+			direct_url = nil
+			for i, v in ipairs(links) do
+				if string.find(v, "confirm=") then
+					direct_url = v
+				end
+			end
+			if direct_url == nil then
+				save_file(content,"gdrive_invalid_content.htm")
+				write_log("[error][gdrive.6] Can't find direct link to download. Invalid response from Google Drive")
+				return nil
+			end
+			direct_url = direct_url:gsub( "&amp;", "&")
+			write_log('[info][gdrive] Re-updating confirmed url '..direct_url)
+			rc = 33
+		elseif ct == 'text/html' then
 			save_file(header,"gdrive_invalid_header.txt")
 			direct_url = nil
 			links = http.collect_link(load_file(filename), url)
+			write_log('[info][gdrive] Deleting '..filename)
 			os.remove(filename)
 			for i, v in ipairs(links) do
 				if string.find(v, "confirm=") then
@@ -151,10 +142,12 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 			end
 			direct_url = direct_url:gsub( "&amp;", "&")
 			write_log('[info][gdrive] Re-updating confirmed url '..direct_url)
-			rc = 28
+			rc = 33
 		end
 		n = n + 1
-	until rc ~= 28	-- until not time out (return code = 28)
+		print(n)
+	until ((rc ~= 28) and (rc ~= 33)) -- until not time out (return code = 28) and not invalid response (return code = 33)
+	write_log('[info][gdrive.7.5] rc='..rc..' '..http.error(rc))
 	if rc ~= 0 then
 		write_log("[error][gdrive.8] "..http.error(rc)..". Downloaded: "..format_number(os.getfilesize(filename)).." bytes")
 		return false
@@ -215,7 +208,7 @@ end
 -- ]]
 
 -- content = [[
--- https://drive.google.com/file/d/0BxjPkoVoNqw7NzJLZ1c4bEhhSWM/view?usp=sharing
+-- https://drive.google.com/uc?id=1TRsyLUrJ8mBXE-FQZASQ68auUIAU1IK6&export=download
 -- ]]
 
 -- instant test internal library
