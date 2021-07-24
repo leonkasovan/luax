@@ -14,7 +14,7 @@ end
 
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
-local MAXTIMEOUT = 5400	-- set max timeout 90 minutes
+local MAXTIMEOUT = 120	-- set max timeout 90 minutes
 
 -- Output :
 --	true : on success
@@ -42,13 +42,11 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	os.remove(TEMP_FILE)
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	rc, header = http.request{url = url, output_filename = TEMP_FILE}
-	-- print(rc, header)
 	if rc ~= 0 then
 		write_log("[error][gdrive.1] "..http.error(rc))
 		os.remove(TEMP_FILE)
 		if rc == 28 then return false else return nil end
 	end
-	-- print(header)
 	
 	filename = string.match(header, '[Ff]ilename%s*=%s*"(.-)"')
 	if filename ~= nil then
@@ -68,7 +66,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	os.remove(TEMP_FILE)
 	filename = string.match(content, '<a href=".-">(.-)</a>')
 	if filename == nil then
-		write_log("[error][gdrive.5] Can't find it's filename. Invalid response from Google Drive")
+		write_log("[error][gdrive.2] Can't find it's filename. Invalid response from Google Drive")
 		save_file(content,"gdrive_invalid_content.htm")
 		return nil
 	end
@@ -84,29 +82,26 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
  
 	if direct_url == nil then
 		save_file(content,"gdrive_invalid_content.htm")
-		write_log("[error][gdrive.6] Can't find direct link to download. Invalid response from Google Drive")
+		write_log("[error][gdrive.3] Can't find direct link to download. Invalid response from Google Drive")
 		return nil
 	end
  
 	direct_url = direct_url:gsub( "&amp;", "&")
 	write_log('[info][gdrive] Downloading '..filename..' from '..format_number(os.getfilesize(filename)))
-	write_log('[info][gdrive] Redirect : '..direct_url)
-	if os.getfilesize(filename) == 0 then
-		write_log('[warning][gdrive] Start downloading '..filename..' from 0 again?? CANCEL CANCEL!!')
-		return nil
-	end
+	write_log('[info][gdrive] Confirmed URL: '..direct_url)
 	http.set_conf(http.OPT_REFERER, url)
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	rc = 0
 	n = 0
 	repeat
-		if rc ~= 0 then write_log('[error][gdrive.7] Retry '..n..': resuming downloading '..filename..' from '..format_number(os.getfilesize(filename))) end
+		if rc ~= 0 then write_log('[error][gdrive.4] Retry '..n..': resume downloading '..filename..' from '..format_number(os.getfilesize(filename))) end
 		rc, header = http.request{url = direct_url, output_filename = filename}
-		write_log('[info][gdrive] rc='..rc..' '..http.error(rc))
 		for w in header:gmatch('[cC]ontent%-[tT]ype%: ([%w%/]+)') do
 			ct = w
 		end
-		if rc == 33 then
+		if rc == 33 then	-- Jika resume fresh download, maka request confirmed url (lagi) via simple GET method tanpa delete file yang telah ada
+			write_log("[warning][gdrive] Invalid Response: Requested range was not delivered by the server")
+			save_file(header,"gdrive_invalid_header.txt")
 			rc, header, content = http.request(direct_url)
 			links = http.collect_link(content, url)
 			direct_url = nil
@@ -117,19 +112,25 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 			end
 			if direct_url == nil then
 				save_file(content,"gdrive_invalid_content.htm")
-				write_log("[error][gdrive.6] Can't find direct link to download. Invalid response from Google Drive")
+				write_log("[error][gdrive.5] Can't find direct link to download. Invalid response from Google Drive")
 				return nil
 			end
 			direct_url = direct_url:gsub( "&amp;", "&")
 			write_log('[info][gdrive] Re-updating confirmed url '..direct_url)
 			rc = 33
-		elseif ct == 'text/html' then
+		elseif ct == 'text/html' then	-- Jika download mulai dari 0, maka harus 2x confirmed url dan hapus downloaded file (yang berisi html)
+			write_log("[warning][gdrive] Invalid Response when downloading")
 			save_file(header,"gdrive_invalid_header.txt")
+			if header:match('HTTP%/1%.1 416') then
+				write_log('[warning][gdrive] Cancel downloading. File already fully downloaded.')
+				return nil
+			end
 			direct_url = nil
 			links = http.collect_link(load_file(filename), url)
 			write_log('[info][gdrive] Deleting '..filename)
 			os.remove(filename)
 			for i, v in ipairs(links) do
+				print('debug', v)
 				if string.find(v, "confirm=") then
 					direct_url = v
 				end
@@ -144,11 +145,9 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 			rc = 33
 		end
 		n = n + 1
-		print(n)
 	until ((rc ~= 28) and (rc ~= 33)) -- until not time out (return code = 28) and not invalid response (return code = 33)
-	write_log('[info][gdrive.7.5] rc='..rc..' '..http.error(rc))
 	if rc ~= 0 then
-		write_log("[error][gdrive.8] "..http.error(rc)..". Downloaded: "..format_number(os.getfilesize(filename)).." bytes")
+		write_log("[error][gdrive.7] "..http.error(rc)..". Downloaded: "..format_number(os.getfilesize(filename)).." bytes")
 		return false
 	end
 	
@@ -206,25 +205,25 @@ end
 -- https://drive.google.com/uc?id=1kgzgnYfTnogMcXkrVIuaA8l3-RLkWB1K&export=download
 -- ]]
 
--- content = [[
--- https://drive.google.com/uc?id=1TRsyLUrJ8mBXE-FQZASQ68auUIAU1IK6&export=download
--- ]]
-
 -- instant test internal library
--- local MAXTRY = 10
--- for url in content:gmatch("[^\r\n]+") do
-	-- if verify_gdrive(url) then
-		-- done = download_gdrive(url)
-		-- try = 1
-		-- while ((try <= MAXTRY) and (done == false)) do
-			-- print('Retry '..try)
-			-- done = download_gdrive(url)
-			-- try = try + 1
-		-- end
-	-- else
-		-- print('URL not valid for Google Drive')
-	-- end
--- end
+content = [[
+https://drive.google.com/file/d/1JxHB5wEZTnw__PmfT7OSY5cossvul_Fy/view?usp=sharing
+]]
+
+local MAXTRY = 10
+for url in content:gmatch("[^\r\n]+") do
+	if verify_gdrive(url) then
+		done = download_gdrive(url)
+		try = 1
+		while ((try <= MAXTRY) and (done == false)) do
+			print('Retry '..try)
+			done = download_gdrive(url)
+			try = try + 1
+		end
+	else
+		print('URL not valid for Google Drive')
+	end
+end
 
 -------------------------------------------------------------------------------
 --	Library Interface
