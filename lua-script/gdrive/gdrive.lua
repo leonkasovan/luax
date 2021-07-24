@@ -14,7 +14,7 @@ end
 
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
-local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
+local MAXTIMEOUT = 5400	-- set max timeout 60 minutes
 
 -- Output :
 --	true : on success
