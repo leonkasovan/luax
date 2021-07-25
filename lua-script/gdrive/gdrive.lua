@@ -193,37 +193,25 @@ end
 --end
 --local gdrive = import_library('https://gist.github.com/dhaninovan/d94d938e96b3171a42e47aa1f8c0c22b/raw/f0d1d427e8cfe70884ad3621e084b1341fa05786/gdrive.lua')
 -------------------------------------------------------------------------------
--- https://drive.google.com/file/d/1tX99mPnKbK3LoFMWhgPQ3fkJIl1-lTOP/view --Little Nightmare 2
--- https://drive.google.com/file/d/1I9mp4wQ1HqTf2bqf02mLBbDDewq54YGE/view -- The room 4 part 1
--- https://drive.google.com/file/d/1bD0Htxf0PA9H6amkdpGjcs5BwPgAbg4U/view -- The room 4 part 2
--- https://drive.google.com/file/d/1MFpdoyxwDkUX72IwdG8iRR2f2HiUuov9/view	Gi Joe Part 1
--- https://drive.google.com/file/d/1tRsLrRhXGKZbqwV1R5MOlpf6o4-cUvU3/view	Jet cave Adventure
--- https://drive.google.com/file/d/1Q87AuA2vRBy_rQ8mh6aemfrnTnj0MSE2/view Neon Abyss Launch Edition-GOG 390.42 MB
-
--- Movie Finding Ohana
+-- instant test internal library
 -- content = [[
--- https://drive.google.com/uc?id=1kgzgnYfTnogMcXkrVIuaA8l3-RLkWB1K&export=download
+-- https://drive.google.com/file/d/1JxHB5wEZTnw__PmfT7OSY5cossvul_Fy/view?usp=sharing
 -- ]]
 
--- instant test internal library
-content = [[
-https://drive.google.com/file/d/1JxHB5wEZTnw__PmfT7OSY5cossvul_Fy/view?usp=sharing
-]]
-
-local MAXTRY = 10
-for url in content:gmatch("[^\r\n]+") do
-	if verify_gdrive(url) then
-		done = download_gdrive(url)
-		try = 1
-		while ((try <= MAXTRY) and (done == false)) do
-			print('Retry '..try)
-			done = download_gdrive(url)
-			try = try + 1
-		end
-	else
-		print('URL not valid for Google Drive')
-	end
-end
+-- local MAXTRY = 10
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_gdrive(url) then
+		-- done = download_gdrive(url)
+		-- try = 1
+		-- while ((try <= MAXTRY) and (done == false)) do
+			-- print('Retry '..try)
+			-- done = download_gdrive(url)
+			-- try = try + 1
+		-- end
+	-- else
+		-- print('URL not valid for Google Drive')
+	-- end
+-- end
 
 -------------------------------------------------------------------------------
 --	Library Interface
