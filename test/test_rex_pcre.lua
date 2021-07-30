@@ -19,7 +19,9 @@ print(pcre._VERSION)
 -- end
 
 url = 'https://imgtaxi.com/img-5f6ed35a87c6e.html'
-url = 'https://imgdrive.net/img-5f6ed447549f2.html'
+url = 'http://imgdrive.net/img-5f6ed447549f2.html'
 print(pcre.match(url, '^https://img(?:adult|taxi|drive)\\.(?:com|net)/img\\-\\w+\\.html'))
+
+print(url:find('^http.?://'))
 
 -- os.execute('pause')
