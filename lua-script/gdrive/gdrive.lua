@@ -193,24 +193,24 @@ end
 --local gdrive = import_library('https://gist.github.com/dhaninovan/d94d938e96b3171a42e47aa1f8c0c22b/raw/f0d1d427e8cfe70884ad3621e084b1341fa05786/gdrive.lua')
 -------------------------------------------------------------------------------
 -- instant test internal library
-content = [[
-https://drive.google.com/uc?id=1i_sZd6plHz8sJGYAwPhBslN70EN1cAPZ&export=download
-]]
+-- content = [[
+-- https://drive.google.com/uc?id=1i_sZd6plHz8sJGYAwPhBslN70EN1cAPZ&export=download
+-- ]]
 
-local MAXTRY = 10
-for url in content:gmatch("[^\r\n]+") do
-	if verify_gdrive(url) then
-		done = download_gdrive(url)
-		try = 1
-		while ((try <= MAXTRY) and (done == false)) do
-			print('Retry '..try)
-			done = download_gdrive(url)
-			try = try + 1
-		end
-	else
-		print('URL not valid for Google Drive')
-	end
-end
+-- local MAXTRY = 10
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_gdrive(url) then
+		-- done = download_gdrive(url)
+		-- try = 1
+		-- while ((try <= MAXTRY) and (done == false)) do
+			-- print('Retry '..try)
+			-- done = download_gdrive(url)
+			-- try = try + 1
+		-- end
+	-- else
+		-- print('URL not valid for Google Drive')
+	-- end
+-- end
 
 -------------------------------------------------------------------------------
 --	Library Interface
