@@ -7,6 +7,7 @@ local local_last_update_id
 local TOKEN1 = '1082609389'
 local TOKEN2 = 'AAFJ4OdO7KvWFG24zkzsX6povpOZnv1kU0M'
 local API_TELEGRAM_BOT = 'https://api.telegram.org/bot'..TOKEN1..':'..TOKEN2..'/'
+local MAXTRY = 10
 
 function shell_run(cmd)
 	local fi, res
@@ -19,6 +20,26 @@ function shell_run(cmd)
 	end
 	
 	return res
+end
+
+function add_download(url, desc)
+	local list_of_urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+	local try
+
+	try = 1
+	while ((list_of_urls == nil) and (try < MAXTRY)) do
+		list_of_urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+		try = try + 1
+	end
+	
+	if list_of_urls == nil then return false end
+	if desc then
+		gist.update('5d47a78e821dca8d37d990f267c6e209', 'list_url.txt', string.format("%s\n\#%s\n%s", list_of_urls, desc, url))
+	else
+		gist.update('5d47a78e821dca8d37d990f267c6e209', 'list_url.txt', string.format("%s\n%s", list_of_urls, url))
+	end
+	
+	return true
 end
 
 rc, headers, content = http.request(API_TELEGRAM_BOT..'getMe')
@@ -51,6 +72,12 @@ for i,v in pairs(resp.result) do
 			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -l multi_host_downloader')))
 		elseif v.message.text:find('/run_dl') then
 			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd multi_host_downloader && lua multi_host_downloader.lua')))
+		elseif v.message.text:find('^http.?://') then
+			if add_download(v.message.text) then
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text=Success+adding+url')
+			else
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text=Failed+adding+url')
+			end
 		else
 			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run(v.message.text)))
 		end

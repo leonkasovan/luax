@@ -14,7 +14,7 @@ end
 
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
-local MAXTIMEOUT = 120	-- set max timeout 90 minutes
+local MAXTIMEOUT = 5400	-- set max timeout 90 minutes
 
 -- Output :
 --	true : on success
@@ -130,7 +130,6 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 			write_log('[info][gdrive] Deleting '..filename)
 			os.remove(filename)
 			for i, v in ipairs(links) do
-				print('debug', v)
 				if string.find(v, "confirm=") then
 					direct_url = v
 				end
@@ -195,7 +194,7 @@ end
 -------------------------------------------------------------------------------
 -- instant test internal library
 -- content = [[
--- https://drive.google.com/file/d/1JxHB5wEZTnw__PmfT7OSY5cossvul_Fy/view?usp=sharing
+-- https://drive.google.com/uc?id=1i_sZd6plHz8sJGYAwPhBslN70EN1cAPZ&export=download
 -- ]]
 
 -- local MAXTRY = 10
