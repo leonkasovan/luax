@@ -40,15 +40,20 @@ end
 print(os.date()..' Loading last_update_id = '..local_last_update_id..' [done]')
 
 rc, headers, content = http.request(API_TELEGRAM_BOT..'getUpdates?offset='..(local_last_update_id+1))
+print(content)
 resp = json.decode(content)
 for i,v in pairs(resp.result) do
-	print(string.format('%s New text message from %s_%s: %s', os.date(), v.message.from.first_name, v.message.from.last_name, v.message.text))
-	if v.message.text:find('/show_log') then
-		rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cat multi_host_downloader/multi_host_downloader.log')))
-	elseif v.message.text:find('/show_files') then
-		rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -l multi_host_downloader')))
-	else
-		rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run(v.message.text)))
+	if v.message then
+		print(string.format('%s New text message from %s_%s: %s', os.date(), v.message.from.first_name, v.message.from.last_name, v.message.text))
+		if v.message.text:find('/show_log') then
+			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cat multi_host_downloader/multi_host_downloader.log')))
+		elseif v.message.text:find('/show_files') then
+			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -l multi_host_downloader')))
+		elseif v.message.text:find('/run_dl') then
+			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd multi_host_downloader && lua multi_host_downloader.lua')))
+		else
+			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run(v.message.text)))
+		end
 	end
 	local_last_update_id = v.update_id
 end
