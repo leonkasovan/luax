@@ -65,21 +65,25 @@ print(content)
 resp = json.decode(content)
 for i,v in pairs(resp.result) do
 	if v.message then
-		print(string.format('%s New text message from %s_%s: %s', os.date(), v.message.from.first_name, v.message.from.last_name, v.message.text))
-		if v.message.text:find('/show_log') then
-			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cat multi_host_downloader/multi_host_downloader.log')))
-		elseif v.message.text:find('/show_files') then
-			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -l multi_host_downloader')))
-		elseif v.message.text:find('/run_dl') then
-			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd multi_host_downloader && lua multi_host_downloader.lua')))
-		elseif v.message.text:find('^http.?://') then
-			if add_download(v.message.text) then
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text=Success+adding+url')
+		if v.message.text then
+			print(string.format('%s New text message from %s_%s: %s', os.date(), v.message.from.first_name, v.message.from.last_name, v.message.text))
+			if v.message.text:find('/show_log') then
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cat multi_host_downloader/multi_host_downloader.log')))
+			elseif v.message.text:find('/show_files') then
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -l multi_host_downloader')))
+			elseif v.message.text:find('/run_dl') then
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd multi_host_downloader && lua multi_host_downloader.lua')))
+			elseif v.message.text:find('^http.?://') then
+				if add_download(v.message.text) then
+					rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text=Success+adding+url')
+				else
+					rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text=Failed+adding+url')
+				end
 			else
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text=Failed+adding+url')
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run(v.message.text)))
 			end
-		else
-			rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run(v.message.text)))
+		elseif v.message.document then
+			print(string.format('%s New document from %s_%s: %s', os.date(), v.message.from.first_name, v.message.from.last_name, v.message.document.file_name))
 		end
 	end
 	local_last_update_id = v.update_id
