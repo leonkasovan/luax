@@ -9,6 +9,8 @@ local TOKEN2 = 'AAFJ4OdO7KvWFG24zkzsX6povpOZnv1kU0M'
 local API_TELEGRAM_BOT = 'https://api.telegram.org/bot'..TOKEN1..':'..TOKEN2..'/'
 local MAXTRY = 10
 
+local gist = dofile('github/gist.lua')
+
 function shell_run(cmd)
 	local fi, res
 	
