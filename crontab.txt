@@ -1,0 +1,7 @@
+#install:
+#cat /home/pi/luax | crontab
+* * * * * cd /home/pi/luax/lua-script && lua shell_bot.lua
+0 23 * * * cd /home/pi/luax/lua-script/multi_host_downloader && lua multi_host_downloader.lua >>multi_host_downloader.log 2>lua_error.log
+#0 11 * * * cd /home/pi/luax/lua-script/multi_host_downloader && lua multi_host_downloader.lua >>multi_host_downloader.log 2>lua_error.log
+5 * * * * cd /home/pi/luax/lua-script && lua hourly_action.lua > hourly_action.log
+0 * * * * cd /home/pi/luax && git pull >> git.log 2>&1

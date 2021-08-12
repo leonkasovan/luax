@@ -7,3 +7,7 @@ end
 
 print(table.concat(mytable))
 print(table.concat(mytable, ';'))
+
+for i,v in pairs(_G) do
+	print(i,v)
+end
