@@ -12,8 +12,7 @@ function my_write_log(data)
 end
 
 -- GLOBAL SETTING
-local MAXTIMEOUT = 1800	-- set max timeout 30 minutes
-local LOG_FILE = "youtube-dl.log"
+local MAXTIMEOUT = 5400	-- set max timeout 30 minutes
 local YOUTUBE_DL = ""
 
 if os.info() == "Windows" then
@@ -28,7 +27,7 @@ end
 --	nil : fail, invalid response
 function download_vidio(url, callback_function_write_log, callback_function_on_success)
 	local rc, content, id, title, url1, prevline
-	local write_log
+	local write_log, codecs, resolution
  
 	if callback_function_write_log ~= nil then
 		write_log = callback_function_write_log
