@@ -162,12 +162,12 @@ end
 -- end
 
 -- Get list of url
-local urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+local urls = gist.read('https://gist.github.com/dhaninovan/c3f8927ba4c3d75c7d552ee06ca2335e')
 local try
 
 try = 1
 while ((urls == nil) and (try < MAXTRY)) do
-	urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+	urls = gist.read('https://gist.github.com/dhaninovan/c3f8927ba4c3d75c7d552ee06ca2335e')
 	try = try + 1
 end
 if urls == nil then
