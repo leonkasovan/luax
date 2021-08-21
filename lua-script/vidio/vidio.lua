@@ -14,6 +14,7 @@ end
 -- GLOBAL SETTING
 local MAXTIMEOUT = 5400	-- set max timeout 30 minutes
 local YOUTUBE_DL = ""
+local LOG_FILE = "youtube-dl.log"
 
 if os.info() == "Windows" then
 	YOUTUBE_DL = "youtube-dl.exe"
