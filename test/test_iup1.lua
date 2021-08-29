@@ -26,7 +26,8 @@ if res ~= "" then
 end
 
 res, name = iup.GetParam("Title", nil,
-    "Give your name: %s\n","")
+    "Give your name: %s\n%s\n","Novan", "Dhani"
+	)
 iup.Message("Hello!",name)
 
 res, prof = iup.GetParam("Title", nil,

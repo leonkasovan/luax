@@ -25,20 +25,20 @@ function shell_run(cmd)
 end
 
 function add_download(url, desc)
-	local list_of_urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+	local list_of_urls = gist.read('https://gist.github.com/dhaninovan/c3f8927ba4c3d75c7d552ee06ca2335e')
 	local try
 
 	try = 1
 	while ((list_of_urls == nil) and (try < MAXTRY)) do
-		list_of_urls = gist.read('https://gist.github.com/dhaninovan/5d47a78e821dca8d37d990f267c6e209')
+		list_of_urls = gist.read('https://gist.github.com/dhaninovan/c3f8927ba4c3d75c7d552ee06ca2335e')
 		try = try + 1
 	end
 	
 	if list_of_urls == nil then return false end
 	if desc then
-		gist.update('5d47a78e821dca8d37d990f267c6e209', 'list_url.txt', string.format("%s\n\#%s\n%s", list_of_urls, desc, url))
+		gist.update('c3f8927ba4c3d75c7d552ee06ca2335e', 'list_url.txt', string.format("%s\n\#%s\n%s", list_of_urls, desc, url))
 	else
-		gist.update('5d47a78e821dca8d37d990f267c6e209', 'list_url.txt', string.format("%s\n%s", list_of_urls, url))
+		gist.update('c3f8927ba4c3d75c7d552ee06ca2335e', 'list_url.txt', string.format("%s\n%s", list_of_urls, url))
 	end
 	
 	return true
