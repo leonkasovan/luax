@@ -13,7 +13,7 @@ local gist = dofile('github/gist.lua')
 
 function shell_run(cmd)
 	local fi, res
-	
+	print(cmd)
 	res = ""
 	fi = io.popen(cmd)
 	if fi then
@@ -70,9 +70,11 @@ for i,v in pairs(resp.result) do
 		if v.message.text then
 			print(string.format('%s New text message from %s_%s: %s', os.date(), v.message.from.first_name, v.message.from.last_name, v.message.text))
 			if v.message.text:find('/show_log') then
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cat multi_host_downloader/multi_host_downloader.log')))
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('tail -15 multi_host_downloader/multi_host_downloader.log')))
+				print(rc, header)
 			elseif v.message.text:find('/show_files') then
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -l multi_host_downloader')))
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -holt multi_host_downloader')))
+				print(rc, header)
 			elseif v.message.text:find('/run_dl') then
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd multi_host_downloader && lua multi_host_downloader.lua')))
 			elseif v.message.text:find('^http.?://') then
