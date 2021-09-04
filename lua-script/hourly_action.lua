@@ -43,7 +43,7 @@ if os.info() == "Windows" then
 	os.execute('dir /A:-D /O:D > files.txt')	
 else
 	gist = dofile('github/gist.lua')
-	os.execute("ls -lt multi_host_downloader > files.txt")
+	os.execute("ls -rholt multi_host_downloader > files.txt")
 end
 
 tcontent = {}
@@ -65,10 +65,14 @@ if os.date("%d")%3 == 0 then
 	if os.date("%H") == "21" then
 		if os.info() == "Windows" then 
 			os.execute('type multi_host_downloader\\multi_host_downloader.log >> multi_host_downloader\\multi_host_downloader_history.log')
-			os.remove('multi_host_downloader\\multi_host_downloader.log') 
+			os.remove('multi_host_downloader\\multi_host_downloader.log')
+			os.remove('multi_host_downloader\\youtube-dl.log')
+			os.execute('multi_host_downloader\\*.htm')
 		else
 			os.execute('cat multi_host_downloader/multi_host_downloader.log >> multi_host_downloader/multi_host_downloader_history.log')
-			os.remove('multi_host_downloader/multi_host_downloader.log') 
+			os.remove('multi_host_downloader/multi_host_downloader.log')
+			os.remove('multi_host_downloader/youtube-dl.log')
+			os.execute('multi_host_downloader/*.htm')
 		end
 		print('Archiving log at '..os.date())
 	end
