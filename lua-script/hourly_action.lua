@@ -61,7 +61,7 @@ table.insert(tcontent, strip_html('multi_host_downloader/pixeldrain_invalid_cont
 table.insert(tcontent, strip_html('multi_host_downloader/mediafire_invalid_content.htm'))
 res = gist.update('e1ea2560db98933916e42a1c47bdeec2', 'multi_host_downloader.log', table.concat(tcontent))
 
-if os.date("%d")%7 == 0 then
+if os.date("%d")%3 == 0 then
 	if os.date("%H") == "21" then
 		if os.info() == "Windows" then 
 			os.execute('type multi_host_downloader\\multi_host_downloader.log >> multi_host_downloader\\multi_host_downloader_history.log')
