@@ -13,7 +13,7 @@ function my_write_log(data)
 end
 
 -- GLOBAL SETTING
-local MAXTIMEOUT = 900	-- set max timeout 15 minutes
+local MAXTIMEOUT = 3600	-- set max timeout 60 minutes
 
 -- Output :
 --	true : on success
