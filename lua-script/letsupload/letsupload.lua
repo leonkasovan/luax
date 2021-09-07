@@ -7,6 +7,7 @@
 
 dofile('../strict.lua')
 dofile('../common.lua')
+local gist = dofile('../github/gist.lua')
 
 function my_write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
@@ -45,6 +46,7 @@ function download_letsupload(url, callback_function_write_log, callback_function
 	if filename == nil or filesize == nil then
 		write_log("[error][letsupload.download] Can't find filename / filesize. Invalid response from letsupload.io")
 		save_file(content,"letsupload_invalid_content.htm")
+		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: <span class="h3">(.-)</span>')
 		return nil
 	end
 	
@@ -52,6 +54,7 @@ function download_letsupload(url, callback_function_write_log, callback_function
 	if url == nil then
 		write_log("[error][letsupload.download] Can't find download link. Invalid response from letsupload.io")
 		save_file(content,"letsupload_invalid_content.htm")
+		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, "window.location = '(.-)'; return false;\">download</button>")
 		return nil
 	end
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
@@ -64,6 +67,7 @@ function download_letsupload(url, callback_function_write_log, callback_function
 	if uid == nil then
 		write_log("[error][letsupload.download] Can't find post data in showFileInformation(uid). Check letsupload_invalid_content.htm")
 		save_file(content,"letsupload_invalid_content.htm")
+		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'showFileInformation%((%d+)%);')
 		return nil
 	end
 	
