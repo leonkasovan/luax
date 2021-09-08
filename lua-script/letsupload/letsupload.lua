@@ -40,6 +40,16 @@ function download_letsupload(url, callback_function_write_log, callback_function
 		write_log("[error][letsupload.download] "..http.error(rc))
 		return false
 	end
+	
+	if #content == 0 then
+		write_log("[error][letsupload.download] Empty response")
+		if os.info() == "Linux" then
+			os.execute('sleep 60')
+		else
+			os.execute('timeout 60')
+		end
+		return false
+	end
 		
 	filename = string.match(content, '<span class="h3">(.-)</span>')
 	filesize = string.match(content, 'Filesize:</span>%s+<span>(.-)</span>')
