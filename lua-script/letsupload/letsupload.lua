@@ -41,6 +41,16 @@ function download_letsupload(url, callback_function_write_log, callback_function
 		return false
 	end
 	
+	if content == nil then
+		write_log("[error][letsupload.download] Empty response")
+		if os.info() == "Linux" then
+			os.execute('sleep 60')
+		else
+			os.execute('timeout 60')
+		end
+		return false
+	end
+	
 	if #content == 0 then
 		write_log("[error][letsupload.download] Empty response")
 		if os.info() == "Linux" then
