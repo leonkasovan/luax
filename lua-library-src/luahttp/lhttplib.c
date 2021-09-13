@@ -91,6 +91,7 @@ Dont forget to define CURL_STATICLIB while building liblua
 	C_OPT(VERBOSE, boolean) \
 	C_OPT(LOW_SPEED_LIMIT, number) \
 	C_OPT(LOW_SPEED_TIME, number) \
+	C_OPT(COOKIELIST, string) \
 
 struct feat {
 	const char *name;
@@ -1489,7 +1490,6 @@ static int hl_request (lua_State *L) {
 	if (myheaders) curl_slist_free_all(myheaders);
 	return 3;
 }
-
 
 /* LUA Registration ============================================================== */
 static const luaL_Reg httplib[] = {

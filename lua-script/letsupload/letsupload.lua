@@ -115,6 +115,8 @@ function download_letsupload(url, callback_function_write_log, callback_function
 		write_log("[error][letsupload.download] "..http.error(rc))
 		return false
 	end
+	-- Delete all cookies, because server letsupload always return empty response for the next request
+	-- http.set_conf(http.OPT_COOKIELIST, "ALL")
 	
 	-- Update success list of URL
 	if callback_function_on_success ~= nil then callback_function_on_success(string.format("%s %s; %s (%s)", os.date(), original_url, filename, filesize)) end
