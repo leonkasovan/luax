@@ -88,6 +88,7 @@ git pull
 
 Git commands after edit some files:
 ```
+git config credential.helper store
 git commit -a
 git push
 ```
