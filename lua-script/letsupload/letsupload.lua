@@ -44,9 +44,9 @@ function download_letsupload(url, callback_function_write_log, callback_function
 	if content == nil then
 		write_log("[error][letsupload.download] Empty response")
 		if os.info() == "Linux" then
-			os.execute('sleep 60')
+			os.execute('sleep 180')
 		else
-			os.execute('timeout 60')
+			os.execute('timeout 180')
 		end
 		return false
 	end
@@ -54,9 +54,9 @@ function download_letsupload(url, callback_function_write_log, callback_function
 	if #content == 0 then
 		write_log("[error][letsupload.download] Empty response")
 		if os.info() == "Linux" then
-			os.execute('sleep 60')
+			os.execute('sleep 180')
 		else
-			os.execute('timeout 60')
+			os.execute('timeout 180')
 		end
 		return false
 	end
@@ -70,26 +70,28 @@ function download_letsupload(url, callback_function_write_log, callback_function
 		return nil
 	end
 	
-	url = string.match(content, "window.location = '(.-)'; return false;\">download</button>")
-	if url == nil then
-		write_log("[error][letsupload.download] Can't find download link. Invalid response from letsupload.io")
-		save_file(content,"letsupload_invalid_content.htm")
-		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, "window.location = '(.-)'; return false;\">download</button>")
-		return nil
-	end
-	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	rc, headers, content = http.request(url)
-	if rc ~= 0 then
-		write_log("[error][letsupload.download] "..http.error(rc))
-		return false
-	end
-	uid = string.match(content, 'showFileInformation%((%d+)%);')
-	if uid == nil then
-		write_log("[error][letsupload.download] Can't find post data in showFileInformation(uid). Check letsupload_invalid_content.htm")
-		save_file(content,"letsupload_invalid_content.htm")
-		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'showFileInformation%((%d+)%);')
-		return nil
-	end
+	repeat
+		url = string.match(content, "window.location = '(.-)'; return false;\">download</button>")
+		if url == nil then
+			write_log("[error][letsupload.download] Can't find download link. Invalid response from letsupload.io")
+			save_file(content,"letsupload_invalid_content.htm")
+			update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, "window.location = '(.-)'; return false;\">download</button>")
+			return nil
+		end
+		http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
+		rc, headers, content = http.request(url)
+		if rc ~= 0 then
+			write_log("[error][letsupload.download] "..http.error(rc))
+			return false
+		end
+		uid = string.match(content, 'showFileInformation%((%d+)%);')
+		if uid == nil then
+			write_log("[error][letsupload.download] Can't find post data in showFileInformation(uid). Check letsupload_invalid_content.htm")
+			save_file(content,"letsupload_invalid_content.htm")
+			update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'showFileInformation%((%d+)%);')
+			-- return nil
+		end
+	until (uid ~= nil)
 	
 	rc, headers, content = http.request('https://letsupload.io/account/ajax/file_details','u='..uid)
 	if rc ~= 0 then
@@ -116,7 +118,7 @@ function download_letsupload(url, callback_function_write_log, callback_function
 		return false
 	end
 	-- Delete all cookies, because server letsupload always return empty response for the next request
-	-- http.set_conf(http.OPT_COOKIELIST, "ALL")
+	http.set_conf(http.OPT_COOKIELIST, "ALL")
 	
 	-- Update success list of URL
 	if callback_function_on_success ~= nil then callback_function_on_success(string.format("%s %s; %s (%s)", os.date(), original_url, filename, filesize)) end
