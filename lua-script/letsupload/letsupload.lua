@@ -35,6 +35,8 @@ function download_letsupload(url, callback_function_write_log, callback_function
 		url = 'https://letsupload.io/'..string.match(url, 'letsupload.io/(%w+)')
 	end
 	
+	-- Delete all cookies, because server letsupload always return empty response for the next request
+	http.set_conf(http.OPT_COOKIELIST, "ALL")
 	rc, headers, content = http.request(url)
 	if rc ~= 0 then
 		write_log("[error][letsupload.download] "..http.error(rc))
