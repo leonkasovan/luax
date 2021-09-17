@@ -13,3 +13,7 @@
 0 6,12,18 * * 0,6 cd /media/pi/luax/lua-script/multi_host_downloader && lua multi_host_downloader.lua >>multi_host_downloader.log 2>lua_error.log
 5 * * * * cd /media/pi/luax/lua-script && lua hourly_action.lua > hourly_action.log
 0 * * * * cd /media/pi/luax && git pull >> git.log 2>&1
+
+@reboot /usr/local/bin/usb-mount.sh
+@reboot cd /media/pi/luax
+
