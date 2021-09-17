@@ -62,17 +62,17 @@ function download_letsupload(url, callback_function_write_log, callback_function
 		end
 		return false
 	end
-		
-	filename = string.match(content, '<span class="h3">(.-)</span>')
-	filesize = string.match(content, 'Filesize:</span>%s+<span>(.-)</span>')
-	if filename == nil or filesize == nil then
-		write_log("[error][letsupload.download] Can't find filename / filesize. Invalid response from letsupload.io")
-		save_file(content,"letsupload_invalid_content.htm")
-		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: <span class="h3">(.-)</span>')
-		return nil
-	end
-	
+			
 	repeat
+		filename = string.match(content, '<span class="h3">(.-)</span>')
+		filesize = string.match(content, 'Filesize:</span>%s+<span>(.-)</span>')
+		if filename == nil or filesize == nil then
+			write_log("[error][letsupload.download] Can't find filename / filesize. Invalid response from letsupload.io")
+			save_file(content,"letsupload_invalid_content.htm")
+			update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: <span class="h3">(.-)</span>')
+			return nil
+		end
+	
 		url = string.match(content, "window.location = '(.-)'; return false;\">download</button>")
 		if url == nil then
 			write_log("[error][letsupload.download] Can't find download link. Invalid response from letsupload.io")
@@ -91,6 +91,7 @@ function download_letsupload(url, callback_function_write_log, callback_function
 			write_log("[error][letsupload.download] Can't find post data in showFileInformation(uid). Check letsupload_invalid_content.htm")
 			save_file(content,"letsupload_invalid_content.htm")
 			update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'showFileInformation%((%d+)%);')
+			url = original_url
 			-- return nil
 		end
 	until (uid ~= nil)
