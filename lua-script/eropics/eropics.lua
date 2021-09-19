@@ -111,25 +111,25 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
-content = [[
-https://eropics.to/2019/01/06/cke18-rimi-tokyo-hotel
-]]
+-- content = [[
+-- https://eropics.to/2019/01/06/cke18-rimi-tokyo-hotel
+-- ]]
 
-local MAXTRY = 10
-local done, try
-for url in content:gmatch("[^\r\n]+") do
-	if verify_eropics(url) then
-		done = download_eropics(url)
-		try = 1
-		while ((try <= MAXTRY) and (done == false)) do
-			my_write_log('Retry '..try)
-			done = download_eropics(url)
-			try = try + 1
-		end
-	else
-		my_write_log('[error][eropics] invalid URL')
-	end
-end
+-- local MAXTRY = 10
+-- local done, try
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_eropics(url) then
+		-- done = download_eropics(url)
+		-- try = 1
+		-- while ((try <= MAXTRY) and (done == false)) do
+			-- my_write_log('Retry '..try)
+			-- done = download_eropics(url)
+			-- try = try + 1
+		-- end
+	-- else
+		-- my_write_log('[error][eropics] invalid URL')
+	-- end
+-- end
 
 -- rc, headers = http.request{url = 'https://vipr.im/rljku4uxpmt1', output_filename = 'vipr_0.htm'}
 -- if rc ~= 0 then

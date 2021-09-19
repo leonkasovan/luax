@@ -74,6 +74,7 @@ local mediafire = dofile('../mediafire/mediafire.lua')
 local imx = dofile('../imx/imx.lua')
 local games_db = dofile('../games-database/games_db.lua')
 local girlygirlpic = dofile('../girlygirlpic/girlygirlpic.lua')
+local eropics = dofile('../eropics/eropics.lua')
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
@@ -134,6 +135,8 @@ function verify(url)
 			return girlygirlpic.download_model
 		elseif girlygirlpic.verify_country(url) then
 			return girlygirlpic.download_country
+		elseif eropics.verify(url) then
+			return eropics.download
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		elseif url:match('^ftps?://.-/.+$') then
