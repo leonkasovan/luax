@@ -114,25 +114,26 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
--- content = [[
--- https://eropics.to/2021/09/08/thisisglamour-lycia-cutie-pie-tease-x155-september-7-2021
--- ]]
+content = [[
+https://eropics.to/2021/09/08/stunning18-alina-a-alina-red-114-photos-sep-08-2021
+https://eropics.to/2021/09/08/errotica-archives-lena-flora-lena-flora-62-photos-sep-08-2021
+]]
 
--- local MAXTRY = 10
--- local done, try
--- for url in content:gmatch("[^\r\n]+") do
-	-- if verify_eropics(url) then
-		-- done = download_eropics(url)
-		-- try = 1
-		-- while ((try <= MAXTRY) and (done == false)) do
-			-- my_write_log('Retry '..try)
-			-- done = download_eropics(url)
-			-- try = try + 1
-		-- end
-	-- else
-		-- my_write_log('[error][eropics] invalid URL')
-	-- end
--- end
+local MAXTRY = 10
+local done, try
+for url in content:gmatch("[^\r\n]+") do
+	if verify_eropics(url) then
+		done = download_eropics(url)
+		try = 1
+		while ((try <= MAXTRY) and (done == false)) do
+			my_write_log('Retry '..try)
+			done = download_eropics(url)
+			try = try + 1
+		end
+	else
+		my_write_log('[error][eropics] invalid URL')
+	end
+end
 
 -------------------------------------------------------------------------------
 --	Library Interface

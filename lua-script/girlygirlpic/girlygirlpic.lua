@@ -67,12 +67,12 @@ function download_girlygirlpic(url, callback_function_write_log, callback_functi
 		write_log("[error][girlygirlpic] "..http.error(rc))
 		return false
 	end
-	print(rc, headers)
-	 save_file(content, 'girlygirlpic3.htm')
+	-- print(rc, headers)
+	-- save_file(content, 'girlygirlpic3.htm')
 	title = content:match("<li><span>(.-)</span></ul>")
 	title = title:gsub('%[.-%]', '')
 	title = title:gsub('%W','_')
-	print(title)
+	-- print(title)
 	filename = title:sub(1,15)
 	
 	-- Do processing in here
