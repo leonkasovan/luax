@@ -7,10 +7,13 @@ dofile('../common.lua')
 
 local UNSUPPORTED_FILENAME = 'unsupported_links.txt'
 local imx = dofile('../imx/imx.lua')
+local vipr = dofile('../vipr/vipr.lua')
 
 function verify(url)
 	if imx.verify(url) then
 		return imx.download
+	elseif vipr.verify(url) then
+		return vipr.download
 	else
 		return nil
 	end
@@ -112,7 +115,7 @@ end
 --	Library Testing
 -------------------------------------------------------------------------------
 -- content = [[
--- https://eropics.to/2019/01/06/cke18-rimi-tokyo-hotel
+-- https://eropics.to/2021/09/08/thisisglamour-lycia-cutie-pie-tease-x155-september-7-2021
 -- ]]
 
 -- local MAXTRY = 10
@@ -130,13 +133,6 @@ end
 		-- my_write_log('[error][eropics] invalid URL')
 	-- end
 -- end
-
--- rc, headers = http.request{url = 'https://vipr.im/rljku4uxpmt1', output_filename = 'vipr_0.htm'}
--- if rc ~= 0 then
-	-- print("Error: "..http.error(rc), rc)
-	-- return false
--- end
--- print(headers)
 
 -------------------------------------------------------------------------------
 --	Library Interface
