@@ -114,27 +114,44 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
-content = [[
-https://eropics.to/2021/09/08/stunning18-alina-a-alina-red-114-photos-sep-08-2021
-https://eropics.to/2021/09/08/errotica-archives-lena-flora-lena-flora-62-photos-sep-08-2021
-]]
+-- content = [[
+-- https://eropics.to/2021/09/08/stunning18-alina-a-alina-red-114-photos-sep-08-2021
+-- https://eropics.to/2021/09/08/errotica-archives-lena-flora-lena-flora-62-photos-sep-08-2021
+-- ]]
 
-local MAXTRY = 10
-local done, try
-for url in content:gmatch("[^\r\n]+") do
-	if verify_eropics(url) then
-		done = download_eropics(url)
-		try = 1
-		while ((try <= MAXTRY) and (done == false)) do
-			my_write_log('Retry '..try)
-			done = download_eropics(url)
-			try = try + 1
-		end
-	else
-		my_write_log('[error][eropics] invalid URL')
-	end
-end
+-- local MAXTRY = 10
+-- local done, try
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_eropics(url) then
+		-- done = download_eropics(url)
+		-- try = 1
+		-- while ((try <= MAXTRY) and (done == false)) do
+			-- my_write_log('Retry '..try)
+			-- done = download_eropics(url)
+			-- try = try + 1
+		-- end
+	-- else
+		-- my_write_log('[error][eropics] invalid URL')
+	-- end
+-- end
 
+-- url = 'https://eropics.to/category/softcore-photo-sets/marvelcharm'
+-- rc, headers, content = http.request(url)
+-- if rc ~= 0 then
+	-- print("Error: "..http.error(rc), rc)
+	-- return false
+-- end
+-- links = http.collect_link(content, url)
+-- for i,v in pairs(links) do
+	-- if v:match('https://eropics%.to/%d+/%d+/%d+/%S+') then print(v) end
+-- end
+
+-- rc, headers = http.request{url = 'https://eropics.to/category/softcore-photo-sets/marvelcharm', output_filename = 'eropics_cat_marvelcharm.htm'}
+-- if rc ~= 0 then
+	-- print("Error: "..http.error(rc), rc)
+	-- return false
+-- end
+-- print(headers)
 -------------------------------------------------------------------------------
 --	Library Interface
 -------------------------------------------------------------------------------
