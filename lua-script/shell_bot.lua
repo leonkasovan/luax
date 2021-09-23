@@ -71,7 +71,7 @@ for i,v in pairs(resp.result) do
 			if v.message.text:find('/show_log') then
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('tail -c 2000 multi_host_downloader/multi_host_downloader.log')))
 			elseif v.message.text:find('/show_files') then
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -rholt multi_host_downloader | tail -c 2000')))
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -rholt multi_host_downloader')))
 			elseif v.message.text:find('/move_files') then
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('mv multi_host_downloader/*.mp4 /media/pi')))
 			elseif v.message.text:find('/run_dl') then
@@ -100,3 +100,10 @@ if #resp.result > 0 then
 else
 	print(os.date()..' Nothing new')
 end
+rc, headers, content = http.request('https://','arg=value')
+if rc ~= 0 then
+	print("Error: "..http.error(rc), rc)
+	return false
+end
+print(content)
+print(headers)
