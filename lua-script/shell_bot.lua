@@ -69,9 +69,9 @@ for i,v in pairs(resp.result) do
 		if v.message.text then
 			print(string.format('%s New text message from %s_%s: %s', os.date(), v.message.from.first_name, v.message.from.last_name, v.message.text))
 			if v.message.text:find('/show_log') then
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('tail -15 multi_host_downloader/multi_host_downloader.log')))
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('tail -c 2000 multi_host_downloader/multi_host_downloader.log')))
 			elseif v.message.text:find('/show_files') then
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -rholt multi_host_downloader | tail -c 1900')))
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -rholt multi_host_downloader | tail -c 2000')))
 			elseif v.message.text:find('/move_files') then
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage?chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('mv multi_host_downloader/*.mp4 /media/pi')))
 			elseif v.message.text:find('/run_dl') then
