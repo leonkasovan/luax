@@ -121,7 +121,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 		elseif ct == 'text/html' then	-- Jika download mulai dari 0, maka harus 2x confirmed url dan hapus downloaded file (yang berisi html)
 			write_log("[warning][gdrive] Invalid Response when downloading")
 			save_file(header,"gdrive_invalid_header.txt")
-			if header:match('HTTP%/1%.1 416') then
+			if header:match('HTTP%/%d%.%d 416') or header:match('HTTP%/%d 416') then
 				write_log('[warning][gdrive] Cancel downloading. File already fully downloaded.')
 				return nil
 			end
