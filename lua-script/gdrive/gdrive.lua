@@ -7,6 +7,7 @@
 
 dofile('../strict.lua')
 dofile('../common.lua')
+local gist = dofile('../github/gist.lua')
 
 function my_write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
@@ -68,6 +69,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	if filename == nil then
 		write_log("[error][gdrive.2] Can't find it's filename. Invalid response from Google Drive")
 		save_file(content,"gdrive_invalid_content.htm")
+		gist.update('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: <a href=".-">(.-)</a>')
 		return nil
 	end
 	filename = filename:gsub('[%;%#%/%\%:%?%*%"%<%>%|]', "")
@@ -83,6 +85,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	if direct_url == nil then
 		save_file(content,"gdrive_invalid_content.htm")
 		write_log("[error][gdrive.3] Can't find direct link to download. Invalid response from Google Drive")
+		gist.update('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: confirm=')
 		return nil
 	end
  
@@ -113,6 +116,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 			if direct_url == nil then
 				save_file(content,"gdrive_invalid_content.htm")
 				write_log("[error][gdrive.5] Can't find direct link to download. Invalid response from Google Drive")
+				gist.update('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: confirm=')
 				return nil
 			end
 			direct_url = direct_url:gsub( "&amp;", "&")
@@ -137,6 +141,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 			if direct_url == nil then
 				save_file(content,"gdrive_invalid_content.htm")
 				write_log("[error][gdrive.6] Can't find direct link to download. Invalid response from Google Drive")
+				gist.update('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: confirm=')
 				return nil
 			end
 			direct_url = direct_url:gsub( "&amp;", "&")

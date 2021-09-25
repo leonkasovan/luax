@@ -137,6 +137,8 @@ function verify(url)
 			return girlygirlpic.download_country
 		elseif eropics.verify(url) then
 			return eropics.download
+		elseif eropics.verify_category(url) then
+			return eropics.download_category
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		elseif url:match('^ftps?://.-/.+$') then
