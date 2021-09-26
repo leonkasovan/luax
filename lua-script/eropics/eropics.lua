@@ -186,7 +186,7 @@ function download_eropics_category(url, callback_function_write_log, callback_fu
 	
 	-- Do processing in here
 	for w in content:gmatch('entry%-header %-%->%s-<a href="(.-)" class="image%-thumbnail">') do
-		download_eropics(w)
+		download_eropics(w, callback_function_write_log, callback_function_on_success)
 	end
 	return true
 end
