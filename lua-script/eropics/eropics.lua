@@ -196,7 +196,7 @@ function verify_eropics(url)
 end
 
 function verify_eropics_category(url)
-	return url:match('https://eropics%.to/category/%S+/%S+') or 
+	return url:match('https://eropics%.to/category/%S+/%S+') or
 	url:match('http://eropics%.to/category/%S+/%S+') or
 	url:match('^https://eropics%.to$')
 end
@@ -206,6 +206,7 @@ function show_verified_eropics()
 [[
 https://eropics.to/2019/01/06/cke18-rimi-hands-attack
 https://eropics.to/category/softcore-photo-sets/18andbusty
+https://eropics.to/category/softcore-photo-sets/cke18/page/2
 ]]
 end
 

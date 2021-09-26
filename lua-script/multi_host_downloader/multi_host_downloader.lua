@@ -154,17 +154,20 @@ function verify(url)
 end
 
 -- Check lua instance
--- local fi, res
--- fi = io.popen('ps -e')
--- if fi then
-	-- res = fi:read("*a")
-	-- fi:close()
-	
-	-- if res:find('multi_host_downloader', 1, true) then
-		-- write_log("[warning] Previuos multi_host_downloader.lua script is running. Exiting")
-		-- return 0
-	-- end
--- end
+local fi, res
+local duration = 0
+fi = io.popen('ps -x')
+if fi then
+	res = fi:read("*a")
+	fi:close()
+	for hh,mm in res:gmatch('(%d+):(%d+) lua multi_host_downloader%.lua') do
+		duration = duration + tonumber(hh)*60 + tonumber(mm)*60
+	end
+	if duration > 0 then
+		write_log("[warning] Previous multi_host_downloader.lua script is running for "..duration.." minutes. Exiting")
+		return 0
+	end
+end
 
 -- Get list of url
 local urls = gist.read('https://gist.github.com/dhaninovan/c3f8927ba4c3d75c7d552ee06ca2335e')
