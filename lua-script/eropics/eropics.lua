@@ -42,7 +42,7 @@ local function append_done(url)
 	end
 end
 
-function verify(url)
+function img_host_verify(url)
 	if imx.verify(url) then
 		return imx.download
 	elseif vipr.verify(url) then
@@ -95,10 +95,14 @@ function download_eropics(url, callback_function_write_log, callback_function_on
 	n_fail = 0
 	n_unsupported = 0
 	content = content:match('<div class="entry%-content">(.-)</div>')
+	if content == nil then
+		write_log("[error][eropics] Content is empty")
+		return nil
+	end
 	links = http.collect_link(content, url)
 	for i,v in pairs(links) do
 		-- print(i,v)
-		download_func = verify(v)
+		download_func = img_host_verify(v)
 		if download_func then
 			if is_done(v) == false then
 				if download_func(v, callback_function_write_log, nil) then
