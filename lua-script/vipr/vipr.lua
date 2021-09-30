@@ -4,7 +4,7 @@
 
 dofile('../strict.lua')
 dofile('../common.lua')
-
+dofile('../github/gist.lua')
 function my_write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
 end
@@ -33,6 +33,8 @@ function download_vipr(url, callback_function_write_log, callback_function_on_su
 	media_url = string.match(content, '&nbsp;&nbsp;.<a href="(.-)" download class')
 	if media_url == nil then
 		write_log("[error][vipr] Can't find media url")
+		save_file(content,"vipr_invalid_content.htm")
+		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: &nbsp;&nbsp;.<a href="(.-)" download class')
 		return nil
 	end
 	
@@ -64,7 +66,7 @@ end
 --	Library Testing
 -------------------------------------------------------------------------------
 -- content = [[
--- https://vipr.im/7bwn8a24aog9
+-- https://vipr.im/lpv9rp24mjp0
 -- ]]
 
 -- local MAXTRY = 10
