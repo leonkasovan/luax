@@ -156,12 +156,12 @@ end
 -- Check lua instance
 local fi, res
 local duration = 0
-fi = io.popen('ps -x')
+fi = io.popen('ps -x | grep lua')
 if fi then
 	res = fi:read("*a")
 	fi:close()
-	for hh,mm in res:gmatch('(%d+):(%d+) lua multi_host_downloader%.lua') do
-		duration = duration + tonumber(hh)*60 + tonumber(mm)*60
+	for hh,mm in res:gmatch('(%d+)%:(%d+) lua multi%_host%_downloader%.lua') do
+		duration = duration + tonumber(hh)*60 + tonumber(mm)
 	end
 	if duration > 0 then
 		write_log("[warning] Previous multi_host_downloader.lua script is running for "..duration.." minutes. Exiting")
