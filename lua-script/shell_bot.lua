@@ -71,7 +71,7 @@ for i,v in pairs(resp.result) do
 			if v.message.text:find('/show_log') then
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('tail -c 2000 multi_host_downloader/multi_host_downloader.log')))
 			elseif v.message.text:find('/show_files') then
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -rholt multi_host_downloader')))
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ls -rholt multi_host_downloader | tail -c 2000')))
 			elseif v.message.text:find('/move_files') then
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('mv multi_host_downloader/*.mp4 /media/pi')))
 			elseif v.message.text:find('/update_src') then
@@ -85,7 +85,7 @@ for i,v in pairs(resp.result) do
 					rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text=Failed+adding+url')
 				end
 			else
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run(v.message.text)))
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run(v.message.text..' | tail -c 2000')))
 			end
 		elseif v.message.document then
 			print(string.format('%s New document from %s_%s: %s', os.date(), v.message.from.first_name, v.message.from.last_name, v.message.document.file_name))
