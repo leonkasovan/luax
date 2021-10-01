@@ -44,6 +44,13 @@ function download_filedot(url, callback_function_write_log, callback_function_on
 	end
 	
 	filename = string.match(content, 'fname" value="(.-)">')
+	if filename == nil then
+		write_log("[error][filedot.download] Can't find filename. Invalid response from filedot.io")
+		save_file(content,"filedot_invalid_content.htm")
+		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: fname" value="(.-)">')
+		return nil
+	end
+	
 	rc, headers, content = http.request(url,'op=download1&usr_login=&referer=https://nnsets.fr/&method_free=Free+Download+>>&id='..id..'&fname='..filename)
 	if rc ~= 0 then
 		write_log("Error: "..http.error(rc))
