@@ -78,6 +78,8 @@ for i,v in pairs(resp.result) do
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd .. && git pull')))
 			elseif v.message.text:find('/run_dl') then
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd multi_host_downloader && lua multi_host_downloader.lua')))
+			elseif v.message.text:find('/view_process') then
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ps -C lua --format stime,time,pid,cmd')))
 			elseif v.message.text:find('^http.?://') then
 				if add_download(v.message.text) then
 					rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text=Success+adding+url')

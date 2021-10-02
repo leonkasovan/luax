@@ -130,20 +130,23 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
-content = [[
-https://filedot.xyz/v4k75hw9csnn
-]]
+-- content = [[
+-- https://filedot.xyz/v4k75hw9csnn
+-- ]]
 
-local fname
-for url in content:gmatch("[^\r\n]+") do
-	if verify_filedot(url) then
-		-- fname = download_filedot(url, nil, nil, true)	--check only : downloadable or premium
-		fname = download_filedot(url, nil, nil)
-		if fname ~= nil then print(url, fname) else print(url, 'premium account needed') end
-	else
-		my_write_log('[error][filedot] invalid URL')
-	end
-end
+-- local fname
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_filedot(url) then
+		-- check only : downloadable or premium
+		-- fname = download_filedot(url, nil, nil, true)
+		
+		-- no check, just download it
+		-- fname = download_filedot(url, nil, nil)
+		-- if fname ~= nil then print(url, fname) else print(url, 'premium account needed') end
+	-- else
+		-- my_write_log('[error][filedot] invalid URL')
+	-- end
+-- end
 
 
 -------------------------------------------------------------------------------
