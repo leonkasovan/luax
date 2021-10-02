@@ -29,7 +29,15 @@ function download_vipr(url, callback_function_write_log, callback_function_on_su
 		write_log("[error][vipr] "..http.error(rc))
 		return false
 	end
-		-- Do processing in here
+	
+	if #content == 0 then
+		write_log("[error][vipr] Empty response. Check response header")
+		save_file(headers,"vipr_invalid_header.txt")
+		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', headers, 'Header of Empty response')
+		return nil
+	end
+	
+	-- Do processing in here
 	media_url = string.match(content, '&nbsp;&nbsp;.<a href="(.-)" download class')
 	if media_url == nil then
 		write_log("[error][vipr] Can't find media url")
