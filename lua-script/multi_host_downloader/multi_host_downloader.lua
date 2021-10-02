@@ -208,7 +208,7 @@ for url in urls:gmatch("[^\r\n]+") do
 					done = download_library(url, write_log, update_success_log)
 					try = try + 1
 				end
-				print(collectgarbage("collect"))
+				collectgarbage("collect")
 			end
 			nurl = nurl + 1
 		end
