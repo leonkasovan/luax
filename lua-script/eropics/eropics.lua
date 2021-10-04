@@ -9,6 +9,7 @@ local UNSUPPORTED_FILENAME = 'eropics_unsupported_links.txt'
 local DOWNLOADED_FILENAME = 'eropics_done.txt'
 local imx = dofile('../imx/imx.lua')
 local vipr = dofile('../vipr/vipr.lua')
+local pixhost = dofile('../pixhost/pixhost.lua')
 
 local function is_done(url)
 	local fi, content
@@ -47,6 +48,8 @@ function img_host_verify(url)
 		return imx.download
 	elseif vipr.verify(url) then
 		return vipr.download
+	elseif pixhost.verify(url) then
+		return pixhost.download
 	else
 		return nil
 	end
