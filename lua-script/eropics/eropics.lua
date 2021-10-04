@@ -108,6 +108,7 @@ function download_eropics(url, callback_function_write_log, callback_function_on
 		download_func = img_host_verify(v)
 		if download_func then
 			if is_done(v) == false then
+				http.set_conf(http.OPT_REFERER, url)
 				if download_func(v, callback_function_write_log, nil) then
 					n_success = n_success + 1
 					append_done(v)
