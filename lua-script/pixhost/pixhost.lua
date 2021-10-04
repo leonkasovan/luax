@@ -64,25 +64,25 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
-content = [[
-https://pixhost.to/show/50/230327473_p2260056.jpg
-]]
+-- content = [[
+-- https://pixhost.to/show/50/230327473_p2260056.jpg
+-- ]]
 
-local MAXTRY = 10
-local done, try
-for url in content:gmatch("[^\r\n]+") do
-	if verify_pixhost(url) then
-		done = download_pixhost(url)
-		try = 1
-		while ((try <= MAXTRY) and (done == false)) do
-			my_write_log('Retry '..try)
-			done = download_pixhost(url)
-			try = try + 1
-		end
-	else
-		my_write_log('[error][pixhost] invalid URL')
-	end
-end
+-- local MAXTRY = 10
+-- local done, try
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_pixhost(url) then
+		-- done = download_pixhost(url)
+		-- try = 1
+		-- while ((try <= MAXTRY) and (done == false)) do
+			-- my_write_log('Retry '..try)
+			-- done = download_pixhost(url)
+			-- try = try + 1
+		-- end
+	-- else
+		-- my_write_log('[error][pixhost] invalid URL')
+	-- end
+-- end
 
 -------------------------------------------------------------------------------
 --	Library Interface
