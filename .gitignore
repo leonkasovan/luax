@@ -9,4 +9,8 @@
 *.a
 *.json
 *.jpg
-
+*.bsc
+*.lib
+*.suo
+bin/*
+Release
