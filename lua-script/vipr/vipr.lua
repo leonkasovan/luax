@@ -33,7 +33,7 @@ function download_vipr(url, callback_function_write_log, callback_function_on_su
 	if #content == 0 then
 		write_log("[error][vipr] Empty response. Check response header vipr_invalid_header.txt")
 		save_file(headers,"vipr_invalid_header.txt")
-		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'vipr_invalid_header.txt', headers, 'Header of Empty response')
+		-- update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'vipr_invalid_header.txt', headers, 'Header of Empty response')
 		return nil
 	end
 	write_log("[info][vipr] Content Length = "..tostring(#content))

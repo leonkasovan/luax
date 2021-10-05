@@ -11,34 +11,38 @@ local imx = dofile('../imx/imx.lua')
 local vipr = dofile('../vipr/vipr.lua')
 local pixhost = dofile('../pixhost/pixhost.lua')
 
-local function is_done(url)
+local function is_infile(data, fname)
 	local fi, content
 	
-	fi = io.open(DOWNLOADED_FILENAME, "r")
+	fi = io.open(fname, "r")
 	if fi ~= nil then
 		content = fi:read("*a")
 		fi:close()
-		if content:find(url, 1, true) ~= nil then
+		if content:find(data, 1, true) ~= nil then
 			return true
 		end
 	end
-	fi = gzio.open(DOWNLOADED_FILENAME..'.gz', "r")
+	fi = gzio.open(fname..'.gz', "r")
 	if fi ~= nil then
 		content = fi:read("*a")
 		fi:close()
-		if content:find(url, 1, true) ~= nil then
+		if content:find(data, 1, true) ~= nil then
 			return true
 		end
 	end
 	return false
 end
 
-local function append_done(url)
+local function append_file(data, fname)
 	local fo
 	
-	fo = io.open(DOWNLOADED_FILENAME, "a")
+	fo = io.open(fname, "a")
 	if fo ~= nil then
-		fo:write(url..'\n')
+		fo:write(data..'\n')
+		fo:close()
+	else
+		fo = io.open(fname,"w")
+		fo:write(data..'\n')
 		fo:close()
 	end
 end
@@ -52,20 +56,6 @@ function img_host_verify(url)
 		return pixhost.download
 	else
 		return nil
-	end
-end
-
-function append_file(fname, data)
-	local fo
-	
-	fo = io.open(fname,"a")
-	if fo ~= nil then
-		fo:write(data..'\n')
-		fo:close()
-	else
-		fo = io.open(fname,"w")
-		fo:write(data..'\n')
-		fo:close()
 	end
 end
 
@@ -107,11 +97,11 @@ function download_eropics(url, callback_function_write_log, callback_function_on
 		-- print(i,v)
 		download_func = img_host_verify(v)
 		if download_func then
-			if is_done(v) == false then
+			if is_infile(v, DOWNLOADED_FILENAME) == false then
 				http.set_conf(http.OPT_REFERER, url)
 				if download_func(v, callback_function_write_log, nil) then
 					n_success = n_success + 1
-					append_done(v)
+					append_file(v, DOWNLOADED_FILENAME)
 				else
 					n_fail = n_fail + 1
 				end
@@ -119,7 +109,9 @@ function download_eropics(url, callback_function_write_log, callback_function_on
 				write_log("[info][eropics] Skipped "..v)
 			end
 		else
-			append_file(UNSUPPORTED_FILENAME, v)
+			if is_infile(v, UNSUPPORTED_FILENAME) == false then
+				append_file(v, UNSUPPORTED_FILENAME)
+			end
 			n_unsupported = n_unsupported + 1
 		end
 	end
@@ -166,7 +158,9 @@ function download_eropics(url, callback_function_write_log, callback_function_on
 	end
 	
 	if callback_function_on_success ~= nil then
-		callback_function_on_success(string.format("%s %s (%s images)", os.date(), url, n_success))
+		if n_success > 0 then
+			callback_function_on_success(string.format("%s %s (%s images)", os.date(), url, n_success))
+		end
 	end
 	return true
 end
