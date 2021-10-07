@@ -77,7 +77,10 @@ for i,v in pairs(resp.result) do
 			elseif v.message.text:find('/update_src') then
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd .. && git pull')))
 			elseif v.message.text:find('/run_dl') then
-				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd multi_host_downloader && lua multi_host_downloader.lua')))
+				fo = io.open("last_update.json", "w+")
+				fo:write(string.format('{"last_update_id":%d}', v.update_id))
+				fo:close()
+				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('cd multi_host_downloader && lua multi_host_downloader.lua >>multi_host_downloader.log 2>lua_error.log')))
 			elseif v.message.text:find('/view_process') then
 				rc, headers, content = http.request(API_TELEGRAM_BOT..'sendMessage','chat_id='..v.message.chat.id..'&text='..http.escape(shell_run('ps -f -C lua | tail -c 2000')))
 			elseif v.message.text:find('^http.?://') then
