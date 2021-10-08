@@ -94,6 +94,7 @@ function verify(url)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
 	
 	if success_log == nil then success_log = "" end
+	if url:match("^https://eropics%.to$") then success_log = "" end	-- ignore spesific url
 	if success_log:find(url, 1, true) == nil then
 		if gdrive.verify(url) then
 			return gdrive.download
