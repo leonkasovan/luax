@@ -15,7 +15,7 @@ end
 --	nil : invalid response and other fail status
 function download_vipr(url, callback_function_write_log, callback_function_on_success)
 	local rc, headers, content, title, filename
-	local write_log, media_url
+	local write_log, media_url, fsize
 	
 	if callback_function_write_log ~= nil then
 		write_log = callback_function_write_log
@@ -52,10 +52,15 @@ function download_vipr(url, callback_function_write_log, callback_function_on_su
 		print("Error: "..http.error(rc), rc)
 		return false
 	end
-	if callback_function_on_success ~= nil then
-		callback_function_on_success(string.format("%s %s; %s (%s bytes)", os.date(), url, filename, format_number(os.getfilesize(filename))))
+	fsize = os.getfilesize(filename)
+	if fsize == 8346 then
+		write_log("[error][vipr] Forbidden image")
+		return nil
 	end
-	write_log(string.format("[info][vipr] Success saving file '%s' (%s bytes)", filename, format_number(os.getfilesize(filename))))
+	if callback_function_on_success ~= nil then
+		callback_function_on_success(string.format("%s %s; %s (%s bytes)", os.date(), url, filename, format_number(fsize)))
+	end
+	write_log(string.format("[info][vipr] Success saving file '%s' (%s bytes)", filename, format_number(fsize)))
 	return true
 end
 
