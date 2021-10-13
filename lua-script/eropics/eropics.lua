@@ -135,6 +135,8 @@ function download_eropics(url, callback_function_write_log, callback_function_on
 	
 	-- archieving log for done url
 	if os.getfilesize(DOWNLOADED_FILENAME) > 200000 then
+		local fo,fi
+		
 		fo = gzio.open(DOWNLOADED_FILENAME..'.gz.new','w')
 		fi = gzio.open(DOWNLOADED_FILENAME..'.gz','r')
 		if fi ~= nil then
