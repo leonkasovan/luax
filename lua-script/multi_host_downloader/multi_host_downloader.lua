@@ -75,6 +75,7 @@ local imx = dofile('../imx/imx.lua')
 local games_db = dofile('../games-database/games_db.lua')
 local girlygirlpic = dofile('../girlygirlpic/girlygirlpic.lua')
 local eropics = dofile('../eropics/eropics.lua')
+local imagesbase = dofile('../imagesbase/imagesbase.lua')
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
@@ -140,6 +141,10 @@ function verify(url)
 			return eropics.download
 		elseif eropics.verify_category(url) then
 			return eropics.download_category
+		elseif imagesbase.verify(url) then
+			return imagesbase.download
+		elseif imagesbase.verify_category(url) then
+			return imagesbase.download_category
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		elseif url:match('^ftps?://.-/.+$') then
