@@ -96,6 +96,7 @@ function verify(url)
 	
 	if success_log == nil then success_log = "" end
 	if url:match("^https://eropics%.to$") then success_log = "" end	-- ignore spesific url
+	if url:match("^https://imagesbase%.ru$") then success_log = "" end	-- ignore spesific url
 	if success_log:find(url, 1, true) == nil then
 		if gdrive.verify(url) then
 			return gdrive.download
