@@ -67,6 +67,11 @@ function download_imagesbase(url, callback_function_write_log, callback_function
 		callback_function_on_success(string.format("%s %s; %s (%s bytes)", os.date(), url, filename, format_number(os.getfilesize(filename))))
 	end
 	write_log(string.format("[info][imagesbase] Success saving file '%s' (%s bytes)", filename, format_number(os.getfilesize(filename))))
+	if os.info() == "Windows" then
+		os.execute('move '..filename..' wallpaper')
+	else
+		os.execute('mv '..filename..' wallpaper')
+	end
 	return true
 end
 
