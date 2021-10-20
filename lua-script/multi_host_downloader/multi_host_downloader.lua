@@ -161,18 +161,22 @@ function verify(url)
 end
 
 -- Check lua instance
-local fi, res
-local n_instance = 0
-fi = io.popen('ps -x | grep lua')
-if fi then
-	res = fi:read("*a")
-	fi:close()
-	for hh,mm in res:gmatch('(%d+)%:(%d+) lua multi%_host%_downloader%.lua') do
-		n_instance = n_instance + 1
-	end
-	if n_instance > 1 then
-		write_log("[warning] There is another multi_host_downloader.lua script instance. Exiting")
-		return 0
+if os.info() == "Windows" then
+	-- to be defined
+else
+	local fi, res
+	local n_instance = 0
+	fi = io.popen('ps -x | grep lua')
+	if fi then
+		res = fi:read("*a")
+		fi:close()
+		for hh,mm in res:gmatch('(%d+)%:(%d+) lua multi%_host%_downloader%.lua') do
+			n_instance = n_instance + 1
+		end
+		if n_instance > 1 then
+			write_log("[warning] There is another multi_host_downloader.lua script instance. Exiting")
+			return 0
+		end
 	end
 end
 

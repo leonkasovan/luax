@@ -128,28 +128,28 @@ end
 --	Library Testing
 -------------------------------------------------------------------------------
 -- content = show_verified_imagesbase()
-content = [[
-https://imagesbase.ru/
-]]
+-- content = [[
+-- https://imagesbase.ru/
+-- ]]
 
-local MAXTRY = 10
-local done, try
-login_imagesbase(IMAGESBASE_USER, IMAGESBASE_PASS)
-for url in content:gmatch("[^\r\n]+") do
-	if verify_imagesbase(url) then
-		done = download_imagesbase(url)
-		try = 1
-		while ((try <= MAXTRY) and (done == false)) do
-			my_write_log('Retry '..try)
-			done = download_imagesbase(url)
-			try = try + 1
-		end
-	elseif verify_imagesbase_category(url) then
-		done = download_imagesbase_category(url)
-	else
-		my_write_log('[error][imagesbase] invalid URL')
-	end
-end
+-- local MAXTRY = 10
+-- local done, try
+-- login_imagesbase(IMAGESBASE_USER, IMAGESBASE_PASS)
+-- for url in content:gmatch("[^\r\n]+") do
+	-- if verify_imagesbase(url) then
+		-- done = download_imagesbase(url)
+		-- try = 1
+		-- while ((try <= MAXTRY) and (done == false)) do
+			-- my_write_log('Retry '..try)
+			-- done = download_imagesbase(url)
+			-- try = try + 1
+		-- end
+	-- elseif verify_imagesbase_category(url) then
+		-- done = download_imagesbase_category(url)
+	-- else
+		-- my_write_log('[error][imagesbase] invalid URL')
+	-- end
+-- end
 
 -------------------------------------------------------------------------------
 --	Library Interface
