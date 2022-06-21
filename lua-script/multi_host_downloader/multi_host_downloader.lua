@@ -60,7 +60,7 @@ end
 --local vidio = import_library('https://gist.github.com/dhaninovan/f5dcfa5f411b026f5bcaa646a922514f/raw/')
 --local youtube = import_library('https://gist.github.com/dhaninovan/5d858219718de619428a3ebb2f6f34d9/raw/')
 local gist = dofile('../github/gist.lua')
-local gdrive = dofile('../gdrive/gdrive.lua')
+local gdrive = dofile('../gdrive/gdrive2.lua')
 local solidfiles = dofile('../solidfiles/solidfiles.lua')
 local racaty = dofile('../racaty/racaty.lua')
 local letsupload = dofile('../letsupload/letsupload.lua')

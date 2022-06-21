@@ -68,7 +68,7 @@
       <AdditionalDependencies>bstring.lib;comctl32.lib;iup.lib;liblua.lib;libcurl.lib;ws2_32.lib;zlib.lib;wldap32.lib;advapi32.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "C:\Program Files (x86)\Lua\5.1"</Command>
+      <Command>copy "$(TargetPath)" "C:\Windows"</Command>
       <Message>Install Lua Interpreter</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -93,7 +93,7 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(TargetPath)" "C:\Program Files (x86)\Lua\5.1"</Command>
+      <Command>copy "$(TargetPath)" "C:\Windows"</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Install Lua Interpreter</Message>

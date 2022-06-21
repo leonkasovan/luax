@@ -92,7 +92,7 @@ Dont forget to define CURL_STATICLIB while building liblua
 	C_OPT(LOW_SPEED_LIMIT, number) \
 	C_OPT(LOW_SPEED_TIME, number) \
 	C_OPT(COOKIELIST, string) \
-
+	C_OPT(POSTREDIR, number) \
 struct feat {
 	const char *name;
 	int bitmask;
