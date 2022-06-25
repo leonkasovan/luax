@@ -47,7 +47,7 @@ function download_vimm(url, callback_function_write_log, callback_function_on_su
 		return nil
 	end
 
-	TMPFILE = media_id..".tmp""
+	TMPFILE = media_id..".tmp"
 	http.set_conf(http.OPT_REFERER, 'https://vimm.net/')
 	rc, headers = http.request{url = "https://download3.vimm.net/download/?mediaId="..media_id, output_filename = TMPFILE}
 	if rc ~= 0 then
