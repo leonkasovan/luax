@@ -52,13 +52,6 @@ function general_download(url, callback_function_write_log, callback_function_on
 end
 
 --- Import Library
---local gist = import_library('https://gist.github.com/dhaninovan/c99bf60b414d902a447b90633c8dd9d4/raw/')
---local gdrive = import_library('https://gist.github.com/dhaninovan/d94d938e96b3171a42e47aa1f8c0c22b/raw/')
---local solidfiles = import_library('https://gist.github.com/dhaninovan/44a8586f3ec91ad479a690ecfdb608a7/raw/')
---local racaty = import_library('https://gist.github.com/dhaninovan/d883c5513627c5b8ae4711b5ecf87486/raw/')
---local letsupload = import_library('https://gist.github.com/dhaninovan/311d56a792c6b98cb277cb6bca47396b/raw/')
---local vidio = import_library('https://gist.github.com/dhaninovan/f5dcfa5f411b026f5bcaa646a922514f/raw/')
---local youtube = import_library('https://gist.github.com/dhaninovan/5d858219718de619428a3ebb2f6f34d9/raw/')
 local gist = dofile('../github/gist.lua')
 local gdrive = dofile('../gdrive/gdrive2.lua')
 local solidfiles = dofile('../solidfiles/solidfiles.lua')
@@ -76,6 +69,7 @@ local games_db = dofile('../games-database/games_db.lua')
 local girlygirlpic = dofile('../girlygirlpic/girlygirlpic.lua')
 local eropics = dofile('../eropics/eropics.lua')
 local imagesbase = dofile('../imagesbase/imagesbase.lua')
+local vimm = dofile('../vimm/vimm.lua')
 
 function update_success_log(data)
 	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
@@ -146,6 +140,8 @@ function verify(url)
 			return imagesbase.download
 		elseif imagesbase.verify_category(url) then
 			return imagesbase.download_category
+		elseif vimm.verify(url) then
+			return vimm.download
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		elseif url:match('^ftps?://.-/.+$') then
@@ -193,14 +189,6 @@ if urls == nil then
 	write_log('Fail to grab list of url after '..try..' times trying.')
 	return -1
 end
-
--- urls = [[
--- https://www.youtube.com/watch?v=gt_9okOgvUU
--- https://www.youtube.com/watch?v=mRYsxQKwi5A
--- https://www.youtube.com/watch?v=-r1Ws8nz58k
--- https://www.youtube.com/watch?v=CeP9Tuz5X5U
--- https://www.youtube.com/watch?v=uKtQiexjDOE
--- ]]
 
 -- Download url(s)
 local nurl, url, done, download_library

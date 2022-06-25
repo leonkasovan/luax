@@ -12,5 +12,6 @@
 *.bsc
 *.lib
 *.suo
+*.sdf
 bin/*
 Release
