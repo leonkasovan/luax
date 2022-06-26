@@ -37,7 +37,6 @@ function download_vimm(url, callback_function_write_log, callback_function_on_su
 		save_file(headers,"vimm_invalid_header.txt")
 		return nil
 	end
-	write_log("[info][vimm] Content Length = "..tostring(#content))
 	-- Do processing in here
 	media_id = string.match(content, 'name="mediaId" value="(.-)"><input')
 	if media_id == nil then
