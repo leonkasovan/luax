@@ -38,11 +38,9 @@ function download_vimm(url, callback_function_write_log, callback_function_on_su
 		return nil
 	end
 	-- Do processing in here
-	media_id = string.match(content, 'name="mediaId" value="(.-)"><input')
+	media_id = string.match(url, 'vault/(.-)$')
 	if media_id == nil then
 		write_log("[error][vimm.3] Can't find media id")
-		save_file(content,"vimm_invalid_content.htm")
-		update_gist('2ff7b7c90cd7f219043bd450b5c1b05e', 'vimm_invalid_content.htm', headers..content, 'Fail match: name="mediaId" value="(.-)"><input')
 		return nil
 	end
 
@@ -83,25 +81,25 @@ end
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
--- content = [[
--- https://vimm.net/vault/24694
--- ]]
+content = [[
+https://vimm.net/vault/24712
+]]
 
--- local MAXTRY = 3
--- local done, try
--- for url in content:gmatch("[^\r\n]+") do
---	 if verify_vimm(url) then
---		 done = download_vimm(url)
---		 try = 1
---		 while ((try <= MAXTRY) and (done == false)) do
---			 my_write_log('Retry '..try)
---			 done = download_vimm(url)
---			 try = try + 1
---		 end
---	 else
---		 my_write_log('[error][vimm] invalid URL')
---	 end
--- end
+local MAXTRY = 3
+local done, try
+for url in content:gmatch("[^\r\n]+") do
+ if verify_vimm(url) then
+	 done = download_vimm(url)
+	 try = 1
+	 while ((try <= MAXTRY) and (done == false)) do
+		 my_write_log('Retry '..try)
+		 done = download_vimm(url)
+		 try = try + 1
+	 end
+ else
+	 my_write_log('[error][vimm] invalid URL')
+ end
+end
 
 -------------------------------------------------------------------------------
 --	Library Interface
