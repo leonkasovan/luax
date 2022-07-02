@@ -46,7 +46,7 @@ function download_vimm(url, callback_function_write_log, callback_function_on_su
 
 	TMPFILE = media_id..".tmp"
 	http.set_conf(http.OPT_TIMEOUT, 1800)
-	http.set_conf(http.OPT_REFERER, 'https://vimm.net/')
+	http.set_conf(http.OPT_REFERER, url)
 	rc, headers = http.request{url = "https://download3.vimm.net/download/?mediaId="..media_id, output_filename = TMPFILE}
 	if rc ~= 0 then
 		write_log("[error][vimm.4] "..http.error(rc))
