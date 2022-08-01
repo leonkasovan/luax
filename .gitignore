@@ -1,0 +1,17 @@
+*.log
+*.o
+*.rar
+*.mp4
+*.zip
+*.htm
+*.txt
+*.mkv
+*.a
+*.json
+*.jpg
+*.bsc
+*.lib
+*.suo
+*.sdf
+bin/*
+Release
