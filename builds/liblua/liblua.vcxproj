@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{25DD684B-E291-42F2-AE64-535B6FCBCAA7}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>liblua</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)lib\</OutDir>
+    <IncludePath>$(SolutionDir)ext-library\iup-3.30;$(SolutionDir)include;$(IncludePath)</IncludePath>
+    <ExtensionsToDeleteOnClean>*.log;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)lib\</OutDir>
+    <IncludePath>$(SolutionDir)ext-library\iup-3.30;$(SolutionDir)include;$(IncludePath)</IncludePath>
+    <ExtensionsToDeleteOnClean>*.log;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;CURL_STATICLIB;PCRE_STATIC;HAVE_CONFIG_H;IUPLUA_USELH;_MBCS;_WINDOWS;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;CURL_STATICLIB;PCRE_STATIC;HAVE_CONFIG_H;IUPLUA_USELH;_MBCS;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\lua-library-src\liblua\lapi.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lauxlib.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lbaselib.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lcode.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\ldblib.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\ldebug.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\ldo.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\ldump.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lfunc.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lgc.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\linit.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\liolib.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\llex.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lmathlib.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lmem.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\loadlib.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lobject.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lopcodes.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\loslib.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lparser.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lstate.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lstring.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lstrlib.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\ltable.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\ltablib.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\ltm.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lundump.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lvm.c" />
+    <ClCompile Include="..\..\lua-library-src\liblua\lzio.c" />
+    <ClCompile Include="..\..\lua-library-src\luacsv\lcsvlib.c" />
+    <ClCompile Include="..\..\lua-library-src\luafilesystem\lfs.c" />
+    <ClCompile Include="..\..\lua-library-src\luagzio\lgziolib.c" />
+    <ClCompile Include="..\..\lua-library-src\luahttp\lhttplib.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_animatedlabel.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_backgroundbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_button.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_calendar.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_canvas.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_cbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_clipboard.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_colorbar.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_colorbrowser.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_colordlg.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_datepick.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_detachbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_dial.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_dialog.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_dropbutton.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_expander.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_filedlg.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_fill.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatbutton.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatframe.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatlabel.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatlist.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatscrollbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatseparator.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flattabs.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flattoggle.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flattree.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatval.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_fontdlg.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_frame.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_gauge.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_gridbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_hbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_image.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_imagergb.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_imagergba.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_item.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_label.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_link.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_list.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_menu.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_messagedlg.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_multibox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_multiline.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_normalizer.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_param.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_parambox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_progressbar.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_progressdlg.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_radio.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_sbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_scrollbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_separator.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_space.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_spin.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_spinbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_split.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_submenu.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_tabs.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_text.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_thread.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_timer.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_toggle.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_tree.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_user.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_val.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_vbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_zbox.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_api.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_config.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_draw.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_getcolor.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_getparam.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_scanf.c" />
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_tree_aux.c" />
+    <ClCompile Include="..\..\lua-library-src\luajson\lua_cjson.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\common.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\lpcre.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\lpcre_f.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_byte_order.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_chartables.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_compile.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_config.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_dfa_exec.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_exec.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_fullinfo.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_get.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_globals.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_jit_compile.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_maketables.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_newline.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_ord2utf8.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_refcount.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_string_utils.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_study.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_tables.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_ucd.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_valid_utf8.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_version.c" />
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_xclass.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\lua-library-src\luapcre\algo.h" />
+    <ClInclude Include="..\..\lua-library-src\luapcre\common.h" />
+    <ClInclude Include="..\..\lua-library-src\luapcre\config.h" />
+    <ClInclude Include="..\..\lua-library-src\luapcre\pcre.h" />
+    <ClInclude Include="..\..\lua-library-src\luapcre\pcre_internal.h" />
+    <ClInclude Include="..\..\lua-library-src\luapcre\pcre_version.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

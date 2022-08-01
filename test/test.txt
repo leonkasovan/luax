@@ -1,0 +1,11 @@
+PID TTY      STAT   TIME COMMAND
+  551 ?        Ss     0:00 /lib/systemd/systemd --user
+  552 ?        S      0:00 (sd-pam)
+  562 tty1     S+     0:00 -bash
+20028 ?        S      0:00 lua multi_host_downloader.lua  
+20025 ?        Ss     0:00 /bin/sh -c cd /media/pi/luax/lua-script/multi_host_downloader && lua multi_host_downloader.lua >>multi_host_downloader.log 2>lua_error.log
+20028 ?        S      0:00 lua multi_host_downloader.lua
+20062 ?        Ss     0:00 /bin/sh -c cd /media/pi/luax/lua-script && lua shell_bot.lua > shell_bot.log 2>lua_error.log
+20063 ?        S      0:00 lua shell_bot.lua
+20065 ?        S      0:00 sh -c ps -x
+20066 ?        R      0:00 ps -x

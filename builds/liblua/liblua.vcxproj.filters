@@ -1,0 +1,465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\luaiup">
+      <UniqueIdentifier>{7321b5ab-131a-49c0-ac51-6142edbcd949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\luagzio">
+      <UniqueIdentifier>{305a0e40-eea9-4b7b-ab02-3cb66d872430}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\luacsv">
+      <UniqueIdentifier>{cc3471d2-3f88-429c-ba1d-455a95f8d3d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\luahttp">
+      <UniqueIdentifier>{4e65ef81-69b1-42d9-bea5-740943cfff3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\luajson">
+      <UniqueIdentifier>{02733664-e2a9-476b-9d42-5e96540ac288}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\luapcre">
+      <UniqueIdentifier>{e86a6ac0-f06b-472a-b19b-fc46b5682b3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\luafilesystem">
+      <UniqueIdentifier>{aa9a0d0c-16ff-4066-98bf-49593f46bf24}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\lua-library-src\liblua\lapi.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lauxlib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lbaselib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lcode.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\ldblib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\ldebug.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\ldo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\ldump.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lfunc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lgc.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\linit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\liolib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\llex.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lmathlib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lmem.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\loadlib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lobject.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lopcodes.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\loslib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lparser.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lstate.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lstring.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lstrlib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\ltable.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\ltablib.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\ltm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lundump.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lvm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\liblua\lzio.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\common.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\lpcre.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\lpcre_f.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_byte_order.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_chartables.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_compile.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_config.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_dfa_exec.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_exec.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_fullinfo.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_get.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_globals.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_jit_compile.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_maketables.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_newline.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_ord2utf8.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_refcount.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_string_utils.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_study.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_tables.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_ucd.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_valid_utf8.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_version.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luapcre\pcre_xclass.c">
+      <Filter>Source Files\luapcre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_animatedlabel.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_backgroundbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_button.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_calendar.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_canvas.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_cbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_clipboard.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_colorbar.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_colorbrowser.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_colordlg.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_datepick.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_detachbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_dial.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_dialog.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_dropbutton.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_expander.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_filedlg.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_fill.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatbutton.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatframe.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatlabel.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatlist.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatscrollbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatseparator.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flattabs.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flattoggle.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flattree.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_flatval.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_fontdlg.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_frame.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_gauge.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_gridbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_hbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_image.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_imagergb.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_imagergba.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_item.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_label.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_link.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_list.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_menu.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_messagedlg.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_multibox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_multiline.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_normalizer.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_param.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_parambox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_progressbar.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_progressdlg.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_radio.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_sbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_scrollbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_separator.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_space.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_spin.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_spinbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_split.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_submenu.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_tabs.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_text.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_thread.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_timer.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_toggle.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_tree.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_user.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_val.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_vbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\il_zbox.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_api.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_config.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_draw.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_getcolor.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_getparam.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_scanf.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luaiup\iuplua_tree_aux.c">
+      <Filter>Source Files\luaiup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luagzio\lgziolib.c">
+      <Filter>Source Files\luagzio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luacsv\lcsvlib.c">
+      <Filter>Source Files\luacsv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luahttp\lhttplib.c">
+      <Filter>Source Files\luahttp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luajson\lua_cjson.c">
+      <Filter>Source Files\luajson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lua-library-src\luafilesystem\lfs.c">
+      <Filter>Source Files\luafilesystem</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\lua-library-src\luapcre\common.h">
+      <Filter>Source Files\luapcre</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lua-library-src\luapcre\config.h">
+      <Filter>Source Files\luapcre</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lua-library-src\luapcre\pcre.h">
+      <Filter>Source Files\luapcre</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lua-library-src\luapcre\pcre_version.h">
+      <Filter>Source Files\luapcre</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lua-library-src\luapcre\algo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lua-library-src\luapcre\pcre_internal.h">
+      <Filter>Source Files\luapcre</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
