@@ -67,7 +67,7 @@ sudo apt install libreadline-dev libcurl4-openssl-dev libpcre3-dev libz-dev
 
 How to build (Linux):
 ```
-git clone https://github.com/dhaninovan/luax.git
+git clone https://github.com/leonkasovan/luax.git
 make
 bin/lua
 ```
