@@ -7,7 +7,9 @@
 # Your platform. See PLATS for possible values.
 PLAT= none
 
-CC= gcc
+#CC= gcc
+CC= aarch64-linux-gnu-gcc
+#CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64 -I/usr/include/aarch64-linux-gnu/
 CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64
 AR= ar -r
 RANLIB= ranlib
