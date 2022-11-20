@@ -92,7 +92,8 @@ Dont forget to define CURL_STATICLIB while building liblua
 	C_OPT(LOW_SPEED_LIMIT, number) \
 	C_OPT(LOW_SPEED_TIME, number) \
 	C_OPT(COOKIELIST, string) \
-	C_OPT(POSTREDIR, number) \
+	C_OPT(POSTREDIR, number)
+
 struct feat {
 	const char *name;
 	int bitmask;
@@ -244,7 +245,6 @@ static int hl_set_conf (lua_State *L) {
 	union luaValueT v;                   /* the result option value */
 	int curlOpt;                         /* the provided option code  */
 	CURLcode code;                       /* return error code from curl */
-	
 	luaL_checktype(L, 1, LUA_TNUMBER);   /* accept only number option codes */
 	if (lua_gettop(L)<2)                 /* option value is always required */
 	{
@@ -263,8 +263,12 @@ static int hl_set_conf (lua_State *L) {
 /* Expands all the list of switch-case's here */
 ALL_CURL_OPT
 	}
-
-	if (CURLE_OK == (code=curl_easy_setopt(curl, curlOpt, v.nval))){
+	if (lua_type(L, 2) ==  LUA_TSTRING){	// param is string type 
+		code=curl_easy_setopt(curl, curlOpt, v.sval);
+	}else{	// param is number or bool type
+		code=curl_easy_setopt(curl, curlOpt, v.nval);
+	}
+	if (CURLE_OK == code){
 		/* on success return true */
 		lua_pushboolean(L, 1);
 		lua_pushstring(L, "Success");
@@ -1407,6 +1411,7 @@ static int hl_request (lua_State *L) {
 		}else{
 			url = "";
 		}
+		// printf("[debug][http] url %s\n", url);
 		curl_easy_setopt(curl, CURLOPT_URL, url);
 		lua_pop(L, 1);
 
@@ -1433,7 +1438,7 @@ static int hl_request (lua_State *L) {
 
 			fb = fopen(output_filename,"rb");
 			if (fb == NULL){	//from scratch
-				//printf("[debug][http] Create new file %s\n", output_filename);
+				// printf("[debug][http] Create new file %s\n", output_filename);
 				fb = fopen(output_filename, "wb");
 				curl_easy_setopt(curl, CURLOPT_RANGE, NULL);
 				curl_easy_setopt(curl, CURLOPT_RESUME_FROM, 0);

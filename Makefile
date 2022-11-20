@@ -8,7 +8,8 @@
 PLAT= none
 
 CC= gcc
-CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64
+#CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64
+CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude 
 AR= ar -r
 RANLIB= ranlib
 RM= rm -f
@@ -22,10 +23,11 @@ MYOBJDIR= builds/
 
 # == END OF USER SETTINGS. NO NEED TO CHANGE ANYTHING BELOW THIS LINE =========
 
-all: $(MYBINDIR)lua
+all: $(MYBINDIR)luax
 
-$(MYBINDIR)lua: $(MYOBJDIR)lua.o $(MYLIBSDIR)liblua.a $(MYLIBSDIR)bstring.a
-	$(CC) -o $(MYBINDIR)lua $(MYOBJDIR)lua.o $(MYLIBSDIR)liblua.a $(MYLIBSDIR)bstring.a $(LIBS)
+$(MYBINDIR)luax: $(MYOBJDIR)lua.o $(MYLIBSDIR)liblua.a $(MYLIBSDIR)bstring.a
+	$(CC) -o $(MYBINDIR)luax $(MYOBJDIR)lua.o $(MYLIBSDIR)liblua.a $(MYLIBSDIR)bstring.a $(LIBS)
+	strip $(MYBINDIR)luax
 
 BSTRING_SRCS = $(wildcard $(BSTRINGSRCDIR)*.c)
 BSTRING_OBJS = $(BSTRING_SRCS:.c=.o)
@@ -74,7 +76,7 @@ clean:
 	$(RM) $(MYBINDIR)lua
 
 install:
-	install  -C bin/lua /usr/bin/lua
+	install  -C bin/luax /usr/bin/luax
 
 # (end of Makefile)
 
