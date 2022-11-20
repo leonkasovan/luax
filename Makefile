@@ -3,6 +3,13 @@
 # prepare other libs: apt install libreadline-dev libcurl4-openssl-dev libpcre3-dev libz-dev
 
 # == CHANGE THE SETTINGS BELOW TO SUIT YOUR ENVIRONMENT =======================
+#Build for arm64
+#sudo ln -sf /usr/bin/aarch64-linux-gnu-gcc /usr/bin/gcc
+#sudo ln -sf /usr/bin/aarch64-linux-gnu-strip /usr/bin/strip
+
+#Build for x86
+#sudo ln -sf /usr/bin/x86_64-linux-gnu-gcc /usr/bin/gcc
+#sudo ln -sf /usr/bin/x86_64-linux-gnu-strip /usr/bin/strip
 
 # Your platform. See PLATS for possible values.
 PLAT= none
