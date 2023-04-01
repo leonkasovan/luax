@@ -7,8 +7,8 @@
 # Your platform. See PLATS for possible values.
 PLAT= none
 
-#CC= gcc
-CC= aarch64-linux-gnu-gcc
+CC= gcc
+#CC= aarch64-linux-gnu-gcc
 #CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64 -I/usr/include/aarch64-linux-gnu/
 CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64
 AR= ar -r
@@ -24,10 +24,10 @@ MYOBJDIR= builds/
 
 # == END OF USER SETTINGS. NO NEED TO CHANGE ANYTHING BELOW THIS LINE =========
 
-all: $(MYBINDIR)lua
+all: $(MYBINDIR)luax
 
-$(MYBINDIR)lua: $(MYOBJDIR)lua.o $(MYLIBSDIR)liblua.a $(MYLIBSDIR)bstring.a
-	$(CC) -o $(MYBINDIR)lua $(MYOBJDIR)lua.o $(MYLIBSDIR)liblua.a $(MYLIBSDIR)bstring.a $(LIBS)
+$(MYBINDIR)luax: $(MYOBJDIR)lua.o $(MYLIBSDIR)liblua.a $(MYLIBSDIR)bstring.a
+	$(CC) -o $(MYBINDIR)luax $(MYOBJDIR)lua.o $(MYLIBSDIR)liblua.a $(MYLIBSDIR)bstring.a $(LIBS)
 
 BSTRING_SRCS = $(wildcard $(BSTRINGSRCDIR)*.c)
 BSTRING_OBJS = $(BSTRING_SRCS:.c=.o)
@@ -73,10 +73,10 @@ clean:
 	$(RM) $(LIBLUASRCDIR)*.o
 	$(RM) $(MYLIBSDIR)*.a
 	$(RM) $(MYOBJDIR)*.o
-	$(RM) $(MYBINDIR)lua
+	$(RM) $(MYBINDIR)luax
 
 install:
-	install  -C bin/lua /usr/bin/lua
+	install  -C bin/luax /usr/bin/luax
 
 # (end of Makefile)
 
