@@ -1,6 +1,6 @@
 /*
 HTTP Lua Library
-** Curl wrapper library
+** Curl wrapper library https://github.com/LuaDist/luacurl
 ** We've registered this lib and to be executed in linit.c
 TODO:
 
