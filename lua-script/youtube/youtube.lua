@@ -10,7 +10,7 @@
 dofile('../strict.lua')
 dofile('../common.lua')
 
-function my_write_log(data)
+local function my_write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
 end
 
