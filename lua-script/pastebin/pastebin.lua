@@ -263,6 +263,24 @@ function list_paste_as_table(limit)
 	return t_paste
 end
 
+function read_paste_by_title(paste_title)
+	local content
+	
+	if #paste_title == 0 then
+		write_log("[error] Paste Title is empty")
+		return nil
+	end
+	
+	content = nil
+	for i,v in pairs(list_paste_as_table()) do
+		if v[3] == paste_title then
+			content = read_paste(v[1])
+			break
+		end
+	end
+	return content
+end
+
 function append_paste_by_title(new_content, paste_title)
 	local res, old_content
 	

@@ -71,23 +71,13 @@ local eropics = dofile('../eropics/eropics.lua')
 local imagesbase = dofile('../imagesbase/imagesbase.lua')
 local vimm = dofile('../vimm/vimm.lua')
 
-SUCCESS_LOG_ID = 'MVb3z7iD'
+SUCCESS_LOG_TITLE = 'success_log'
 function update_success_log(data)
-	local success_log = pastebin.read(SUCCESS_LOG_ID)
-	local try
-
-	try = 1
-	while ((success_log == nil) and (try < MAXTRY)) do
-		success_log = pastebin.read(SUCCESS_LOG_ID)
-		try = try + 1
-	end
-	
-	if success_log == nil then success_log = "Fail to load previous success log at "..os.date() end
-	pastebin.update(SUCCESS_LOG_ID, string.format("%s\n%s", success_log, data))
+	pastebin.append_by_title(data, SUCCESS_LOG_TITLE)
 end
 
 function verify(url)
-	local success_log = pastebin.read(SUCCESS_LOG_ID)
+	local success_log = pastebin.read_by_title(SUCCESS_LOG_TITLE)
 	
 	if success_log == nil then success_log = "" end
 	if url:match("^https://eropics%.to$") then success_log = "" end	-- ignore spesific url
