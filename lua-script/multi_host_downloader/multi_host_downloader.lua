@@ -52,7 +52,7 @@ function general_download(url, callback_function_write_log, callback_function_on
 end
 
 --- Import Library
-local gist = dofile('../github/gist.lua')
+local pastebin = dofile('../pastebin/pastebin.lua')
 local gdrive = dofile('../gdrive/gdrive2.lua')
 local solidfiles = dofile('../solidfiles/solidfiles.lua')
 local racaty = dofile('../racaty/racaty.lua')
@@ -71,22 +71,23 @@ local eropics = dofile('../eropics/eropics.lua')
 local imagesbase = dofile('../imagesbase/imagesbase.lua')
 local vimm = dofile('../vimm/vimm.lua')
 
+SUCCESS_LOG_ID = 'MVb3z7iD'
 function update_success_log(data)
-	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
+	local success_log = pastebin.read(SUCCESS_LOG_ID)
 	local try
 
 	try = 1
 	while ((success_log == nil) and (try < MAXTRY)) do
-		success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
+		success_log = pastebin.read(SUCCESS_LOG_ID)
 		try = try + 1
 	end
 	
 	if success_log == nil then success_log = "Fail to load previous success log at "..os.date() end
-	gist.update('19611e27b450185cd15241035b5b2110', 'success.log', string.format("%s\n%s", success_log, data))
+	pastebin.update(SUCCESS_LOG_ID, string.format("%s\n%s", success_log, data))
 end
 
 function verify(url)
-	local success_log = gist.read('https://gist.github.com/dhaninovan/19611e27b450185cd15241035b5b2110')
+	local success_log = pastebin.read(SUCCESS_LOG_ID)
 	
 	if success_log == nil then success_log = "" end
 	if url:match("^https://eropics%.to$") then success_log = "" end	-- ignore spesific url
@@ -177,12 +178,13 @@ else
 end
 
 -- Get list of url
-local urls = gist.read('https://gist.github.com/dhaninovan/c3f8927ba4c3d75c7d552ee06ca2335e')
+URLS_ID = 'gWpb9rwj'
+local urls = pastebin.read(URLS_ID)
 local try
 
 try = 1
 while ((urls == nil) and (try < MAXTRY)) do
-	urls = gist.read('https://gist.github.com/dhaninovan/c3f8927ba4c3d75c7d552ee06ca2335e')
+	urls = pastebin.read(URLS_ID)
 	try = try + 1
 end
 if urls == nil then

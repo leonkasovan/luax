@@ -7,6 +7,7 @@ local LOG_FILE = "luaPastebin.log"
 local USERNAME = "leonkasovan"
 local USERPASS = "rikadanR1"
 local MAXTIMEOUT = 30
+local api_user_key = nil
 
 --os.execute("del "..LOG_FILE)
 function write_log(data)
@@ -64,7 +65,7 @@ function read_paste(paste_id, login)
 		http.set_conf(http.OPT_TIMEOUT, 30)
 		rc, content = http.post_form('https://pastebin.com/login', 'submit_hidden=submit_hidden&submit=Login&user_name='..USERNAME..'&user_password='..USERPASS)
 		if rc ~= 0 then
-			print("[error] Login: "..http.error(rc))
+			write_log("[error] Login: "..http.error(rc))
 			return nil
 		end
 	end
@@ -80,17 +81,21 @@ end
 
 --input 1: content(string)
 --input 2: paste name(string, optional) default = MyPaste 31/12/20 23:59:59
---output : new url with paste id(string), return nil if fail
-function new_paste(content, paste_name)
-	local rc, api_user_key
+--input 3: paste_private(string, optional) 0 = Public (default), 1 = Unlisted, 2 = Private
+--output : new paste id(string), return nil if fail
+function new_paste(content, paste_name, paste_private)
+	local rc
 	paste_name = paste_name or 'MyPaste '..os.date()
+	paste_private = paste_private or '0'
 	
 	-- Authentification
-	http.set_conf(http.OPT_TIMEOUT, 30)
-	rc, api_user_key = http.post_form('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
-	if rc ~= 0 then
-		write_log("[error] Login: "..http.error(rc))
-		return nil
+	if api_user_key == nil then
+		http.set_conf(http.OPT_TIMEOUT, 30)
+		rc, api_user_key = http.post_form('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
+		if rc ~= 0 then
+			write_log("[error] Login: "..http.error(rc))
+			return nil
+		end
 	end
 	
 	-- New Paste
@@ -98,7 +103,7 @@ function new_paste(content, paste_name)
 	rc, paste_id = http.post_form('https://pastebin.com/api/api_post.php', table.concat({
 	'api_dev_key=1b9f95b79f59af3f51bb793540445838',
 	'api_option=paste',
-	'api_paste_private=0',	-- 0 = Public, 1 = Unlisted, 2 = Private
+	'api_paste_private='..paste_private,	-- 0 = Public, 1 = Unlisted, 2 = Private
 	'api_paste_expire_date=N',	-- N = Never, 1Y = 1 Year, 1M = 1 Month, 1D = 1 Day
 	'api_user_key='..api_user_key,
 	'api_paste_code='..http.escape(content),
@@ -173,6 +178,148 @@ function update_paste(paste_id, content, new_paste_name)
 	return true
 end
 
+function delete_paste(key)
+	local rc, res
+	
+	if key == nil or key == "" then
+		write_log("[error delete] Key is empty")
+		return nil
+	end
+	
+	write_log("[info delete_paste] Key: "..key)
+	-- Authentification
+	if api_user_key == nil then
+		http.set_conf(http.OPT_TIMEOUT, 30)
+		rc, api_user_key = http.post_form('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
+		if rc ~= 0 then
+			write_log("[error] Login: "..http.error(rc))
+			return nil
+		end
+	end
+	
+	-- Delete Paste
+	http.set_conf(http.OPT_TIMEOUT, 60)
+	rc, res = http.post_form('https://pastebin.com/api/api_post.php', table.concat({
+	'api_dev_key=1b9f95b79f59af3f51bb793540445838',
+	'api_option=delete',
+	'api_user_key='..api_user_key,
+	'api_paste_key='..key
+	},'&'))
+	if rc ~= 0 then
+		write_log("[error] List Paste: "..http.error(rc))
+		return nil
+	end
+	write_log("[info delete] "..res)
+	return res
+end
+
+function list_paste(limit)
+	local rc, list_paste
+	
+	if limit == nil then
+		limit = '1000'
+	end
+	
+	-- Authentification
+	if api_user_key == nil then
+		http.set_conf(http.OPT_TIMEOUT, 30)
+		rc, api_user_key = http.post_form('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
+		if rc ~= 0 then
+			write_log("[error] Login: "..http.error(rc))
+			return nil
+		end
+	end
+	
+	-- Get List Paste
+	http.set_conf(http.OPT_TIMEOUT, 60)
+	rc, list_paste = http.post_form('https://pastebin.com/api/api_post.php', table.concat({
+	'api_dev_key=1b9f95b79f59af3f51bb793540445838',
+	'api_option=list',
+	'api_user_key='..api_user_key,
+	'api_results_limit='..limit
+	},'&'))
+	if rc ~= 0 then
+		write_log("[error] List Paste: "..http.error(rc))
+		return nil
+	end
+	return list_paste
+end
+
+-- input: limit max of paste result
+-- output: table of paste data (1. paste_key, 2. paste_date, 3. paste_title)
+function list_paste_as_table(limit)
+	local content, t_paste
+	
+	content = list_paste(limit)
+	if content == nil then
+		return nil
+	end
+	
+	t_paste = {}
+	for paste_key,paste_date,paste_title in content:gmatch('<paste_key>(.-)</paste_key>.-<paste_date>(.-)</paste_date>.-<paste_title>(.-)</paste_title>') do
+		t_paste[#t_paste + 1] = {paste_key, paste_date, paste_title}
+	end
+	
+	return t_paste
+end
+
+function append_paste_by_title(new_content, paste_title)
+	local res, old_content
+	
+	if #paste_title == 0 then
+		write_log("[error] Paste Title is empty")
+		return nil
+	end
+	
+	res = nil
+	write_log("[info append_paste_by_title] searching title: "..paste_title)
+	for i,v in pairs(list_paste_as_table()) do
+		if v[3] == paste_title then
+			old_content = read_paste(v[1])
+			if old_content == nil then 
+				res = new_paste(new_content, paste_title, '1')	-- 0 = Public, 1 = Unlisted, 2 = Private
+			else
+				res = new_paste(old_content..'\n'..new_content, paste_title, '1')	-- 0 = Public, 1 = Unlisted, 2 = Private
+			end
+			write_log("[info append_paste_by_title] found title: "..paste_title)
+			write_log("[info append_paste_by_title] delete old title: "..v[3])
+			delete_paste(v[1])
+			break
+		end
+	end
+	write_log("[info append_paste_by_title] new key: "..res)
+	return res
+end
+
+function update_paste_by_title(new_content, paste_title)
+	local res
+	
+	if #paste_title == 0 then
+		write_log("[error] Paste Title is empty")
+		return nil
+	end
+	
+	res = nil
+	for i,v in pairs(list_paste_as_table()) do
+		if v[3] == paste_title then
+			res = new_paste(new_content, paste_title, '1')	-- 0 = Public, 1 = Unlisted, 2 = Private
+			delete_paste(v[1])
+			break
+		end
+	end
+	return res
+end
+
+return {
+	read = read_paste,
+	new = new_paste,
+	delete = delete_paste,
+	list = list_paste,
+	list_as_table = list_paste_as_table,
+	update_by_title = update_paste_by_title,
+	append_by_title = append_paste_by_title,
+	update = update_paste
+}
 
 -- Test Case Function Pastebin
 
@@ -226,12 +373,12 @@ end
 --end
 
 -- Case: update content
-id = 'mxd45wyi'
-if update_paste(id, 'Kita update lagi\nBaris satu\nBaris dua\nBaris tiga\nBaris empat\nBaris lima') then
-	write_log('Update Paste success. Click https://pastebin.com/'..id)
-else
-	write_log('Update Paste Fail')
-end
+--id = 'mxd45wyi'
+--if update_paste(id, 'Kita update lagi\nBaris satu\nBaris dua\nBaris tiga\nBaris empat\nBaris lima') then
+--	write_log('Update Paste success. Click https://pastebin.com/'..id)
+--else
+--	write_log('Update Paste Fail')
+--end
 
 -- Case: update content and rename
 -- id = 'Db4MUNJg'
@@ -242,7 +389,7 @@ end
 -- end
 
 
-if not DEBUG then os.execute("pause") end
+--if not DEBUG then os.execute("pause") end
 
 -- GET /edit/Db4MUNJg HTTP/2
 -- Host: pastebin.com
