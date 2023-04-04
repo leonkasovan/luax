@@ -179,7 +179,9 @@ size_t WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, void *data){
 static union luaValueT get_string(lua_State* L, int n)
 {
 	union luaValueT v;
+	//printf("lhttplib.c: argumen=%d\n", n);
 	v.sval=(char*)lua_tostring(L, n);
+	//printf("lhttplib.c: value_as_string=%s\n", v.sval);
 	return v;
 }
 
@@ -187,7 +189,9 @@ static union luaValueT get_string(lua_State* L, int n)
 static union luaValueT get_number(lua_State* L, int n)
 {
 	union luaValueT v;
+	//printf("lhttplib.c: argumen=%d\n", n);
 	v.nval=(int)luaL_checknumber(L, n);
+	//printf("lhttplib.c: value_as_number=%d\n", v.nval);
 	return v;
 }
 
@@ -220,7 +224,7 @@ static int hl_version (lua_State *L) {
 			}
 		}
 	}
-    
+
 	if(curlinfo->features) {
 		char *featp[ sizeof(feats) / sizeof(feats[0]) + 1];
 		size_t numfeat = 0;
@@ -245,7 +249,7 @@ static int hl_set_conf (lua_State *L) {
 	union luaValueT v;                   /* the result option value */
 	int curlOpt;                         /* the provided option code  */
 	CURLcode code;                       /* return error code from curl */
-	
+
 	luaL_checktype(L, 1, LUA_TNUMBER);   /* accept only number option codes */
 	if (lua_gettop(L)<2)                 /* option value is always required */
 	{
@@ -265,7 +269,8 @@ static int hl_set_conf (lua_State *L) {
 ALL_CURL_OPT
 	}
 
-	if (CURLE_OK == (code=curl_easy_setopt(curl, curlOpt, v.nval))){
+	//if (CURLE_OK == (code=curl_easy_setopt(curl, curlOpt, v.nval))){
+	if (CURLE_OK == (code=curl_easy_setopt(curl, curlOpt, v))){
 		/* on success return true */
 		lua_pushboolean(L, 1);
 		lua_pushstring(L, "Success");
