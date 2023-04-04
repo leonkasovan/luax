@@ -25,7 +25,9 @@ else
 	YOUTUBE_DL = "/usr/local/bin/youtube-dl"
 end
 
--- http.set_conf(http.OPT_USERAGENT, 'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.181 Mobile Safari/537.36')
+-- dibawah akan buat Segmentation Fault di Linux
+-- agar di comment dulu
+--http.set_conf(http.OPT_USERAGENT, 'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.181 Mobile Safari/537.36')
 
 -- Output :
 --	true : on success
