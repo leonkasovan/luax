@@ -120,7 +120,7 @@ function delete_paste(key)
 	'api_paste_key='..key
 	},'&'))
 	if rc ~= 0 then
-		write_log("[error] List Paste: "..http.error(rc))
+		write_log("[ERR|delete_paste] "..http.error(rc))
 		return nil
 	end
 	return res
@@ -152,7 +152,7 @@ function list_paste(limit)
 	'api_results_limit='..limit
 	},'&'))
 	if rc ~= 0 then
-		write_log("[error] List Paste: "..http.error(rc))
+		write_log("[ERR|list_paste] "..http.error(rc))
 		return nil
 	end
 	return list_paste

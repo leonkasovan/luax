@@ -41,13 +41,9 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 		id  = string.match(url, 'uc%?id%=(.-)%&')
 	end
 	
-	write_log("gdrive2.lua: before set_conf COOKIEFILE")
 	http.set_conf(http.OPT_COOKIEFILE, "gdrive_cookies.txt")
-	write_log("gdrive2.lua: after set_conf COOKIEFILE")
 	os.remove(TEMP_FILE)
-	write_log("gdrive2.lua: before set_conf TIMEOUT")
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	write_log("gdrive2.lua: after set_conf TIMEOUT")
 	rc, header = http.request{url = url, output_filename = TEMP_FILE}
 	if rc ~= 0 then
 		write_log("[error][gdrive.1] "..http.error(rc))
