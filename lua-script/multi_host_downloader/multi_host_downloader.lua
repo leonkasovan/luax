@@ -6,7 +6,7 @@
 -- GLOBAL SETTING
 local MAXTRY = 10
 local TEMP_FILE = "file.tmp"
-local MAXTIMEOUT = 1800	-- set max timeout 30 minutes
+local MAXTIMEOUT = 9999	-- set max timeout 30 minutes
 
 function write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)

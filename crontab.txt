@@ -1,1 +1,2 @@
 40 * * * * cd /home/pi/Projects/luax/lua-script/multi_host_downloader && luax multi_host_downloader.lua >>multi_host_downloader.log 2>luax_error.log
+35 * * * * cd /home/pi/Projects/luax && git pull
