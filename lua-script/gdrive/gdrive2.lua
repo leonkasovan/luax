@@ -7,7 +7,7 @@
 
 dofile('../strict.lua')
 dofile('../common.lua')
-local gist = dofile('../github/gist.lua')
+-- local gist = dofile('../github/gist.lua')
 
 function my_write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
@@ -15,7 +15,7 @@ end
 
 -- GLOBAL SETTING
 local TEMP_FILE = "file.tmp"
-local MAXTIMEOUT = 5400	-- set max timeout 90 minutes
+local MAXTIMEOUT = 9999	-- set max timeout 90 minutes
 
 -- Output :
 --	true : on success
@@ -32,7 +32,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 		write_log = my_write_log
 	end
 	
-	write_log('[info][gdrive] Processing '..url)
+	write_log('[info][gdrive2] Processing '..url)
 	original_url = url
 	id = string.match(url, '/%w/(.-)/view')
 	if id ~= nil then
@@ -60,7 +60,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 		if callback_function_on_success ~= nil then 
 			callback_function_on_success(string.format("%s %s; %s (%s bytes)", os.date(), original_url, filename, format_number(os.getfilesize(filename))))
 		end
-		write_log(string.format("[info][gdrive] Success saving (small) file '%s' (%s bytes)", filename, format_number(os.getfilesize(filename))))
+		write_log(string.format("[info][gdrive2] Success saving (small) file '%s' (%s bytes)", filename, format_number(os.getfilesize(filename))))
 		return true
 	end
 	
@@ -71,7 +71,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	if filename == nil then
 		write_log("[error][gdrive.2] Can't find it's filename. Invalid response from Google Drive")
 		save_file(content,"gdrive_invalid_content.htm")
-		gist.update('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: <a href=".-">(.-)</a>')
+		-- gist.update('2ff7b7c90cd7f219043bd450b5c1b05e', 'invalid.htm', content, 'Fail match: <a href=".-">(.-)</a>')
 		return nil
 	end
 	filename = filename:gsub('[%;%#%/%\%:%?%*%"%<%>%|]', "")
@@ -92,7 +92,7 @@ function download_gdrive(url, callback_function_write_log, callback_function_on_
 	if callback_function_on_success ~= nil then
 		callback_function_on_success(string.format("%s %s; %s (%s bytes)", os.date(), original_url, filename, format_number(os.getfilesize(filename))))
 	end
-	write_log(string.format("[info][gdrive] Success saving (big) file '%s' (%s bytes)", filename, format_number(os.getfilesize(filename))))
+	write_log(string.format("[info][gdrive2] Success saving (big) file '%s' (%s bytes)", filename, format_number(os.getfilesize(filename))))
 	return true
 end
 
