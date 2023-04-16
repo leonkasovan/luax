@@ -14,13 +14,13 @@ function generate_dbformat()
 		print('Error create file dbformat.txt')
 		return false
 	end
-	fo:write(OUTPUT_SEPARATOR.."\ntitleid"..OUTPUT_SEPARATOR.."region"..OUTPUT_SEPARATOR.."name"..OUTPUT_SEPARATOR.."url"..OUTPUT_SEPARATOR.."rap"..OUTPUT_SEPARATOR.."size\n")
+	fo:write(OUTPUT_SEPARATOR.."\ncontentid"..OUTPUT_SEPARATOR.."name"..OUTPUT_SEPARATOR.."url"..OUTPUT_SEPARATOR.."rap"..OUTPUT_SEPARATOR.."size\n")
 	fo:close()
 	return true
 end
 
 function convert_db(finput,foutput)
-	local fo
+	local fo, line
 	
 	fo = io.open(foutput, "w")
 	if fo == nil then
@@ -29,8 +29,12 @@ function convert_db(finput,foutput)
 	end
 	for line in io.lines(finput) do
 		local f
-		f = csv.parse(line, '\t')
-		fo:write(f[1]..OUTPUT_SEPARATOR..f[2]..OUTPUT_SEPARATOR..f[3]..OUTPUT_SEPARATOR..f[4]..OUTPUT_SEPARATOR..f[5]..OUTPUT_SEPARATOR..f[9].."\n")
+		if line ~= nil and line ~= "" then
+			f = csv.parse(line, '\t')
+			if f ~= nil then
+				fo:write(f[6]..OUTPUT_SEPARATOR..f[3]..OUTPUT_SEPARATOR..f[4]..OUTPUT_SEPARATOR..f[5]..OUTPUT_SEPARATOR..f[9].."\n")
+			end
+		end
 	end
 	fo:close()
 	return true
@@ -63,4 +67,4 @@ else
 	print("Process PS3_DLCS fail.")
 end
 
-print("If all success, copy *.txt to PS3 /dev/hdd0/NP00PKGI3/USRDIR")
+print("If all success, copy *.txt to PS3 /dev_hdd0/game/NP00PKGI3/USRDIR")
