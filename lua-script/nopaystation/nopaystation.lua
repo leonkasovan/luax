@@ -65,6 +65,7 @@ function download_nopaystation(url, callback_function_write_log, callback_functi
 	end
 	filename = filename:gsub("%W","_")..".pkg"
 	pkg_url = url:gsub("%?version","/pkg%?version")
+	http.set_conf(http.OPT_NOPROGRESS, false)
 	rc, headers = http.request{url = pkg_url, output_filename = filename}
 	if rc ~= 0 then
 		write_log("[error][nopaystation|download_nopaystation] "..http.error(rc))

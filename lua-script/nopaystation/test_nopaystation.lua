@@ -1,10 +1,11 @@
 -------------------------------------------------------------------------------
 --	Library Testing
 -------------------------------------------------------------------------------
+
 local nopaystation = dofile('nopaystation.lua')
 
 content = [[
-http://nopaystation.com/view/PS3/NPUB30667/MVC2011040100001/1?version=1
+http://nopaystation.com/view/PS3/NPEB02246/TMNINJATU2015PS3/1?version=1.02
 ]]
 
 local MAXTRY = 3
