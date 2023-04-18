@@ -153,11 +153,11 @@ if os.info() == "Windows" then
 else
 	local fi, res
 	local n_instance = 0
-	fi = io.popen('ps -x | grep lua')
+	fi = io.popen('ps -x | grep luax')
 	if fi then
 		res = fi:read("*a")
 		fi:close()
-		for hh,mm in res:gmatch('(%d+)%:(%d+) lua multi%_host%_downloader%.lua') do
+		for hh,mm in res:gmatch('(%d+)%:(%d+) luax multi%_host%_downloader%.lua') do
 			n_instance = n_instance + 1
 		end
 		if n_instance > 1 then
