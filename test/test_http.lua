@@ -36,6 +36,7 @@ http.set_conf(http.OPT_TIMEOUT, 60)
 http.set_conf(http.OPT_USERAGENT, 'Opera/9.80 (J2ME/MIDP; Opera Mini/7.1.32052/29.3417; U; en) Presto/2.8.119 Version/11.10')
 http.set_conf(http.OPT_VERBOSE, true)
 http.set_conf(http.OPT_COOKIEFILE, 'cookies.txt')
+http.set_conf(http.OPT_NOPROGRESS, false)
 -- add custom header
 print(http.request{
 	url = 'https://notepad-plus-plus.org/update/getDownloadUrl.php?version=7.91&param=x64', 
