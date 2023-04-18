@@ -70,6 +70,7 @@ local girlygirlpic = dofile('../girlygirlpic/girlygirlpic.lua')
 local eropics = dofile('../eropics/eropics.lua')
 local imagesbase = dofile('../imagesbase/imagesbase.lua')
 local vimm = dofile('../vimm/vimm.lua')
+local nopaystation = dofile('../nopaystation/nopaystation.lua')
 
 SUCCESS_LOG_TITLE = 'success_log'
 function update_success_log(data)
@@ -133,6 +134,8 @@ function verify(url)
 			return imagesbase.download_category
 		elseif vimm.verify(url) then
 			return vimm.download
+		elseif nopaystation.verify(url) then
+			return nopaystation.download
 		elseif url:match('^https?://.-/.+$') then
 			return general_download
 		elseif url:match('^ftps?://.-/.+$') then
