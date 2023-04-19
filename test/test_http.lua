@@ -37,11 +37,13 @@ http.set_conf(http.OPT_USERAGENT, 'Opera/9.80 (J2ME/MIDP; Opera Mini/7.1.32052/2
 http.set_conf(http.OPT_VERBOSE, true)
 http.set_conf(http.OPT_COOKIEFILE, 'cookies.txt')
 http.set_conf(http.OPT_NOPROGRESS, false)
+http.set_conf(http.OPT_PROGRESS_TYPE, 3)	-- 1=default 2=simple 3=very simple
 -- add custom header
 print(http.request{
 	url = 'https://notepad-plus-plus.org/update/getDownloadUrl.php?version=7.91&param=x64', 
 	method = 'GET',
 	headers = { 'X-Accept: text/lua', 'X-Custom: halo-there'}})
+http.set_conf(http.OPT_NOPROGRESS, true)
 
 -- download and save into file
 -- print(http.request{url = 'https://www.google.com', output_filename = 'google.htm'})

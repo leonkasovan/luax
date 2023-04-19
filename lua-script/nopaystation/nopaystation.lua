@@ -66,7 +66,9 @@ function download_nopaystation(url, callback_function_write_log, callback_functi
 	filename = filename:gsub("%W","_")..".pkg"
 	pkg_url = url:gsub("%?version","/pkg%?version")
 	http.set_conf(http.OPT_NOPROGRESS, false)
+	http.set_conf(http.OPT_PROGRESS_TYPE, 3)
 	rc, headers = http.request{url = pkg_url, output_filename = filename}
+	http.set_conf(http.OPT_NOPROGRESS, true)
 	if rc ~= 0 then
 		write_log("[error][nopaystation|download_nopaystation] "..http.error(rc))
 		return false
@@ -80,7 +82,7 @@ function download_nopaystation(url, callback_function_write_log, callback_functi
 end
 
 function verify_nopaystation(url)
-	return url:match('http://nopaystation%.com/view/%w+/%w+/%w+/%d+')
+	return url:match('http://nopaystation%.com/view/%w+/%w+/%w+/%d+') or url:match('https://nopaystation%.com/view/%w+/%w+/%w+/%d+')
 end
 
 function show_verified_nopaystation()

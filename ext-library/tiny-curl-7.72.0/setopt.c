@@ -266,6 +266,12 @@ CURLcode Curl_vsetopt(struct Curl_easy *data, CURLoption option, va_list param)
     else
       data->progress.flags &= ~PGRS_HIDE;
     break;
+  case CURLOPT_PROGRESS_TYPE:
+    /*
+     * Shut off the internal supported progress meter
+     */
+    data->set.progress_type = va_arg(param, long);	// option for progress meter type (1=default 2=simple 3=very simple)
+    break;
   case CURLOPT_NOBODY:
     /*
      * Do not include the body part in the output data stream.

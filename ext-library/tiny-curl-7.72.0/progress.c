@@ -568,6 +568,202 @@ static void progress_meter(struct connectdata *conn)
   /* we flush the output stream to make it appear as soon as possible */
   fflush(data->set.err);
 }
+
+static void progress_meter2(struct connectdata *conn)
+{
+  struct Curl_easy *data = conn->data;
+  char max5[6][10];
+  curl_off_t dlpercen = 0;
+  curl_off_t ulpercen = 0;
+  curl_off_t total_percen = 0;
+  curl_off_t total_transfer;
+  curl_off_t total_expected_transfer;
+  char time_left[10];
+  char time_total[10];
+  char time_spent[10];
+  curl_off_t ulestimate = 0;
+  curl_off_t dlestimate = 0;
+  curl_off_t total_estimate;
+  curl_off_t timespent =
+    (curl_off_t)data->progress.timespent/1000000; /* seconds */
+
+  if(!(data->progress.flags & PGRS_HEADERS_OUT)) {
+    if(data->state.resume_from) {
+      fprintf(data->set.err,
+              "** Resuming transfer from byte position %"
+              CURL_FORMAT_CURL_OFF_T "\n", data->state.resume_from);
+    }
+    fprintf(data->set.err,
+            "  %% Total    %% Received  Average    Time     Time     Time   Current\n"
+            "                           Dload    Total    Spent    Left     Speed\n");
+    data->progress.flags |= PGRS_HEADERS_OUT; /* headers are shown */
+  }
+
+  /* Figure out the estimated time of arrival for the upload */
+  if((data->progress.flags & PGRS_UL_SIZE_KNOWN) &&
+     (data->progress.ulspeed > CURL_OFF_T_C(0))) {
+    ulestimate = data->progress.size_ul / data->progress.ulspeed;
+
+    if(data->progress.size_ul > CURL_OFF_T_C(10000))
+      ulpercen = data->progress.uploaded /
+        (data->progress.size_ul/CURL_OFF_T_C(100));
+    else if(data->progress.size_ul > CURL_OFF_T_C(0))
+      ulpercen = (data->progress.uploaded*100) /
+        data->progress.size_ul;
+  }
+
+  /* ... and the download */
+  if((data->progress.flags & PGRS_DL_SIZE_KNOWN) &&
+     (data->progress.dlspeed > CURL_OFF_T_C(0))) {
+    dlestimate = data->progress.size_dl / data->progress.dlspeed;
+
+    if(data->progress.size_dl > CURL_OFF_T_C(10000))
+      dlpercen = data->progress.downloaded /
+        (data->progress.size_dl/CURL_OFF_T_C(100));
+    else if(data->progress.size_dl > CURL_OFF_T_C(0))
+      dlpercen = (data->progress.downloaded*100) /
+        data->progress.size_dl;
+  }
+
+  /* Now figure out which of them is slower and use that one for the
+     total estimate! */
+  total_estimate = ulestimate>dlestimate?ulestimate:dlestimate;
+
+  /* create the three time strings */
+  time2str(time_left, total_estimate > 0?(total_estimate - timespent):0);
+  time2str(time_total, total_estimate);
+  time2str(time_spent, timespent);
+
+  /* Get the total amount of data expected to get transferred */
+  total_expected_transfer =
+    ((data->progress.flags & PGRS_UL_SIZE_KNOWN)?
+     data->progress.size_ul:data->progress.uploaded)+
+    ((data->progress.flags & PGRS_DL_SIZE_KNOWN)?
+     data->progress.size_dl:data->progress.downloaded);
+
+  /* We have transferred this much so far */
+  total_transfer = data->progress.downloaded + data->progress.uploaded;
+
+  /* Get the percentage of data transferred so far */
+  if(total_expected_transfer > CURL_OFF_T_C(10000))
+    total_percen = total_transfer /
+      (total_expected_transfer/CURL_OFF_T_C(100));
+  else if(total_expected_transfer > CURL_OFF_T_C(0))
+    total_percen = (total_transfer*100) / total_expected_transfer;
+
+  fprintf(data->set.err,
+          "\r"
+          "%3" CURL_FORMAT_CURL_OFF_T " %s  %3" CURL_FORMAT_CURL_OFF_T "    %s    %s  %s %s %s   %s",
+          total_percen,  /* 3 letters */                /* total % */
+          max5data(total_expected_transfer, max5[2]),   /* total size */
+          dlpercen,      /* 3 letters */                /* rcvd % */
+          max5data(data->progress.downloaded, max5[0]), /* rcvd size */
+          max5data(data->progress.dlspeed, max5[3]),    /* avrg dl speed */
+          time_total,    /* 8 letters */                /* total time */
+          time_spent,    /* 8 letters */                /* time spent */
+          time_left,     /* 8 letters */                /* time left */
+          max5data(data->progress.current_speed, max5[5])
+    );
+
+  /* we flush the output stream to make it appear as soon as possible */
+  fflush(data->set.err);
+}
+
+static void progress_meter3(struct connectdata *conn)
+{
+  struct Curl_easy *data = conn->data;
+  char max5[6][10];
+  curl_off_t dlpercen = 0;
+  curl_off_t ulpercen = 0;
+  curl_off_t total_percen = 0;
+  curl_off_t total_transfer;
+  curl_off_t total_expected_transfer;
+  char time_left[10];
+  char time_total[10];
+  char time_spent[10];
+  curl_off_t ulestimate = 0;
+  curl_off_t dlestimate = 0;
+  curl_off_t total_estimate;
+  curl_off_t timespent =
+    (curl_off_t)data->progress.timespent/1000000; /* seconds */
+
+  if(!(data->progress.flags & PGRS_HEADERS_OUT)) {
+    if(data->state.resume_from) {
+      fprintf(data->set.err,
+              "** Resuming transfer from byte position %"
+              CURL_FORMAT_CURL_OFF_T "\n", data->state.resume_from);
+    }
+    fprintf(data->set.err,
+            "  %% Received    Time     Time   Current\n"
+            "                Total    Left     Speed\n");
+    data->progress.flags |= PGRS_HEADERS_OUT; /* headers are shown */
+  }
+
+  /* Figure out the estimated time of arrival for the upload */
+  if((data->progress.flags & PGRS_UL_SIZE_KNOWN) &&
+     (data->progress.ulspeed > CURL_OFF_T_C(0))) {
+    ulestimate = data->progress.size_ul / data->progress.ulspeed;
+
+    if(data->progress.size_ul > CURL_OFF_T_C(10000))
+      ulpercen = data->progress.uploaded /
+        (data->progress.size_ul/CURL_OFF_T_C(100));
+    else if(data->progress.size_ul > CURL_OFF_T_C(0))
+      ulpercen = (data->progress.uploaded*100) /
+        data->progress.size_ul;
+  }
+
+  /* ... and the download */
+  if((data->progress.flags & PGRS_DL_SIZE_KNOWN) &&
+     (data->progress.dlspeed > CURL_OFF_T_C(0))) {
+    dlestimate = data->progress.size_dl / data->progress.dlspeed;
+
+    if(data->progress.size_dl > CURL_OFF_T_C(10000))
+      dlpercen = data->progress.downloaded /
+        (data->progress.size_dl/CURL_OFF_T_C(100));
+    else if(data->progress.size_dl > CURL_OFF_T_C(0))
+      dlpercen = (data->progress.downloaded*100) /
+        data->progress.size_dl;
+  }
+
+  /* Now figure out which of them is slower and use that one for the
+     total estimate! */
+  total_estimate = ulestimate>dlestimate?ulestimate:dlestimate;
+
+  /* create the three time strings */
+  time2str(time_left, total_estimate > 0?(total_estimate - timespent):0);
+  time2str(time_total, total_estimate);
+  time2str(time_spent, timespent);
+
+  /* Get the total amount of data expected to get transferred */
+  total_expected_transfer =
+    ((data->progress.flags & PGRS_UL_SIZE_KNOWN)?
+     data->progress.size_ul:data->progress.uploaded)+
+    ((data->progress.flags & PGRS_DL_SIZE_KNOWN)?
+     data->progress.size_dl:data->progress.downloaded);
+
+  /* We have transferred this much so far */
+  total_transfer = data->progress.downloaded + data->progress.uploaded;
+
+  /* Get the percentage of data transferred so far */
+  if(total_expected_transfer > CURL_OFF_T_C(10000))
+    total_percen = total_transfer /
+      (total_expected_transfer/CURL_OFF_T_C(100));
+  else if(total_expected_transfer > CURL_OFF_T_C(0))
+    total_percen = (total_transfer*100) / total_expected_transfer;
+
+  fprintf(data->set.err,
+          "\r"
+          "%3" CURL_FORMAT_CURL_OFF_T "    %s  %s %s   %s",
+          dlpercen,      /* 3 letters */                /* rcvd % */
+          max5data(data->progress.downloaded, max5[0]), /* rcvd size */
+          time_total,    /* 8 letters */                /* total time */
+          time_left,     /* 8 letters */                /* time left */
+          max5data(data->progress.current_speed, max5[5])
+    );
+
+  /* we flush the output stream to make it appear as soon as possible */
+  fflush(data->set.err);
+}
 #else
  /* progress bar disabled */
 #define progress_meter(x) Curl_nop_stmt
@@ -618,7 +814,12 @@ int Curl_pgrsUpdate(struct connectdata *conn)
     }
 
     if(showprogress)
-      progress_meter(conn);
+		if (data->set.progress_type == 3)
+			progress_meter3(conn);
+		else if (data->set.progress_type == 2)
+			progress_meter2(conn);
+		else
+			progress_meter(conn);
   }
 
   return 0;

@@ -1127,6 +1127,9 @@ typedef enum {
 
   /* shut off the progress meter */
   CURLOPT(CURLOPT_NOPROGRESS, CURLOPTTYPE_LONG, 43),
+  
+  /* option for progress meter type (1=default 2=simple 3=very simple) */
+  CURLOPT(CURLOPT_PROGRESS_TYPE, CURLOPTTYPE_LONG, 298),
 
   /* use HEAD to get http document */
   CURLOPT(CURLOPT_NOBODY, CURLOPTTYPE_LONG, 44),
