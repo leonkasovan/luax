@@ -587,6 +587,7 @@ static CURLcode multi_done(struct Curl_easy *data,
     /* avoid this if we already aborted by callback to avoid this calling
        another callback */
     CURLcode rc = Curl_pgrsDone(conn);
+	
     if(!result && rc)
       result = CURLE_ABORTED_BY_CALLBACK;
   }
@@ -608,7 +609,6 @@ static CURLcode multi_done(struct Curl_easy *data,
   }
   conn->data = NULL; /* the connection now has no owner */
   data->state.done = TRUE; /* called just now! */
-
   if(conn->dns_entry) {
     Curl_resolv_unlock(data, conn->dns_entry); /* done with this */
     conn->dns_entry = NULL;
@@ -1945,7 +1945,7 @@ static CURLMcode multi_runsingle(struct Curl_multi *multi,
             multistate(data, CURLM_STATE_DO_DONE);
             rc = CURLM_CALL_MULTI_PERFORM;
           }
-        }
+        } 
         else if((CURLE_SEND_ERROR == result) &&
                 data->conn->bits.reuse) {
           /*

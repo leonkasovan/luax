@@ -4,9 +4,9 @@
 -- 16:55 28 June 2020 (c) dhani.novan@gmail.com
 
 -- GLOBAL SETTING
-local MAXTRY = 10
+local MAXTRY = 5
 local TEMP_FILE = "file.tmp"
-local MAXTIMEOUT = 9999	-- set max timeout 30 minutes
+local MAXTIMEOUT = 9999	-- set max timeout
 
 function write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
@@ -27,11 +27,10 @@ function general_download(url, callback_function_write_log, callback_function_on
 		filename = TEMP_FILE
 	end
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
+	http.set_conf(http.OPT_NOPROGRESS, false)
+	http.set_conf(http.OPT_PROGRESS_TYPE, 3)
 	rc, header = http.request{url = url, output_filename = filename}
-	if rc ~= 0 then
-		print("Error: "..http.error(rc), rc)
-		return false
-	end
+	http.set_conf(http.OPT_NOPROGRESS, true)
 	if rc ~= 0 then
 		write_log("[error][general_download] "..http.error(rc))
 		return false

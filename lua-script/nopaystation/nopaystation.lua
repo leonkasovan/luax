@@ -5,6 +5,8 @@
 dofile('../strict.lua')
 dofile('../common.lua')
 
+local MAXTIMEOUT = 9999	-- set max timeout
+
 function my_write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
 end
@@ -24,7 +26,7 @@ function download_nopaystation(url, callback_function_write_log, callback_functi
 	end
 	
 	write_log('[info][nopaystation] Process '..url)
-	http.set_conf(http.OPT_TIMEOUT, 3600)
+	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	rc, headers, content = http.request(url)
 	if rc ~= 0 then
 		write_log("[error][nopaystation|download_nopaystation] "..http.error(rc))

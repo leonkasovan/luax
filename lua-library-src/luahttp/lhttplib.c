@@ -617,191 +617,6 @@ static char *concat_url(const char *base, const char *relurl)
 }
 
 /* Exported Function =========================================================== */
-// arg1 : string for url
-static int hl_get_header (lua_State *L) {
-	CURLcode rc;
-	const char *url = NULL;
-	struct MemoryStruct header_chunk;
-
-	header_chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
-	header_chunk.size = 0;    /* no data at this point */
-	url = luaL_checkstring(L, FIRST_ARG);
-
-	curl_easy_setopt(curl, CURLOPT_URL, url);
-	curl_easy_setopt(curl, CURLOPT_HTTPGET, (long)1);
-	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, NULL);	// We dont send custom header
-	curl_easy_setopt(curl, CURLOPT_NOBODY, (long)1);	// We want ONLY header (response)
-	curl_easy_setopt(curl, CURLOPT_RESUME_FROM, 0);	//reset resume request
-	curl_easy_setopt(curl, CURLOPT_HEADERDATA, (void*)&header_chunk);
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-
-	rc = curl_easy_perform(curl);
-	lua_pushinteger(L, rc);
-	lua_pushlstring(L, header_chunk.memory, header_chunk.size);
-	if(header_chunk.memory) free(header_chunk.memory);
-	return 2;
-}
-
-/* Exported Function =========================================================== */
-// arg1 : string for url
-// arg2 : (optional) string for output's filename
-static int hl_get_url (lua_State *L) {
-	CURLcode rc;
-	const char *url = NULL;
-	const char *fname = NULL;
-	const char *header_fname = "http_header.txt";
-	FILE *fb = NULL;	//Body
-	FILE *fh = NULL;	//Header
-	struct MemoryStruct body_chunk;
-	struct MemoryStruct header_chunk;
-
-	body_chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
-	body_chunk.size = 0;    /* no data at this point */
-	header_chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
-	header_chunk.size = 0;    /* no data at this point */
-
-	url = luaL_checkstring(L, FIRST_ARG);
-	fname = luaL_optstring(L, SECOND_ARG, "");
-
-	curl_easy_setopt(curl, CURLOPT_URL, url);
-	curl_easy_setopt(curl, CURLOPT_HTTPGET, (long)1);
-	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, NULL);
-	
-	if (fname[0]){	// filename is supplied so we use file as output
-		fb = fopen(fname,"rb");
-		if (fb == NULL){	//from scratch
-			fb = fopen(fname, "wb");
-		}else{		//resume download
-			struct _stat64 buf;
-			fclose(fb);
-			if (_stat64(fname, &buf) != 0){
-				curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, 0);	//can't get file size, start from 0 beginning
-			}else{
-				curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, buf.st_size); //this will override CURLOPT_RANGE if any
-			}
-			fb = fopen(fname, "ab");
-		}
-		fh = fopen(header_fname,"w");
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, fb);
-		curl_easy_setopt(curl, CURLOPT_HEADERDATA, fh);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, fwrite);
-		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, fwrite);
-		rc = curl_easy_perform(curl);
-		lua_pushinteger(L, rc);
-		fclose(fb);
-		fclose(fh);
-		return 1;
-	}else{	// filename isnt supplied so we use memory as output
-		curl_easy_setopt(curl, CURLOPT_RESUME_FROM, 0);	//reset resume request
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&body_chunk);
-		curl_easy_setopt(curl, CURLOPT_HEADERDATA, (void*)&header_chunk);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, WriteMemoryCallback);
-		rc = curl_easy_perform(curl);
-		lua_pushinteger(L, rc);
-		lua_pushlstring(L, body_chunk.memory, body_chunk.size);
-		lua_pushlstring(L, header_chunk.memory, header_chunk.size);
-		if(body_chunk.memory) free(body_chunk.memory);
-		if(header_chunk.memory) free(header_chunk.memory);
-		return 3;
-	}
-}
-
-// arg1 : string for url
-// arg2 : table for custom header
-// arg3 : (optional) string for output's filename
-static int hl_get_url_with_header (lua_State *L) {
-	CURLcode rc;
-	const char *url = NULL;
-	const char *fname = NULL;
-	const char *header_fname = "http_header.txt";
-	FILE *fb = NULL;	//Body
-	FILE *fh = NULL;	//Header
-	struct MemoryStruct body_chunk;
-	struct MemoryStruct header_chunk;
-	struct curl_slist *myheaders = NULL;
-	int nstack;
-
-	body_chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
-	body_chunk.size = 0;    /* no data at this point */
-	header_chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
-	header_chunk.size = 0;    /* no data at this point */
-
-	//check number of supplied arguments, min 2 argument
-	nstack = lua_gettop(L);
-	if (nstack < SECOND_ARG){
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-
-	// Get 1st Argument : URL
-	if (lua_type(L, FIRST_ARG) != LUA_TSTRING) {
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-	url = lua_tostring(L, FIRST_ARG);
-
-	// Get 2nd Argument : table for custom header
-	if (lua_type(L, SECOND_ARG) != LUA_TTABLE) {
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-	lua_pushnil(L);  /* first key */
-	while (lua_next(L, SECOND_ARG) != 0) {
-		/* not use 'key' (at index -2) and use 'value' (at index -1) append it slist*/
-		myheaders = curl_slist_append(myheaders, lua_tostring(L, -1));
-		/* removes 'value'; keeps 'key' for next iteration */
-		lua_pop(L, 1);
-	}
-
-	// Get 3rd Argument : (optional) string for output's filename
-	fname = luaL_optstring(L, 3, "");
-
-	curl_easy_setopt(curl, CURLOPT_URL, url);
-	curl_easy_setopt(curl, CURLOPT_HTTPGET, (long)1);
-	if (myheaders) curl_easy_setopt(curl, CURLOPT_HTTPHEADER, myheaders);
-	
-	if (fname[0]){	// filename is supplied so we use file as output
-		fb = fopen(fname,"rb");
-		if (fb == NULL){	//from scratch
-			fb = fopen(fname, "wb");
-		}else{		//resume download
-			struct _stat64 buf;
-			fclose(fb);
-			if (_stat64(fname, &buf) != 0){
-				curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, 0);	//can't get file size, start from 0 beginning
-			}else{
-				curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, buf.st_size); //this will override CURLOPT_RANGE if any
-			}
-			fb = fopen(fname, "ab");
-		}
-		fh = fopen(header_fname,"w");
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, fb);
-		curl_easy_setopt(curl, CURLOPT_HEADERDATA, fh);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, fwrite);
-		rc = curl_easy_perform(curl);
-		lua_pushinteger(L, rc);
-		fclose(fb);
-		fclose(fh);
-		if (myheaders) curl_slist_free_all(myheaders);
-		return 1;
-	}else{	// filename isnt supplied so we use memory as output
-		curl_easy_setopt(curl, CURLOPT_RESUME_FROM, 0);	
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&body_chunk);
-		curl_easy_setopt(curl, CURLOPT_HEADERDATA, (void*)&header_chunk);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-		rc = curl_easy_perform(curl);
-		lua_pushinteger(L, rc);
-		lua_pushlstring(L, body_chunk.memory, body_chunk.size);
-		lua_pushlstring(L, header_chunk.memory, header_chunk.size);
-		if(body_chunk.memory) free(body_chunk.memory);
-		if(header_chunk.memory) free(header_chunk.memory);
-		curl_slist_free_all(myheaders);
-		return 3;
-	}
-}
-
-
 static int hl_error (lua_State *L) {
 	int rc = luaL_checkinteger(L, 1);
 
@@ -893,188 +708,6 @@ static int hl_info (lua_State *L) {
 	{
 		lua_pushfstring(L, "Invalid CURLINFO number: %d", nInfo);
 		return 2;
-	}
-}
-
-// arg1 : string for action url
-// arg2 : string for action form
-// arg3 : (optional) string for output's filename
-static int hl_post_form (lua_State *L) {
-	CURLcode rc;
-	const char *url = NULL;
-	const char *fname = NULL;
-	const char *formdata = NULL;
-	FILE *f = NULL;
-	struct MemoryStruct body_chunk;
-	struct MemoryStruct header_chunk;
-	int nstack;
-
-	body_chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
-	body_chunk.size = 0;    /* no data at this point */
-	header_chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
-	header_chunk.size = 0;    /* no data at this point */
-
-	//check number of supplied arguments, min 2 argument
-	nstack = lua_gettop(L);
-	if (nstack < SECOND_ARG){
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-
-	// Get 1st Argument : URL
-	if (lua_type(L, FIRST_ARG) != LUA_TSTRING) {
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-	//url = lua_tostring(L, FIRST_ARG);
-	url = luaL_checkstring(L, FIRST_ARG);
-
-	// Get 2nd Argument : string for action form
-	if (lua_type(L, SECOND_ARG) != LUA_TSTRING) {
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-	//formdata = lua_tostring(L, SECOND_ARG);
-	formdata = luaL_checkstring(L, SECOND_ARG);
-
-	// Get 3rd Argument : (optional) string for output's filename
-	fname = luaL_optstring(L, THIRD_ARG, "");
-
-	curl_easy_setopt(curl, CURLOPT_URL, url);
-	curl_easy_setopt(curl, CURLOPT_POST, (long)1);
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, formdata);
-	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, NULL);
-	if (fname[0]){	// filename is supplied so we use file as output
-		f = fopen(fname,"rb");
-		if (f == NULL){	//from scratch
-			f = fopen(fname, "wb");
-		}else{		//resume download
-			struct _stat64 buf;
-			fclose(f);
-			if (_stat64(fname, &buf) != 0){
-				curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, 0);	//can't get file size, start from 0 beginning
-			}else{
-				curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, buf.st_size); //this will override CURLOPT_RANGE if any
-			}
-			f = fopen(fname, "ab");
-		}
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, f);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, fwrite);
-		rc = curl_easy_perform(curl);
-		lua_pushinteger(L, rc);
-		fclose(f);
-		return 1;
-	}else{	// filename isnt supplied so we use memory as output
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&body_chunk);
-		curl_easy_setopt(curl, CURLOPT_HEADERDATA, (void*)&header_chunk);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-		curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, WriteMemoryCallback);
-		rc = curl_easy_perform(curl);
-		lua_pushinteger(L, rc);
-		lua_pushlstring(L, body_chunk.memory, body_chunk.size);
-		lua_pushlstring(L, header_chunk.memory, header_chunk.size);
-		if(body_chunk.memory) free(body_chunk.memory);
-		if(header_chunk.memory) free(header_chunk.memory);
-		return 3;
-	}
-}
-
-// arg1 : string for action url
-// arg2 : string for action form
-// arg3 : table for custom header
-// arg4 : (optional) string for output's filename
-static int hl_post_form_with_header (lua_State *L) {
-	CURLcode rc;
-	const char *url = NULL;
-	const char *fname = NULL;
-	const char *formdata = NULL;
-	FILE *f = NULL;
-	struct curl_slist *myheaders = NULL;
-	int nstack;
-	struct MemoryStruct body_chunk;
-	struct MemoryStruct header_chunk;
-
-	body_chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
-	body_chunk.size = 0;    /* no data at this point */
-	header_chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
-	header_chunk.size = 0;    /* no data at this point */
-
-	//check number of supplied arguments, min 3 argument
-	nstack = lua_gettop(L);
-	if (nstack < THIRD_ARG){
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-
-	// Get 1st Argument : URL
-	if (lua_type(L, FIRST_ARG) != LUA_TSTRING) {
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-	url = lua_tostring(L, FIRST_ARG);
-	//url = luaL_checkstring(L, FIRST_ARG);
-
-	// Get 2nd Argument : string for action form
-	if (lua_type(L, SECOND_ARG) != LUA_TSTRING) {
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-	formdata = lua_tostring(L, SECOND_ARG);
-	//formdata = luaL_checkstring(L, SECOND_ARG);
-	
-	// Get 3rd Argument : table for custom header
-	if (lua_type(L, THIRD_ARG) != LUA_TTABLE) {
-		lua_pushinteger(L, CURLE_FAILED_INIT);
-		return 1;
-	}
-	lua_pushnil(L);  /* first key */
-	while (lua_next(L, THIRD_ARG) != 0) {
-		/* not use 'key' (at index -2) and use 'value' (at index -1) append it slist*/
-		myheaders = curl_slist_append(myheaders, lua_tostring(L, -1));
-		/* removes 'value'; keeps 'key' for next iteration */
-		lua_pop(L, 1);
-	}
-
-	// Get 4rd Argument : (optional) string for output's filename
-	fname = luaL_optstring(L, FOURTH_ARG, "");
-
-	curl_easy_setopt(curl, CURLOPT_URL, url);
-	curl_easy_setopt(curl, CURLOPT_POST, (long)1);
-	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, formdata);
-	if (myheaders) curl_easy_setopt(curl, CURLOPT_HTTPHEADER, myheaders);
-	if (fname[0]){	// filename is supplied so we use file as output
-		f = fopen(fname,"rb");
-		if (f == NULL){	//from scratch
-			f = fopen(fname, "wb");
-		}else{		//resume download
-			struct _stat64 buf;
-			fclose(f);
-			if (_stat64(fname, &buf) != 0){
-				curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, 0);	//can't get file size, start from 0 beginning
-			}else{
-				curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, buf.st_size); //this will override CURLOPT_RANGE if any
-			}
-			f = fopen(fname, "ab");
-		}
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, f);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, fwrite);
-		rc = curl_easy_perform(curl);
-		lua_pushinteger(L, rc);
-		fclose(f);
-		if (myheaders) curl_slist_free_all(myheaders);
-		return 1;
-	}else{	// filename isnt supplied so we use memory as output
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&body_chunk);
-		curl_easy_setopt(curl, CURLOPT_HEADERDATA, (void*)&header_chunk);
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-		rc = curl_easy_perform(curl);
-		lua_pushinteger(L, rc);
-		lua_pushlstring(L, body_chunk.memory, body_chunk.size);
-		lua_pushlstring(L, header_chunk.memory, header_chunk.size);
-		if(body_chunk.memory) free(body_chunk.memory);
-		if(header_chunk.memory) free(header_chunk.memory);
-		if (myheaders) curl_slist_free_all(myheaders);
-		return 3;
 	}
 }
 
@@ -1393,12 +1026,14 @@ static int hl_request (lua_State *L) {
 		formdata = luaL_optstring(L, SECOND_ARG, ""); // Get 2nd Argument : Form Data
 
 		curl_easy_setopt(curl, CURLOPT_URL, url);
-		curl_easy_setopt(curl, CURLOPT_RESUME_FROM, 0);
+		curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, (curl_off_t)0);
 		curl_easy_setopt(curl, CURLOPT_RANGE, NULL);
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, NULL);
 		if (formdata[0] == '\0') {
+			//printf("[lhttplib.c|hl_request|1402] GET url=%s\n", url);
 			curl_easy_setopt(curl, CURLOPT_HTTPGET, (long)1);
 		}else{
+			//printf("[lhttplib.c|hl_request|1405] POST url=%s\n", url);
 			curl_easy_setopt(curl, CURLOPT_POST, (long)1);
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, formdata);
 		}
@@ -1415,14 +1050,17 @@ static int hl_request (lua_State *L) {
 			url = "";
 		}
 		curl_easy_setopt(curl, CURLOPT_URL, url);
+		
 		lua_pop(L, 1);
 
 		lua_getfield(L, -1, "formdata");	// Get Parameter for formdata
 		if (lua_isstring(L, -1)){
+			//printf("[lhttplib.c|hl_request|1427] POST url=%s\n", url);
 			formdata = lua_tostring(L, -1);
 			curl_easy_setopt(curl, CURLOPT_POST, (long)1);
 			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, formdata);
 		}else{
+			//printf("[lhttplib.c|hl_request|1432] GET url=%s\n", url);
 			curl_easy_setopt(curl, CURLOPT_HTTPGET, (long)1);
 		}
 		lua_pop(L, 1);
@@ -1440,28 +1078,28 @@ static int hl_request (lua_State *L) {
 
 			fb = fopen(output_filename,"rb");
 			if (fb == NULL){	//from scratch
-				//printf("[debug][http] Create new file %s\n", output_filename);
+				//printf("[lhttplib.c|hl_request] Create new file %s\n", output_filename);
 				fb = fopen(output_filename, "wb");
 				curl_easy_setopt(curl, CURLOPT_RANGE, NULL);
-				curl_easy_setopt(curl, CURLOPT_RESUME_FROM, 0);
+				curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, (curl_off_t)0);
 			}else{		//resume download
 				struct _stat64 buf;
 				fclose(fb);
 				if (_stat64(output_filename, &buf) != 0){
 					curl_easy_setopt(curl, CURLOPT_RANGE, NULL);
-					curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, 0);	//can't get file size, start from 0 beginning
-					//printf("[debug][http] Resuming %s from 0\n", output_filename);
+					curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, (curl_off_t)0);	//can't get file size, start from 0 beginning
+					//printf("[lhttplib.c|hl_request] Resuming %s from 0\n", output_filename);
 				}else{
-					curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, buf.st_size); //this will override CURLOPT_RANGE if any
-					//printf("[debug][http] Resuming %s from %ld\n", output_filename, buf.st_size);
+					curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, (curl_off_t)buf.st_size); //this will override CURLOPT_RANGE if any
+					//printf("[lhttplib.c|hl_request] Resuming %s from %ld\n", output_filename, buf.st_size);
 				}
 				fb = fopen(output_filename, "ab");
 			}
 			curl_easy_setopt(curl, CURLOPT_WRITEDATA, fb);
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, fwrite);		
-		}else{
+		}else{	//output to memory
 			curl_easy_setopt(curl, CURLOPT_RANGE, NULL);
-			curl_easy_setopt(curl, CURLOPT_RESUME_FROM, 0);
+			curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, (long)0);
 			curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&body_chunk);
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 		}
@@ -1501,17 +1139,12 @@ static int hl_request (lua_State *L) {
 /* LUA Registration ============================================================== */
 static const luaL_Reg httplib[] = {
 	{"request",hl_request},
-	{"get_header",hl_get_header},
-	{"get_url_with_header",hl_get_url_with_header},
-	{"post_form_with_header",hl_post_form_with_header},
 	{"escape", hl_escape},
 	{"unescape", hl_unescape},
 	{"version", hl_version},
 	{"set_conf",hl_set_conf},
-	{"get_url",hl_get_url},
 	{"error",hl_error},
 	{"info",hl_info},
-	{"post_form",hl_post_form},
 	{"post_file",hl_post_file},
 	//{"upload_file",hl_upload_file},
 	{"collect_resource",hl_collect_resource},

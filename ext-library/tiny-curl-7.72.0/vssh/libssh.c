@@ -2364,10 +2364,13 @@ static CURLcode myssh_done(struct connectdata *conn, CURLcode status)
 
   if(protop)
     Curl_safefree(protop->path);
-  if(Curl_pgrsDone(conn))
+  if(Curl_pgrsDone(conn)){
+	  printf("\rmyssh_done: return CURLE_ABORTED_BY_CALLBACK");
     return CURLE_ABORTED_BY_CALLBACK;
+  }
 
   conn->data->req.keepon = 0;   /* clear all bits */
+  printf("\rmyssh_done: return result");
   return result;
 }
 

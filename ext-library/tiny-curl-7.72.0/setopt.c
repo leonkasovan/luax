@@ -1545,6 +1545,7 @@ CURLcode Curl_vsetopt(struct Curl_easy *data, CURLoption option, va_list param)
     if(bigsize < -1)
       return CURLE_BAD_FUNCTION_ARGUMENT;
     data->set.set_resume_from = bigsize;
+	//printf("setopt.c|Curl_vsetopt| bigsize=%ld\n", bigsize);
     break;
   case CURLOPT_DEBUGFUNCTION:
     /*

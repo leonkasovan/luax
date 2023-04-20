@@ -122,16 +122,12 @@ typedef ssize_t (Curl_recv)(struct connectdata *conn, /* connection data */
                             CURLcode *err);           /* error to return */
 
 #include "mime.h"
-#include "imap.h"
-#include "pop3.h"
-#include "smtp.h"
 #include "ftp.h"
 #include "file.h"
 #include "vssh/ssh.h"
 #include "http.h"
 #include "rtsp.h"
 #include "smb.h"
-#include "mqtt.h"
 #include "wildcard.h"
 #include "multihandle.h"
 #include "quic.h"
@@ -1063,14 +1059,10 @@ struct connectdata {
     struct http_conn httpc;
     struct ssh_conn sshc;
     struct tftp_state_data *tftpc;
-    struct imap_conn imapc;
-    struct pop3_conn pop3c;
-    struct smtp_conn smtpc;
     struct rtsp_conn rtspc;
     struct smb_conn smbc;
     void *rtmp;
     struct ldapconninfo *ldapc;
-    struct mqtt_conn mqtt;
   } proto;
 
   int cselect_bits; /* bitmask of socket events */

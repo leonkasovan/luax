@@ -99,9 +99,6 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_threads.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\dict.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\doh.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -136,9 +133,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\getinfo.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\gopher.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hash.c">
@@ -192,9 +186,6 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\if2ip.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\imap.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\inet_ntop.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -202,9 +193,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\krb5.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\ldap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\llist.c">
@@ -225,9 +213,6 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\mprintf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\mqtt.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\multi.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -246,16 +231,10 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\nwos.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\openldap.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\parsedate.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\pingpong.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\pop3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\progress.c">
@@ -297,9 +276,6 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\smb.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\smtp.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\socketpair.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -334,12 +310,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\system_win32.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\telnet.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\tftp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\timeval.c">

@@ -2043,6 +2043,7 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
         return CURLE_OUT_OF_MEMORY;
     }
     result = Curl_http_output_auth(conn, request, (pq ? pq : path), FALSE);
+	//printf("Curl_http: %s\n", pq ? pq : path);
     free(pq);
     if(result)
       return result;
@@ -2263,7 +2264,7 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
                                     conn->bits.ipv6_ip?"[":"",
                                     host,
                                     conn->bits.ipv6_ip?"]":"",
-                                    conn->remote_port);
+                                    conn->remote_port); 
 
     if(!data->state.aptr.host)
       /* without Host: we can't make a nice request */
@@ -2353,7 +2354,7 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
 #endif /* CURL_DISABLE_PROXY */
 
   http->p_accept = Curl_checkheaders(conn, "Accept")?NULL:"Accept: */*\r\n";
-
+  //data->state.resume_from = 0;	// NOVAN HACK
   if((HTTPREQ_POST == httpreq || HTTPREQ_PUT == httpreq) &&
      data->state.resume_from) {
     /**********************************************************************
@@ -2395,16 +2396,12 @@ CURLcode Curl_http(struct connectdata *conn, bool *done)
         }
         /* when seekerr == CURL_SEEKFUNC_CANTSEEK (can't seek to offset) */
         do {
-          size_t readthisamountnow =
-            (data->state.resume_from - passed > data->set.buffer_size) ?
-            (size_t)data->set.buffer_size :
-            curlx_sotouz(data->state.resume_from - passed);
+          size_t readthisamountnow = 0, actuallyread = 0;
 
-          size_t actuallyread =
-            data->state.fread_func(data->state.buffer, 1, readthisamountnow,
-                                   data->state.in);
-
-          passed += actuallyread;
+		  readthisamountnow = (data->state.resume_from - passed > data->set.buffer_size) ? (size_t)data->set.buffer_size : curlx_sotouz(data->state.resume_from - passed);
+		  //printf("Curl_http: 2404 !!!!!!!!data->state.resume_from=%ld\n", data->state.resume_from);
+		  actuallyread = data->state.fread_func(data->state.buffer, 1, readthisamountnow, data->state.in);
+          passed += actuallyread; 
           if((actuallyread == 0) || (actuallyread > readthisamountnow)) {
             /* this checks for greater-than only to make sure that the
                CURL_READFUNC_ABORT return code still aborts */

@@ -51,8 +51,8 @@ IDI_ICON1               ICON                    "lua.ico"
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 5,1,5,77
- PRODUCTVERSION 5,1,5,77
+ FILEVERSION 5,1,5,80
+ PRODUCTVERSION 5,1,5,80
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -70,12 +70,12 @@ BEGIN
             VALUE "Comments", "LuaX(tra) Library"
             VALUE "CompanyName", "Dhani Novan"
             VALUE "FileDescription", "Lua Interpreter with eXtra library"
-            VALUE "FileVersion", "5.1.5.77"
+            VALUE "FileVersion", "5.1.5.80"
             VALUE "InternalName", "LuaX"
-            VALUE "LegalCopyright", "Dhani.Novan © 2008, 2019, 2020"
+            VALUE "LegalCopyright", "Dhani.Novan © 2008, 2019, 2020, 2023"
             VALUE "OriginalFilename", "lua.exe"
             VALUE "ProductName", "LuaX"
-            VALUE "ProductVersion", "5.1.5.77"
+            VALUE "ProductVersion", "5.1.5.80"
         END
     END
     BLOCK "VarFileInfo"

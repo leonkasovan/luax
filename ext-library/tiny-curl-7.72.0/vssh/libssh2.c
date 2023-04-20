@@ -3203,10 +3203,13 @@ static CURLcode ssh_done(struct connectdata *conn, CURLcode status)
 
   if(sftp_scp)
     Curl_safefree(sftp_scp->path);
-  if(Curl_pgrsDone(conn))
+  if(Curl_pgrsDone(conn)){
+	  printf("\rssh_done: return CURLE_ABORTED_BY_CALLBACK");
     return CURLE_ABORTED_BY_CALLBACK;
+  }
 
   conn->data->req.keepon = 0; /* clear all bits */
+  printf("\rssh_done: return result");
   return result;
 }
 

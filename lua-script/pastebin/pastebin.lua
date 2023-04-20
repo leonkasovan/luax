@@ -35,18 +35,17 @@ end
 	-- value : false = for access public/unlisted paste (default)
 --output : content of paste(string), return nil if fail
 function read_paste(paste_id, login)
-	local rc, content
+	local rc, content, headers
 
+	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	if login then	-- login for access private/unlisted paste
-		http.set_conf(http.OPT_TIMEOUT, 30)
-		rc, content = http.post_form('https://pastebin.com/login', 'submit_hidden=submit_hidden&submit=Login&user_name='..USERNAME..'&user_password='..USERPASS)
+		rc, headers, content = http.request('https://pastebin.com/login', 'submit_hidden=submit_hidden&submit=Login&user_name='..USERNAME..'&user_password='..USERPASS)
 		if rc ~= 0 then
 			write_log("[error] Login: "..http.error(rc))
 			return nil
 		end
 	end
-	http.set_conf(http.OPT_TIMEOUT, 30)
-	rc, content = http.get_url("https://pastebin.com/raw/"..paste_id)
+	rc, headers, content = http.request("https://pastebin.com/raw/"..paste_id)
 	if rc ~= 0 then
 		write_log("[error] Reading paste "..paste_id..": "..http.error(rc))
 		return nil
@@ -60,14 +59,14 @@ end
 --input 3: paste_private(string, optional) 0 = Public (default), 1 = Unlisted, 2 = Private
 --output : new paste id(string), return nil if fail
 function new_paste(content, paste_name, paste_private)
-	local rc, paste_id
+	local rc, paste_id, headers
 	paste_name = paste_name or 'MyPaste '..os.date()
 	paste_private = paste_private or '0'
 	
+	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	-- Authentification
 	if api_user_key == nil then
-		http.set_conf(http.OPT_TIMEOUT, 30)
-		rc, api_user_key = http.post_form('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
+		rc, headers, api_user_key = http.request('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
 		if rc ~= 0 then
 			write_log("[error] Login: "..http.error(rc))
 			return nil
@@ -75,8 +74,7 @@ function new_paste(content, paste_name, paste_private)
 	end
 	
 	-- New Paste
-	http.set_conf(http.OPT_TIMEOUT, 60)
-	rc, paste_id = http.post_form('https://pastebin.com/api/api_post.php', table.concat({
+	rc, headers, paste_id = http.request('https://pastebin.com/api/api_post.php', table.concat({
 	'api_dev_key=1b9f95b79f59af3f51bb793540445838',
 	'api_option=paste',
 	'api_paste_private='..paste_private,	-- 0 = Public, 1 = Unlisted, 2 = Private
@@ -93,18 +91,17 @@ function new_paste(content, paste_name, paste_private)
 end
 
 function delete_paste(key)
-	local rc, res
+	local rc, res, headers
 	
 	if key == nil or key == "" then
 		write_log("[error delete] Key is empty")
 		return nil
 	end
 	
-	write_log("[info delete_paste] Key: "..key)
+	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	-- Authentification
 	if api_user_key == nil then
-		http.set_conf(http.OPT_TIMEOUT, 30)
-		rc, api_user_key = http.post_form('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
+		rc, headers, api_user_key = http.request('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
 		if rc ~= 0 then
 			write_log("[error] Login: "..http.error(rc))
 			return nil
@@ -112,8 +109,7 @@ function delete_paste(key)
 	end
 	
 	-- Delete Paste
-	http.set_conf(http.OPT_TIMEOUT, 60)
-	rc, res = http.post_form('https://pastebin.com/api/api_post.php', table.concat({
+	rc, headers, res = http.request('https://pastebin.com/api/api_post.php', table.concat({
 	'api_dev_key=1b9f95b79f59af3f51bb793540445838',
 	'api_option=delete',
 	'api_user_key='..api_user_key,
@@ -127,16 +123,16 @@ function delete_paste(key)
 end
 
 function list_paste(limit)
-	local rc, list_paste
+	local rc, list_paste, api_user_key, headers
 	
 	if limit == nil then
 		limit = '1000'
 	end
+	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
 	
 	-- Authentification
 	if api_user_key == nil then
-		http.set_conf(http.OPT_TIMEOUT, 30)
-		rc, api_user_key = http.post_form('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
+		rc, headers, api_user_key = http.request('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
 		if rc ~= 0 then
 			write_log("[error] Login: "..http.error(rc))
 			return nil
@@ -144,8 +140,7 @@ function list_paste(limit)
 	end
 	
 	-- Get List Paste
-	http.set_conf(http.OPT_TIMEOUT, 60)
-	rc, list_paste = http.post_form('https://pastebin.com/api/api_post.php', table.concat({
+	rc, headers, list_paste = http.request('https://pastebin.com/api/api_post.php', table.concat({
 	'api_dev_key=1b9f95b79f59af3f51bb793540445838',
 	'api_option=list',
 	'api_user_key='..api_user_key,

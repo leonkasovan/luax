@@ -55,7 +55,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;BUILDING_LIBCURL;USE_IPV6;USE_WINDOWS_SSPI;USE_SCHANNEL;USE_ZLIB;HAVE_ZLIB;HAVE_LIBZ;HAVE_ZLIB_H;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;BUILDING_LIBCURL;USE_IPV6;USE_WINDOWS_SSPI;USE_SCHANNEL;USE_ZLIB;HAVE_ZLIB;HAVE_LIBZ;HAVE_ZLIB_H;CURL_DISABLE_SMTP;CURL_DISABLE_LDAP;CURL_DISABLE_IMAP;CURL_DISABLE_TELNET;CURL_DISABLE_TFTP;CURL_DISABLE_GOPHER;CURL_DISABLE_DICT;CURL_DISABLE_POP3;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -71,7 +71,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;BUILDING_LIBCURL;USE_IPV6;USE_WINDOWS_SSPI;USE_SCHANNEL;USE_ZLIB;HAVE_ZLIB;HAVE_LIBZ;HAVE_ZLIB_H;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;BUILDING_LIBCURL;USE_IPV6;USE_WINDOWS_SSPI;USE_SCHANNEL;USE_ZLIB;HAVE_ZLIB;HAVE_LIBZ;HAVE_ZLIB_H;CURL_DISABLE_SMTP;CURL_DISABLE_LDAP;CURL_DISABLE_IMAP;CURL_DISABLE_TELNET;CURL_DISABLE_TFTP;CURL_DISABLE_GOPHER;CURL_DISABLE_DICT;CURL_DISABLE_POP3;DEBUGBUILD;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -116,7 +116,6 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_sasl.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_sspi.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\curl_threads.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\dict.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\doh.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\dotdot.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\dynbuf.c" />
@@ -129,7 +128,6 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\ftplistparser.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\getenv.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\getinfo.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\gopher.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hash.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hmac.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\hostasyn.c" />
@@ -147,28 +145,23 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\http_proxy.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\idn_win32.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\if2ip.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\imap.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\inet_ntop.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\inet_pton.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\krb5.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\ldap.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\llist.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\md4.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\md5.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\memdebug.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\mime.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\mprintf.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\mqtt.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\multi.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\netrc.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\non-ascii.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\nonblock.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\nwlib.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\nwos.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\openldap.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\parsedate.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\pingpong.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\pop3.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\progress.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\psl.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\rand.c" />
@@ -182,7 +175,6 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\share.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\slist.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\smb.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\smtp.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\socketpair.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\socks.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\socks_gssapi.c" />
@@ -195,8 +187,6 @@
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\strtok.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\strtoofft.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\system_win32.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\telnet.c" />
-    <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\tftp.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\timeval.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\transfer.c" />
     <ClCompile Include="..\..\ext-library\tiny-curl-7.72.0\url.c" />

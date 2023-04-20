@@ -27,7 +27,10 @@ function general_download(url, callback_function_write_log, callback_function_on
 		filename = TEMP_FILE
 	end
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
+	http.set_conf(http.OPT_NOPROGRESS, false)
+	http.set_conf(http.OPT_PROGRESS_TYPE, 3)
 	rc, header = http.request{url = url, output_filename = filename}
+	http.set_conf(http.OPT_NOPROGRESS, true)
 	if rc ~= 0 then
 		print("Error: "..http.error(rc), rc)
 		return false
@@ -137,7 +140,9 @@ end
 
 -- Get list of url
 local urls = [[
-https://github.com/JustEnoughLinuxOS/distribution/releases/download/20230311/JELOS-RK3566.aarch64-20230311.img.gz
+https://archive.org/download/PS3_NOINTRO_USA__5/Marvel%20vs.%20Capcom%202%20-%20New%20Age%20of%20Heroes%20%28USA%29%20%28Trial%29.7z
+https://archive.org/download/PS3_NOINTRO_USA__5/Marvel%20vs.%20Capcom%202%20-%20New%20Age%20of%20Heroes%20%28USA%29%20%28Unlock%20Key%29.zip
+https://archive.org/download/PS3_NOINTRO_USA__5/Marvel%20vs.%20Capcom%202%20-%20New%20Age%20of%20Heroes%20%28USA%29%20%28v1.01%29%20%28Update%29.zip
 ]]
 
 -- Download url(s)

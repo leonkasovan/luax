@@ -698,6 +698,8 @@ static CURLcode easy_perform(struct Curl_easy *data, bool events)
 
   sigpipe_restore(&pipe_st);
 
+  data->state.resume_from = 0;	//NOVAN FIX
+  data->set.set_resume_from = 0;	//NOVAN FIX
   /* The multi handle is kept alive, owned by the easy handle */
   return result;
 }

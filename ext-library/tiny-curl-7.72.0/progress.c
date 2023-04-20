@@ -143,8 +143,9 @@ int Curl_pgrsDone(struct connectdata *conn)
   struct Curl_easy *data = conn->data;
   data->progress.lastshow = 0;
   rc = Curl_pgrsUpdate(conn); /* the final (forced) update */
-  if(rc)
+  if(rc){
     return rc;
+  }
 
   if(!(data->progress.flags & PGRS_HIDE) &&
      !data->progress.callback)
@@ -695,7 +696,7 @@ static void progress_meter3(struct connectdata *conn)
     }
     fprintf(data->set.err,
             "  %% Received    Time     Time   Current\n"
-            "                Total    Left     Speed\n");
+            "                Spent    Left     Speed\n");
     data->progress.flags |= PGRS_HEADERS_OUT; /* headers are shown */
   }
 
@@ -756,7 +757,7 @@ static void progress_meter3(struct connectdata *conn)
           "%3" CURL_FORMAT_CURL_OFF_T "    %s  %s %s   %s",
           dlpercen,      /* 3 letters */                /* rcvd % */
           max5data(data->progress.downloaded, max5[0]), /* rcvd size */
-          time_total,    /* 8 letters */                /* total time */
+          time_spent,    /* 8 letters */                /* total time */
           time_left,     /* 8 letters */                /* time left */
           max5data(data->progress.current_speed, max5[5])
     );
@@ -778,7 +779,7 @@ int Curl_pgrsUpdate(struct connectdata *conn)
 {
   struct Curl_easy *data = conn->data;
   struct curltime now = Curl_now(); /* what time is it */
-  bool showprogress = progress_calc(conn, now);
+  bool showprogress = progress_calc(conn, now) && data->progress.downloaded ;
   if(!(data->progress.flags & PGRS_HIDE)) {
     if(data->set.fxferinfo) {
       int result;

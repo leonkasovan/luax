@@ -69,7 +69,6 @@ bool curl_win32_idn_to_ascii(const char *in, char **out);
 
 #include "urldata.h"
 #include "netrc.h"
-
 #include "formdata.h"
 #include "mime.h"
 #include "vtls/vtls.h"
@@ -99,22 +98,15 @@ bool curl_win32_idn_to_ascii(const char *in, char **out);
 
 /* And now for the protocols */
 #include "ftp.h"
-#include "dict.h"
-#include "telnet.h"
-#include "tftp.h"
 #include "http.h"
 #include "http2.h"
 #include "file.h"
-#include "curl_ldap.h"
 #include "vssh/ssh.h"
-#include "imap.h"
 #include "url.h"
 #include "connect.h"
 #include "inet_ntop.h"
 #include "http_ntlm.h"
 #include "curl_rtmp.h"
-#include "gopher.h"
-#include "mqtt.h"
 #include "http_proxy.h"
 #include "conncache.h"
 #include "multihandle.h"
