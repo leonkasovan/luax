@@ -1,8 +1,7 @@
 Output folder for compiled binary
 E:\Projects\luax\bin
 2,25 MB (2.360.832 bytes)
-
-2,19 MB (2.301.952 bytes)
+2,20 MB (2.312.192 bytes)
 CURL_DISABLE_POP3
 CURL_DISABLE_SMTP
 CURL_DISABLE_LDAP
