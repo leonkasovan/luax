@@ -101,16 +101,45 @@ function archive_generate_db(user_url, category)
 	return true
 end
 
+function archive_find_db(keyword)
+	local f
+	local nn = 0
+	local lower_keyword = keyword:lower()
+	
+	for file in lfs.dir(".") do
+		if file ~= "." and file ~= ".." then
+			local attr = lfs.attributes(file)
+			if attr.mode == "file" and file:match("%.csv$") then
+				for line in io.lines(file) do
+					if line:byte(1) ~= 35 then
+						f = csv.parse(line, '|')
+						if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
+							print(f[2], f[3], file)
+							nn = nn + 1
+						end
+					end
+				end
+			end
+		end
+	end
+	print("\n=====================================\nFound "..nn.." data")
+	return nn
+end
+
 if #arg == 1 then
 	archive_generate_db(arg[1])
+elseif #arg == 2 then
+	if arg[1] == "find" then
+		archive_find_db(arg[2])
+	end
 else
 	print(string.format("Generate ROM database from archieve.org.\nUsage: \n\t#> %s [url]", arg[0]))
 	print(string.format("\t#> %s \"https://archive.org/download/nes-roms\" ", arg[0]))
 	
-	local list_uploads
-	list_uploads = archive_user_uploads('aitus95')
-	for i,v in pairs(list_uploads) do
-		print(i,"https://archive.org/download/"..v)
-	end
-	return true
+	-- local list_uploads
+	-- list_uploads = archive_user_uploads('aitus95')
+	-- for i,v in pairs(list_uploads) do
+		-- print(i,"https://archive.org/download/"..v)
+	-- end
+	-- return true
 end
