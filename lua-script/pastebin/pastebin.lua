@@ -41,13 +41,13 @@ function read_paste(paste_id, login)
 	if login then	-- login for access private/unlisted paste
 		rc, headers, content = http.request('https://pastebin.com/login', 'submit_hidden=submit_hidden&submit=Login&user_name='..USERNAME..'&user_password='..USERPASS)
 		if rc ~= 0 then
-			write_log("[error] Login: "..http.error(rc))
+			write_log("[ERROR | pastebin | read_paste] Login: "..http.error(rc))
 			return nil
 		end
 	end
 	rc, headers, content = http.request("https://pastebin.com/raw/"..paste_id)
 	if rc ~= 0 then
-		write_log("[error] Reading paste "..paste_id..": "..http.error(rc))
+		write_log("[ERROR | pastebin | read_paste] "..paste_id..": "..http.error(rc))
 		return nil
 	end
 	
@@ -68,7 +68,7 @@ function new_paste(content, paste_name, paste_private)
 	if api_user_key == nil then
 		rc, headers, api_user_key = http.request('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
 		if rc ~= 0 then
-			write_log("[error] Login: "..http.error(rc))
+			write_log("[ERROR | pastebin | new_paste] Login: "..http.error(rc))
 			return nil
 		end
 	end
@@ -84,8 +84,12 @@ function new_paste(content, paste_name, paste_private)
 	'api_paste_name='..http.escape(paste_name)
 	},'&'))
 	if rc ~= 0 then
-		write_log("[error] New Paste: "..http.error(rc))
+		write_log("[ERROR | pastebin | new_paste] "..http.error(rc))
 		return nil
+	end
+	
+	if #paste_id ~= 29 then
+		write_log("[ERROR | pastebin | new_paste] "..paste_id)
 	end
 	return paste_id
 end
@@ -103,7 +107,7 @@ function delete_paste(key)
 	if api_user_key == nil then
 		rc, headers, api_user_key = http.request('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
 		if rc ~= 0 then
-			write_log("[error] Login: "..http.error(rc))
+			write_log("[ERROR | pastebin | delete_paste] Login: "..http.error(rc))
 			return nil
 		end
 	end
@@ -116,14 +120,18 @@ function delete_paste(key)
 	'api_paste_key='..key
 	},'&'))
 	if rc ~= 0 then
-		write_log("[ERR|delete_paste] "..http.error(rc))
+		write_log("[ERROR | pastebin | delete_paste] "..http.error(rc))
 		return nil
+	end
+	
+	if res ~= "Paste Removed" then
+		write_log("[ERROR | pastebin | delete_paste] "..res)
 	end
 	return res
 end
 
 function list_paste(limit)
-	local rc, list_paste, api_user_key, headers
+	local rc, list_paste, headers
 	
 	if limit == nil then
 		limit = '1000'
@@ -134,7 +142,7 @@ function list_paste(limit)
 	if api_user_key == nil then
 		rc, headers, api_user_key = http.request('https://pastebin.com/api/api_login.php', 'api_dev_key=1b9f95b79f59af3f51bb793540445838&api_user_name='..USERNAME..'&api_user_password='..USERPASS)
 		if rc ~= 0 then
-			write_log("[error] Login: "..http.error(rc))
+			write_log("[ERROR | pastebin | list_paste] Login: "..http.error(rc))
 			return nil
 		end
 	end
@@ -147,7 +155,7 @@ function list_paste(limit)
 	'api_results_limit='..limit
 	},'&'))
 	if rc ~= 0 then
-		write_log("[ERR|list_paste] "..http.error(rc))
+		write_log("[ERROR | pastebin | list_paste] "..http.error(rc))
 		return nil
 	end
 	return list_paste
@@ -175,7 +183,7 @@ function read_paste_by_title(paste_title)
 	local content
 	
 	if #paste_title == 0 then
-		write_log("[error] Paste Title is empty")
+		write_log("[ERROR | pastebin | read_paste_by_title] Paste Title is empty")
 		return nil
 	end
 	
@@ -193,7 +201,7 @@ function append_paste_by_title(new_content, paste_title)
 	local res, old_content
 	
 	if #paste_title == 0 then
-		write_log("[error] Paste Title is empty")
+		write_log("[ERROR | pastebin | append_paste_by_title] Paste Title is empty")
 		return nil
 	end
 	
@@ -201,7 +209,7 @@ function append_paste_by_title(new_content, paste_title)
 	for i,v in pairs(list_paste_as_table()) do
 		if v[3] == paste_title then
 			old_content = read_paste(v[1])
-			if old_content == nil then 
+			if old_content == nil then
 				res = new_paste(new_content, paste_title, '1')	-- 0 = Public, 1 = Unlisted, 2 = Private
 			else
 				res = new_paste(old_content..'\n'..new_content, paste_title, '1')	-- 0 = Public, 1 = Unlisted, 2 = Private
@@ -217,7 +225,7 @@ function update_paste_by_title(new_content, paste_title)
 	local res
 	
 	if #paste_title == 0 then
-		write_log("[error] Paste Title is empty")
+		write_log("[ERROR | pastebin | update_paste_by_title] Paste Title is empty")
 		return nil
 	end
 	
