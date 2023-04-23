@@ -30,6 +30,7 @@ function archive_user_uploads(user)
 	
 	user_url = 'https://archive.org/details/@'..user..'?tab=uploads&page='
 	repeat
+		print("Processing page "..page)
 		local rc, headers, content = http.request(user_url..tostring(page))
 		if rc ~= 0 then
 			print("Error: "..http.error(rc), rc)
@@ -38,13 +39,10 @@ function archive_user_uploads(user)
 		if content:match('class="no%-results"') then
 			done = true
 		end
-		for link, title in content:gmatch('\n            <a href%="/details/(.-)" title="(.-)"') do
-			-- print(link, title)
+		for link in content:gmatch('\n            <a href%="/details/(.-)" title="') do
 			res[#res + 1] = link
 		end
-		print("Page "..page..": "..tostring(#res).."data")
 		page = page + 1
-		
 	until done
 	return res
 end
@@ -126,20 +124,277 @@ function archive_find_db(keyword)
 	return nn
 end
 
+function archive_find_db_and_open(keyword)
+	local f, fo
+	local nn = 0
+	local lower_keyword = keyword:lower()
+	
+	fo = io.open("result.htm", "w")
+	if fo == nil then
+		print('Error create file result.htm')
+		return false
+	end
+	
+	fo:write([=[
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+<title>Find data archive.org</title>
+<style type="text/css"> 
+body, html  { height: 100%; }
+html, body, div, span, applet, object, iframe,
+/*h1, h2, h3, h4, h5, h6,*/ p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+body { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+:focus { outline: 0; }
+del { text-decoration: line-through; }
+table {border-spacing: 0; }
+ 
+/*------------------------------------------------------------------ */
+ body{
+	font-family:Arial, Helvetica, sans-serif;
+	margin:0 auto;
+}
+a:link {
+	color: #666;
+	font-weight: bold;
+	text-decoration:none;
+}
+a:visited {
+	color: #666;
+	font-weight:bold;
+	text-decoration:none;
+}
+a:active,
+a:hover {
+	color: #bd5a35;
+	text-decoration:underline;
+}
+ 
+table a:link {
+	color: #666;
+	font-weight: bold;
+	text-decoration:none;
+}
+table a:visited {
+	color: #999999;
+	font-weight:bold;
+	text-decoration:none;
+}
+table a:active,
+table a:hover {
+	color: #bd5a35;
+	text-decoration:underline;
+}
+table {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	margin:20px;
+	border: 1px solid;
+}
+table th {
+	padding:10px 25px 10px 25px; 
+	background: #000000	;
+	border-left: 1px solid #a0a0a0;
+	color:#ffffff;
+}
+table th:first-child {
+	border-left: 0;
+}
+table tr {
+	text-align: center;
+	padding-left:20px;
+}
+table td:first-child {
+	padding-left:20px;
+	border-left: 0;
+}
+table td {
+	padding:10px;
+	border-top: 0px solid #ffffff;
+	border-bottom:1px solid #a0a0a0;
+	border-left: 1px solid #a0a0a0;
+	
+	background: #ffffff;
+}
+table tr.even td {
+	background: #eeeeee;
+}
+table tr:hover td {
+	background: #bbbbff;
+}
+table td.minus {
+	color: #ff0000;
+}
+table td.plus {
+	color: #008800;
+} 
+</style>
+ </head>
+ <body>
+ <h2>&nbsp;&nbsp;&nbsp;Search result</h2>
+ <table cellspacing='0'>
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Size</th>
+			<th>Upload Folder</th>
+			<th>Direct<br/>Download</th>
+		</tr>
+	</thead>
+	<tbody>
+]=])
+	for file in lfs.dir(".") do
+		if file ~= "." and file ~= ".." then
+			local attr = lfs.attributes(file)
+			local category
+			local folder_id
+			local user_url
+			
+			if attr.mode == "file" and file:match("%.csv$") then
+				nn = 0
+				for line in io.lines(file) do
+					nn = nn + 1
+					if nn == 1 then 
+						category = line:match("^#category=(.-)$")
+						if category == nil then
+							print(file, "Invalid db. Can't find category")
+							return false
+						end
+					elseif nn == 2 then
+						user_url = line:match('^#url=(.-)$')
+						folder_id = line:match('download/(.-)$')	-- ini buat apa? bisa di delete
+						if user_url == nil or folder_id == nil then
+							print("Invalid db. Can't find user_url or folder_id")
+							return false
+						end
+					else
+						if line:byte(1) ~= 35 and line ~= "" then
+							f = csv.parse(line, '|')
+							if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
+								if user_url == nil then print("user_url=nil", line) end
+								fo:write("<tr><td>"..f[2].."</td><td align='right'>"..f[3].."</td><td><a href='"..user_url.."'>"..folder_id.."</a></td><td><a href='"..user_url.."/"..f[1].."'>DL</a></td></tr>\n")
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	fo:write([=[
+	</tbody>
+ </table>
+ <hr>
+ <div align='center' style='font-size:smaller'><br>Copyright &copy;2013, <b>Dhani Novan</b> (dhani.novan@gmail.com)</div><br/>
+</body>
+</html>
+]=])
+	fo:close()
+	return true
+end
+
 if #arg == 1 then
-	archive_generate_db(arg[1])
+	archive_find_db(arg[1])
 elseif #arg == 2 then
 	if arg[1] == "find" then
 		archive_find_db(arg[2])
+	elseif arg[1] == "create" then
+		archive_generate_db(arg[2])
+	elseif arg[1] == "user" then
+		local nn = 0
+		local list_uploads = archive_user_uploads(arg[2])
+		
+		if list_uploads == nil then
+			print("Try again.")
+		else
+			for i,v in pairs(list_uploads) do
+				print(v)
+				nn = nn + 1
+			end
+			print(string.format("\n\n===========================================================\nFound "..nn.." data.\nUse the result for creating db.\nUsage: #> %s create \"[folder-id]\" ", arg[0]))
+		end
+	elseif arg[1] == "open" then
+		if archive_find_db_and_open(arg[2]) then
+			os.execute("result.htm")
+			-- os.execute("del result.htm")
+		end
+	end
+elseif #arg == 3 then
+	if arg[1] == "user" then
+		local nn = 0
+		local list_uploads = archive_user_uploads(arg[2])
+		
+		if list_uploads == nil then
+			print("Try again.")
+		else
+			for i,v in pairs(list_uploads) do
+				if v:lower():find(arg[3]:lower(),1, true) then
+					print(v)
+					nn = nn + 1
+				end
+			end
+			print(string.format("\n\n===========================================================\nFound "..nn.." data.\nUse the result for creating db.\nUsage: #> %s create \"[folder-id]\" ", arg[0]))
+		end
 	end
 else
-	print(string.format("Generate ROM database from archieve.org.\nUsage: \n\t#> %s [url]", arg[0]))
-	print(string.format("\t#> %s \"https://archive.org/download/nes-roms\" ", arg[0]))
+	local nn = 0
+	for file in lfs.dir(".") do
+		if file ~= "." and file ~= ".." then
+			local attr = lfs.attributes(file)
+			if attr.mode == "file" and file:match("%.csv$") then
+				nn = nn + 1
+			end
+		end
+	end
 	
-	-- local list_uploads
-	-- list_uploads = archive_user_uploads('aitus95')
-	-- for i,v in pairs(list_uploads) do
-		-- print(i,"https://archive.org/download/"..v)
+	print(string.format("Manage(create, find) archieve database from archieve.org.\nLocal database: "..nn.." csv file(s)\n\nUsage: \n\t#> %s [keyword] => Find keyword in local database", arg[0]))
+	print(string.format("\t#> %s find [keyword] => Find keyword in local database", arg[0]))
+	print(string.format("\t#> %s open [keyword] => Find keyword in local database and open the result via browser", arg[0]))
+	print(string.format("\t#> %s user [user_id] => List [folder-id] user uploads", arg[0]))
+	print(string.format("\t#> %s create [url] => Generate local database from url", arg[0]))
+	print(string.format("\t#> %s create [id] => Generate local database from https://archive.org/download/[id]", arg[0]))
+	print("\nSample:")
+	print(string.format("\t#> %s tekken ", arg[0]))
+	print(string.format("\t#> %s \"street fighter\" ", arg[0]))
+	print(string.format("\t#> %s find tekken ", arg[0]))
+	print(string.format("\t#> %s find \"street fighter\" ", arg[0]))
+	print(string.format("\t#> %s open tekken ", arg[0]))
+	print(string.format("\t#> %s open \"street fighter\" ", arg[0]))
+	print(string.format("\t#> %s user aitus95", arg[0]))
+	print(string.format("\t#> %s create \"https://archive.org/download/nes-roms\" ", arg[0]))
+	print(string.format("\t#> %s create \"https://archive.org/details/nes-roms\" ", arg[0]))
+	print(string.format("\t#> %s create \"nes-roms\" ", arg[0]))
+	
+	-- content = [[
+-- PS3_GAMES_AITUS
+-- PS3_GAMES_AITUS_2
+-- PS3_GAMES_AITUS_OTHER
+-- PS3_PSN_1
+-- PS3_PSN_2
+-- ]]
+
+	-- for line in content:gmatch("[^\r\n]+") do
+		-- print(line)
+		-- archive_generate_db(line,"PS3")
 	-- end
-	-- return true
+	return true
 end
