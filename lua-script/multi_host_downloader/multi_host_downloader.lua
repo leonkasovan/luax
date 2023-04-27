@@ -45,8 +45,10 @@ function general_download(url, callback_function_write_log, callback_function_on
 		write_log(string.format("[info][general_download] Success and renamed with filename: %s (%s bytes)", server_filename, server_filesize))
 		return true
 	end
-	if callback_function_on_success ~= nil then callback_function_on_success(string.format("%s %s; %s", os.date(), url, filename)) end
-	write_log("[info][general_download] Success and saved with filename: "..filename)
+	if callback_function_on_success ~= nil then
+		callback_function_on_success(string.format("%s %s; %s (%s bytes)", os.date(), url, filename, format_number(os.getfilesize(filename))))
+	end
+	write_log(string.format("[info][general] Success saving file '%s' (%s bytes)", filename, format_number(os.getfilesize(filename))))
 	return true
 end
 
