@@ -6,20 +6,8 @@
 
 dofile('../strict.lua')
 
-function load_file(filename)
-	local fi, content
-
-	fi = io.open(filename, "r")
-	if fi == nil then
-		print("[error] Load file "..filename)
-		return nil
-	end
-	content = fi:read("*a")
-	fi:close()
-	return content
-end
-
--- user=aitus95
+-- List uploads by user_id
+-- Usage: archive_user_uploads('aitus95')
 -- success, function return table
 -- fail, function return nil
 function archive_user_uploads(user)
@@ -344,7 +332,7 @@ elseif #arg == 3 then
 		local list_uploads = archive_user_uploads(arg[2])
 		
 		if list_uploads == nil then
-			print("Try again.")
+			print("Error. Try again.")
 		else
 			for i,v in pairs(list_uploads) do
 				if v:lower():find(arg[3]:lower(),1, true) then
@@ -354,6 +342,8 @@ elseif #arg == 3 then
 			end
 			print(string.format("\n\n===========================================================\nFound "..nn.." data.\nUse the result for creating db.\nUsage: #> %s create \"[folder-id]\" ", arg[0]))
 		end
+	elseif arg[1] == "create" then
+		archive_generate_db(arg[2], arg[3])
 	end
 else
 	local nn = 0
@@ -372,6 +362,7 @@ else
 	print(string.format("\t#> %s user [user_id] => List [folder-id] user uploads", arg[0]))
 	print(string.format("\t#> %s create [url] => Generate local database from url", arg[0]))
 	print(string.format("\t#> %s create [id] => Generate local database from https://archive.org/download/[id]", arg[0]))
+	print(string.format("\t#> %s create [url] [category]=> Generate local database from url and define its category", arg[0]))
 	print("\nSample:")
 	print(string.format("\t#> %s tekken ", arg[0]))
 	print(string.format("\t#> %s \"street fighter\" ", arg[0]))
@@ -382,6 +373,7 @@ else
 	print(string.format("\t#> %s user aitus95", arg[0]))
 	print(string.format("\t#> %s create \"https://archive.org/download/nes-roms\" ", arg[0]))
 	print(string.format("\t#> %s create \"https://archive.org/details/nes-roms\" ", arg[0]))
+	print(string.format("\t#> %s create \"https://archive.org/details/nes-roms\" \"NES\"", arg[0]))
 	print(string.format("\t#> %s create \"nes-roms\" ", arg[0]))
 	
 	-- content = [[
