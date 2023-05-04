@@ -465,7 +465,7 @@ else
 	print(string.format("\t#> %s create \"nes-roms\" ", arg[0]))
 	
 	-- Test user Cylum database
-	-- cylum_archive_generate_db("https://archive.org/download/cylums-final-burn-neo-rom-collection/Cylum%27s%20FinalBurn%20Neo%20ROM%20Collection%20%2802-18-21%29/")
+	-- cylum_archive_generate_db("https://archive.org/download/cylums-final-burn-neo-rom-collection/Cylum%27s%20FinalBurn%20Neo%20ROM%20Collection%20%2802-18-21%29/", "fbneo")
 	
 	-- content = [[
 -- PS3_GAMES_AITUS
