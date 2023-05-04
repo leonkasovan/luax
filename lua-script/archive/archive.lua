@@ -318,7 +318,7 @@ elseif #arg == 2 then
 				print(v)
 				nn = nn + 1
 			end
-			print(string.format("\n\n===========================================================\nFound "..nn.." data.\nUse the result for creating db.\nUsage: #> %s create \"[folder-id]\" ", arg[0]))
+			print(string.format("\n\n===========================================================\nFound "..nn.." data.\nUse the result for creating db.\nUsage: #> lua %s create \"[folder-id]\" ", arg[0]))
 		end
 	elseif arg[1] == "open" then
 		if archive_find_db_and_open(arg[2]) then
@@ -340,7 +340,7 @@ elseif #arg == 3 then
 					nn = nn + 1
 				end
 			end
-			print(string.format("\n\n===========================================================\nFound "..nn.." data.\nUse the result for creating db.\nUsage: #> %s create \"[folder-id]\" ", arg[0]))
+			print(string.format("\n\n===========================================================\nFound "..nn.." data.\nUse the result for creating db.\nUsage: #> lua %s create \"[folder-id]\" ", arg[0]))
 		end
 	elseif arg[1] == "create" then
 		archive_generate_db(arg[2], arg[3])
@@ -356,25 +356,28 @@ else
 		end
 	end
 	
-	print(string.format("Manage(create, find) archieve database from archieve.org.\nLocal database: "..nn.." csv file(s)\n\nUsage: \n\t#> %s [keyword] => Find keyword in local database", arg[0]))
-	print(string.format("\t#> %s find [keyword] => Find keyword in local database", arg[0]))
-	print(string.format("\t#> %s open [keyword] => Find keyword in local database and open the result via browser", arg[0]))
-	print(string.format("\t#> %s user [user_id] => List [folder-id] user uploads", arg[0]))
-	print(string.format("\t#> %s create [url] => Generate local database from url", arg[0]))
-	print(string.format("\t#> %s create [id] => Generate local database from https://archive.org/download/[id]", arg[0]))
-	print(string.format("\t#> %s create [url] [category]=> Generate local database from url and define its category", arg[0]))
+	print(string.format("Manage(create, find) archieve database from archieve.org.\nLocal database: "..nn.." csv file(s)\n\nUsage: \n\t#> lua %s [keyword] => Find keyword in local database", arg[0]))
+	print(string.format("\t#> lua %s find [keyword] => Find keyword in local database", arg[0]))
+	print(string.format("\t#> lua %s open [keyword] => Find keyword in local database and open the result via browser", arg[0]))
+	print(string.format("\t#> lua %s user [user_id] => List [folder-id] user uploads", arg[0]))
+	print(string.format("\t#> lua %s create [url] => Generate local database from url", arg[0]))
+	print(string.format("\t#> lua %s create [id] => Generate local database from https://archive.org/download/[id]", arg[0]))
+	print(string.format("\t#> lua %s create [url] [category]=> Generate local database from url and define its category", arg[0]))
 	print("\nSample:")
-	print(string.format("\t#> %s tekken ", arg[0]))
-	print(string.format("\t#> %s \"street fighter\" ", arg[0]))
-	print(string.format("\t#> %s find tekken ", arg[0]))
-	print(string.format("\t#> %s find \"street fighter\" ", arg[0]))
-	print(string.format("\t#> %s open tekken ", arg[0]))
-	print(string.format("\t#> %s open \"street fighter\" ", arg[0]))
-	print(string.format("\t#> %s user aitus95", arg[0]))
-	print(string.format("\t#> %s create \"https://archive.org/download/nes-roms\" ", arg[0]))
-	print(string.format("\t#> %s create \"https://archive.org/details/nes-roms\" ", arg[0]))
-	print(string.format("\t#> %s create \"https://archive.org/details/nes-roms\" \"NES\"", arg[0]))
-	print(string.format("\t#> %s create \"nes-roms\" ", arg[0]))
+	print(string.format("\t#> lua %s tekken ", arg[0]))
+	print(string.format("\t#> lua %s \"street fighter\" ", arg[0]))
+	print(string.format("\t#> lua %s find tekken ", arg[0]))
+	print(string.format("\t#> lua %s find \"street fighter\" ", arg[0]))
+	print(string.format("\t#> lua %s open tekken ", arg[0]))
+	print(string.format("\t#> lua %s open \"street fighter\" ", arg[0]))
+	print(string.format("\t#> lua %s user aitus95", arg[0]))
+	print(string.format("\t#> lua %s user cylum", arg[0]))
+	print(string.format("\t#> lua %s user t_m_c", arg[0]))
+	print(string.format("\t#> lua %s user kodi_amp_spmc_canada", arg[0]))
+	print(string.format("\t#> lua %s create \"https://archive.org/download/nes-roms\" ", arg[0]))
+	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" ", arg[0]))
+	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" \"NES\"", arg[0]))
+	print(string.format("\t#> lua %s create \"nes-roms\" ", arg[0]))
 	
 	-- content = [[
 -- PS3_GAMES_AITUS
