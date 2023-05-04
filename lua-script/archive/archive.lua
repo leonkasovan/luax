@@ -72,7 +72,7 @@ function archive_generate_db(user_url, category)
 	nn = 0
 	for w1,w2,w3 in content:gmatch('<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>') do
 		if w1:match("%.jpg$") or w1:match("%.torrent$") or w1:match("%.xml$") or w1:match("%.sqlite$") 
-		or w1:match("^history/") or w1:match("^/details/") 
+		or w3:match("%-") or w1:match("^/details/") or w2:match("parent directory")
 		then
 			print("Ignore: ", w1)
 		else
@@ -300,6 +300,94 @@ table td.plus {
 	return true
 end
 
+-- url=https://archive.org/download/cylums-final-burn-neo-rom-collection/Gamelist.txt
+-- return table of game list
+function cylum_load_gamelist(url)
+	local game_list
+	
+	print("Downloading Gamelist.txt ...")
+	local rc, headers, content = http.request(url)
+	if rc ~= 0 then
+		print("Error: "..http.error(rc), rc)
+		return nil
+	end
+	game_list = {}
+	print("Importing Gamelist.txt ...")
+	for line in content:gmatch("[^\r\n]+") do
+		local game_id, game_year, game_publisher, game_genre, game_player, game_title
+		if #line > 60 then
+			game_id = line:sub(1,12):gsub("%s*%-*%s*","")
+			game_year = line:sub(13,16)
+			game_publisher = line:sub(21,49):gsub("%s*%-+%s*","")
+			game_genre = line:sub(50,69):gsub("%s*%-+%s*","")
+			game_player = line:sub(70,72)
+			game_title = line:sub(76,-1):gsub("%s%-+","")
+			game_list[game_id] = {game_year, game_publisher, game_genre, game_player, game_title}
+		end
+	end
+	return game_list
+end
+
+
+-- user_url= https://archive.org/download/cylums-final-burn-neo-rom-collection/Cylum%27s%20FinalBurn%20Neo%20ROM%20Collection%20%2802-18-21%29/
+function cylum_archive_generate_db(user_url, category)
+	local fo, output_fname, rc, headers, content, nn, list, game_data
+	if user_url == "" or user_url == nil then
+		return false
+	end
+	
+	category = category or "general"
+	if user_url:match('/download/') then
+		output_fname = user_url:match('download/(.-)/')
+	else
+		print("Error input url.\nExample: https://archive.org/download/cylums-final-burn-neo-rom-collection/Cylum%27s%20FinalBurn%20Neo%20ROM%20Collection%20%2802-18-21%29/")
+		return false
+	end
+	list = cylum_load_gamelist("https://archive.org/download/"..output_fname.."/Gamelist.txt")
+	if list == nil then
+		return false
+	end
+	
+	output_fname = output_fname:gsub("%W","_")..".csv"
+	fo = io.open(output_fname, "w")
+	if fo == nil then
+		print('Error open a file '..output_fname)
+		return false
+	end
+	
+	print("Downloading database content ...")
+	rc, headers, content = http.request(user_url)
+	if rc ~= 0 then
+		print("Error: "..http.error(rc), rc)
+		return false
+	end
+	
+	fo:write("#category="..category.."\n")
+	fo:write("#url="..user_url.."\n")
+	nn = 0
+	print("Generating database ...")
+	for w1,w2,w3 in content:gmatch('<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>') do
+		if w1:match("%.jpg$") or w1:match("%.torrent$") or w1:match("%.xml$") or w1:match("%.sqlite$") 
+		or w3:match("%-") or w1:match("^/details/") or w2:match("parent directory")
+		then
+			-- print("Ignore: ", w1)
+		else
+			w2 = w2:gsub("&amp;", "&")
+			w2 = w2:gsub("%.%w+$", "")
+			game_data = list[w2]
+			if game_data == nil then
+				fo:write(w1.."|"..w2.."|"..w3.."\n")
+			else
+				fo:write(string.format("%s|%s|%s - %s - %s - ©%s, %s\n", w1, game_data[5], w3, game_data[3], game_data[4], game_data[1], game_data[2]))
+			end
+			nn = nn + 1
+		end
+	end
+	fo:close()
+	print("Successfully process "..nn.." data")
+	return true
+end
+
 if #arg == 1 then
 	archive_find_db(arg[1])
 elseif #arg == 2 then
@@ -378,6 +466,9 @@ else
 	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" ", arg[0]))
 	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" \"NES\"", arg[0]))
 	print(string.format("\t#> lua %s create \"nes-roms\" ", arg[0]))
+	
+	-- Test user Cylum database
+	-- cylum_archive_generate_db("https://archive.org/download/cylums-final-burn-neo-rom-collection/Cylum%27s%20FinalBurn%20Neo%20ROM%20Collection%20%2802-18-21%29/")
 	
 	-- content = [[
 -- PS3_GAMES_AITUS
