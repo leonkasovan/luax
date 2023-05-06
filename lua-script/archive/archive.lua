@@ -244,9 +244,8 @@ table td.plus {
 	<thead>
 		<tr>
 			<th>Title</th>
-			<th>Size</th>
-			<th>Upload Folder</th>
-			<th>Direct<br/>Download</th>
+			<th>System</th>
+			<th>Collection</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -266,21 +265,27 @@ table td.plus {
 						category = line:match("^#category=(.-)$")
 						if category == nil then
 							print(file, "Invalid db. Can't find category")
+							print(line)
 							return false
 						end
 					elseif nn == 2 then
 						user_url = line:match('^#url=(.-)$')
-						folder_id = line:match('download/(.-)$')	-- ini buat apa? bisa di delete
+						folder_id = line:match('download/(.-)/') or line:match('download/(.-)$')
 						if user_url == nil or folder_id == nil then
-							print("Invalid db. Can't find user_url or folder_id")
+							print(file, "Invalid db. Can't find user_url or folder_id")
+							print(line)
 							return false
+						else
+							if user_url:sub(-1,-1) ~= "/" then
+								user_url = user_url.."/"
+							end
 						end
 					else
 						if line:byte(1) ~= 35 and line ~= "" then
 							f = csv.parse(line, '|')
 							if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
 								if user_url == nil then print("user_url=nil", line) end
-								fo:write("<tr><td>"..f[2].."</td><td align='right'>"..f[3].."</td><td><a href='"..user_url.."'>"..folder_id.."</a></td><td><a href='"..user_url.."/"..f[1].."'>DL</a></td></tr>\n")
+								fo:write(string.format("<tr><td align='left'><a href='%s%s'>%s</a><br/><p style='color:#AAAAAA;font-size:9px;'>%s</p></td><td>%s</td><td><a href='%s'>%s</a></td></tr>\n", user_url, f[1], f[2], f[3], category, user_url, folder_id))
 							end
 						end
 					end
@@ -361,14 +366,51 @@ end
 
 -- user_url=https://archive.org/download/cylums-final-burn-neo-rom-collection/Cylum%27s%20FinalBurn%20Neo%20ROM%20Collection%20%2802-18-21%29/
 -- user_url=https://archive.org/download/cylums-snes-rom-collection/Cylum%27s%20SNES%20ROM%20Collection%20%2802-14-2021%29.zip/
+-- user_url=https://archive.org/download/cylums-snes-rom-collection
 function cylum_archive_generate_db(user_url, category)
-	local fo, output_fname, rc, headers, content, nn, list, game_data, content_format,w1,w2,w3
+	local fo, output_fname, rc, headers, content, nn, list, game_data, content_format,w1,w2,w3, user_url2
 	if user_url == "" or user_url == nil then
 		return false
 	end
 	
+	print("Process url: "..user_url)
 	category = category or "general"
-	output_fname = user_url:match('download/(.-)/')
+	
+	if user_url:sub(-1,-1) == "/" then	-- request 2 level url "https://archive.org/download/cylums-snes-rom-collection/Cylum%27s%20SNES%20ROM%20Collection%20%2802-14-2021%29.zip/"
+		user_url2 = user_url
+		output_fname = user_url:match('download/(.-)/')
+	else -- request 1 level url "https://archive.org/details/cylums-snes-rom-collection"
+		if user_url:match('/details/') then
+			user_url = user_url:gsub('/details/','/download/')
+			output_fname = user_url:match('download/(.-)$')
+		elseif user_url:match('/download/') then
+			output_fname = user_url:match('download/(.-)$')
+		else
+			output_fname = user_url
+			user_url = 'https://archive.org/download/'..user_url
+		end
+		
+		content_format = nil
+		rc, headers, content = http.request(user_url)
+		if rc ~= 0 then
+			print("Error: "..http.error(rc), rc)
+			return false
+		end
+		for link,desc in content:gmatch('<td><a href="(.-)">(.-)</a>') do
+			if desc:sub(-1,-1) == "/" then
+				-- print(link,desc)
+				print("\tContent format: folder")
+				content_format = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+				user_url2 = user_url.."/"..link
+			elseif desc:sub(-4,-1) == ".zip" then
+				-- print(link,desc)
+				print("\tContent format: zipped")
+				content_format = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
+				user_url2 = user_url.."/"..link.."/"
+			end
+		end	
+	end
+	
 	if output_fname == nil then
 		print("Error input url.\nExample: https://archive.org/download/cylums-final-burn-neo-rom-collection/Cylum%27s%20FinalBurn%20Neo%20ROM%20Collection%20%2802-18-21%29/")
 		return false
@@ -378,41 +420,65 @@ function cylum_archive_generate_db(user_url, category)
 		return false
 	end
 	
-	print("Downloading database content ...")
-	rc, headers, content = http.request(user_url)
+	print("Downloading database content from url2...")
+	print("url2: "..user_url2)
+	rc, headers, content = http.request(user_url2)
 	if rc ~= 0 then
 		print("Error: "..http.error(rc), rc)
 		return false
 	end
 
-	print("Generating database "..output_fname.." ...")	
-	content_format = nil
-	w3 = content:match("<title>(.-)</title>"):sub(-7,-1)	-- guess content format based on TITLE
-	if w3 == "Archive" then
-		print("\tContent format: zipped")
-		content_format = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
-	elseif w3 == "listing" then
-		print("\tContent format: folder")
-		content_format = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
-	else
-		print('Error unknown content format: not zipped and not folder')
-		return false
+	if content_format == nil then
+		w3 = content:match("<title>(.-)</title>"):sub(-7,-1)	-- guess content format based on TITLE
+		if w3 == "Archive" then
+			print("\tContent format: zipped")
+			content_format = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
+		elseif w3 == "listing" then
+			print("\tContent format: folder")
+			content_format = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+		else
+			print('Error unknown content format: not zipped and not folder')
+			return false
+		end
 	end
 
-	output_fname = output_fname:gsub("%W","_")..".csv"
+	-- count char / in user_url2 to generate output_fname (special for sub folder)
+	local charcount = 0
+	for i=1, #user_url2 do
+		if user_url2:sub(i, i) == "/" then
+			charcount = charcount + 1
+		end
+	end
+	
+	if charcount == 7 then	-- process sub folder
+		local subfolder = user_url2:match(".*/(.-)/$")
+		subfolder = subfolder:gsub('%%(%x%x)', function(hex)
+			return string.char(tonumber(hex, 16))
+		end)
+		subfolder = subfolder:gsub("%W","_")
+		
+		output_fname = output_fname:gsub("%W","_").."_"..subfolder..".csv"
+	else -- process base folder
+		output_fname = output_fname:gsub("%W","_")..".csv"
+	end
+
+	print("Generating database "..output_fname.." ...")
 	fo = io.open(output_fname, "w")
 	if fo == nil then
 		print('Error open a file '..output_fname)
 		return false
 	end	
 	fo:write("#category="..category.."\n")
-	fo:write("#url="..user_url.."\n")
+	fo:write("#url="..user_url2.."\n")
 	nn = 0
 	for w1,w2,w3 in content:gmatch(content_format) do
 		if w1:match("%.jpg$") or w1:match("%.torrent$") or w1:match("%.xml$") or w1:match("%.sqlite$") 
-		or w3:match("%-") or w1:match("^/details/") or w2:match("parent directory")
+		or w1:match("^/details/") or w2:match("parent directory")
 		then
 			print("\tIgnore: ", w1)
+		elseif w3:match("%-") then
+			print("Process sub folder: "..w1)
+			cylum_archive_generate_db(user_url2..w1, category)
 		else
 			w2 = w2:gsub("&amp;", "&")
 			w2 = w2:gsub("%.%w+$", "")
@@ -508,13 +574,31 @@ else
 	print(string.format("\t#> lua %s user kodi_amp_spmc_canada", arg[0]))
 	print(string.format("\t#> lua %s create \"https://archive.org/download/nes-roms\" ", arg[0]))
 	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" ", arg[0]))
-	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" \"NES\"", arg[0]))
+	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" \"nes\"", arg[0]))
 	print(string.format("\t#> lua %s create \"nes-roms\" ", arg[0]))
+	print("=================================================\n")
 	
-	-- Test user Cylum database
-	-- cylum_archive_generate_db("https://archive.org/download/cylums-final-burn-neo-rom-collection/Cylum%27s%20FinalBurn%20Neo%20ROM%20Collection%20%2802-18-21%29/", "fbneo")
+-- Test user Cylum database
+-- cylum_archive_generate_db("https://archive.org/download/cylums-game-boy-advance-rom-collection_202102/Cylum%27s%20Game%20Boy%20Advance%20ROM%20Collection%20%2802-16-2021%29/","gba")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-final-burn-neo-rom-collection/Cylum%27s%20FinalBurn%20Neo%20ROM%20Collection%20%2802-18-21%29/", "fbneo")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-final-burn-neo-rom-collection")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-snes-rom-collection/Cylum%27s%20SNES%20ROM%20Collection%20%2802-14-2021%29.zip/","snes")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-snes-rom-collection", "snes")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-nes-rom-collection/Cylum%27s%20NES%20ROM%20Collection%20%2802-16-2021%29.zip/","nes")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-sega-genesis-rom-collection/Cylum%27s%20Sega%20Genesis%20ROM%20Collection%20%2802-16-2021%29.zip/","sega-gen")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-sega-master-system-rom-collection/Cylum%27s%20Sega%20Master%20System%20ROM%20Collection%20%2802-16-2021%29.zip/","sega-ms")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-sega-game-gear-collection/Cylum%27s%20Sega%20Game%20Gear%20Collection%20%2802-14-2021%29.zip/","sega-gg")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-sega-32-x-rom-collection/Cylum%27s%20Sega%2032X%20ROM%20Collection%20%2802-14-2021%29.zip/","sega-32x")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-playstation-rom-collection/Cylum%27s%20PlayStation%20ROM%20Collection%20%2802-22-2021%29/Japan/","psx")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-nintendo-ds-rom-collection/Cylum%27s%20Nintendo%20DS%20ROM%20Collection/", "nds")
+-- cylum_archive_generate_db("https://archive.org/details/cylums-game-boy-advance-rom-collection_202102", "gba")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-game-boy-advance-rom-collection_202102", "gba")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-game-boy-advance-rom-collection_202102/Cylum%27s%20Game%20Boy%20Advance%20ROM%20Collection%20%2802-16-2021%29/", "gba")
+-- cylum_archive_generate_db("https://archive.org/download/cylums-nintendo-64-rom-collection", "n64")
+cylum_archive_generate_db("https://archive.org/download/cylums-playstation-rom-collection/Cylum%27s%20PlayStation%20ROM%20Collection%20%2802-22-2021%29/", "psx")
+-- cylum_archive_generate_db("", "")
 	
-	-- content = [[
+-- content = [[
 -- PS3_GAMES_AITUS
 -- PS3_GAMES_AITUS_2
 -- PS3_GAMES_AITUS_OTHER
@@ -522,9 +606,32 @@ else
 -- PS3_PSN_2
 -- ]]
 
-	-- for line in content:gmatch("[^\r\n]+") do
-		-- print(line)
-		-- archive_generate_db(line,"PS3")
+-- for line in content:gmatch("[^\r\n]+") do
+	-- print(line)
+	-- archive_generate_db(line,"PS3")
+-- end
+
+-- function load_file(filename)
+	-- local fi, content
+
+	-- fi = io.open(filename, "r")
+	-- if fi == nil then
+		-- print("[error] Load file "..filename)
+		-- return nil
 	-- end
+	-- content = fi:read("*a")
+	-- fi:close()
+	-- return content
+-- end
+	
+	-- local content = load_file('content.htm')
+	-- for link,desc in content:gmatch('<td><a href="(.-)">(.-)</a>') do
+		-- if desc:sub(-1,-1) == "/" then
+			-- print(link,desc)
+		-- elseif desc:sub(-4,-1) == ".zip" then
+			-- print(link,desc)
+		-- end
+	-- end
+	
 	return true
 end
