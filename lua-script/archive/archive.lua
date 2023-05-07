@@ -5,6 +5,43 @@
 -- 19:37 22 April 2023, Dhani Novan, Jakarta, Cempaka Putih
 
 dofile('../strict.lua')
+dofile('../common.lua')
+
+-- Return table of game category, available in local csv database
+function archive_get_local_category()
+	local res = {}
+	local nn = 0
+	
+	for file in lfs.dir(".") do
+		if file ~= "." and file ~= ".." then
+			local attr = lfs.attributes(file)
+			local category, line
+			if attr.mode == "file" and file:match("%.csv$") then
+				local fi = io.open(file, "r")
+				if fi then
+					-- Read the first line (category)
+					line = fi:read("*line")
+					category = line:match("^#category=(.-)$")
+					if category == nil then
+						print(file, "Invalid db. Can't find category")
+						print(line)
+					else
+						if res[category] == nil then
+							res[category] = 1
+							nn = nn + 1
+						else
+							res[category] = res[category] + 1
+						end
+					end
+					fi:close()
+				end
+			end
+		end
+	end
+	print("There are "..tostring(nn).." categories in this local database")
+	table.sort(res, function(a, b) return a.key < b.key end)
+	return res
+end
 
 -- List uploads by user_id
 -- Usage: archive_user_uploads('aitus95')
@@ -92,28 +129,55 @@ function archive_generate_db(user_url, category)
 end
 
 function archive_find_db(keyword)
-	local f
-	local nn = 0
+	local f, category
+	local no = 0	-- counter of data found matched
+	local nn = 0	-- line number
 	local lower_keyword = keyword:lower()
-	
+
+	os.execute("echo \27[0m")	-- activate color in console (Windows)
 	for file in lfs.dir(".") do
+		local user_url, folder_id
 		if file ~= "." and file ~= ".." then
 			local attr = lfs.attributes(file)
 			if attr.mode == "file" and file:match("%.csv$") then
+				nn = 0
 				for line in io.lines(file) do
-					if line:byte(1) ~= 35 then
-						f = csv.parse(line, '|')
-						if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
-							print(f[2], f[3], file)
-							nn = nn + 1
+					nn = nn + 1
+					if nn == 1 then 
+						category = line:match("^#category=(.-)$")
+						if category == nil then
+							print(file, "Invalid db. Can't find category")
+							print(line)
+							return false
+						end
+					elseif nn == 2 then
+						user_url = line:match('^#url=(.-)$')
+						folder_id = line:match('download/(.-)/') or line:match('download/(.-)$')
+						if user_url == nil or folder_id == nil then
+							print(file, "Invalid db. Can't find user_url or folder_id")
+							print(line)
+							return false
+						else
+							if user_url:sub(-1,-1) ~= "/" then
+								user_url = user_url.."/"
+							end
+						end
+					else
+						if line:byte(1) ~= 35 then
+							f = csv.parse(line, '|')
+							if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
+								no = no + 1
+								-- print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    File: %s\n    Link: %s%s\n", no, f[2], category, f[3], file, user_url, f[1]))
+								print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    Link: %s%s\n", no, f[2], category, f[3], user_url, f[1]))
+							end
 						end
 					end
 				end
 			end
 		end
 	end
-	print("\n=====================================\nFound "..nn.." data")
-	return nn
+	print("\n=====================================\nFound "..no.." data")
+	return no
 end
 
 function archive_find_db_and_open(keyword)
@@ -373,6 +437,9 @@ end
 -- user_url=https://archive.org/download/cylums-snes-rom-collection
 function cylum_archive_generate_db(user_url, category)
 	local fo, output_fname, rc, headers, content, nn, list, game_data, content_format,w1,w2,w3, user_url2
+	local content_format_zipped = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
+	local content_format_folder = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+	
 	if user_url == "" or user_url == nil then
 		return false
 	end
@@ -400,16 +467,18 @@ function cylum_archive_generate_db(user_url, category)
 			print("Error: "..http.error(rc), rc)
 			return false
 		end
+		
+		-- guess content format based on url found
 		for link,desc in content:gmatch('<td><a href="(.-)">(.-)</a>') do
 			if desc:sub(-1,-1) == "/" then
 				-- print(link,desc)
 				print("Content format: folder")
-				content_format = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+				content_format = content_format_folder
 				user_url2 = user_url.."/"..link
 			elseif desc:sub(-4,-1) == ".zip" then
 				-- print(link,desc)
 				print("Content format: zipped")
-				content_format = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
+				content_format = content_format_zipped
 				user_url2 = user_url.."/"..link.."/"
 			end
 		end	
@@ -433,13 +502,14 @@ function cylum_archive_generate_db(user_url, category)
 	end
 
 	if content_format == nil then
-		w3 = content:match("<title>(.-)</title>"):sub(-7,-1)	-- guess content format based on TITLE
-		if w3 == "Archive" then
+		local title
+		title = content:match("<title>(.-)</title>"):sub(-7,-1)	-- guess content format based on TITLE
+		if title == "Archive" then
 			print("Content format: zipped")
-			content_format = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
-		elseif w3 == "listing" then
+			content_format = content_format_zipped
+		elseif title == "listing" then
 			print("Content format: folder")
-			content_format = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+			content_format = content_format_folder
 		else
 			print('Error unknown content format: not zipped and not folder')
 			return false
@@ -489,6 +559,9 @@ function cylum_archive_generate_db(user_url, category)
 			w2 = w2:gsub(".-/", "")
 			-- print("w2: ", w2)
 			game_data = list[w2]
+			if is_string_all_digit(w3) then
+				w3 = format_bytes(w3)
+			end
 			if game_data == nil then
 				fo:write(string.format("%s|%s|%s\n",w1, w2, w3))
 			else
@@ -634,6 +707,9 @@ else
 	-- print(line)
 	-- archive_generate_db(line,"ps2")
 -- end
-	
+
+	for i,v in pairs(archive_get_local_category()) do
+		print(i,v)
+	end
 	return true
 end
