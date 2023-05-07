@@ -4,8 +4,60 @@
 -- https://archive.org/download/nes-romset-ultra-us
 -- 19:37 22 April 2023, Dhani Novan, Jakarta, Cempaka Putih
 
+-- TODO:
+-- Add thumbnail in "open" use "http://thumbnails.libretro.com/"
+-- Enhance "find" and "open" for 2 keyword (done) and optimize it (not yet)
+-- Enhance "find" and "open" for filtering based on category
+-- Add support read compressed db
+
+
 dofile('../strict.lua')
 dofile('../common.lua')
+
+-- line = "one two three four"
+-- keyword = "one" return true
+-- keyword = "one two" return true
+-- keyword = "one five" return false
+-- keyword = "one -four" return false
+function find_in_string(line, keyword)
+	local found
+	local tmp, words
+	local low_case_str
+	
+	if line == nil or keyword == nil or #line == 0 or #keyword == 0 then
+		return false
+	end
+	
+	-- split each word in keyword and put in new table with criteria word's length > 0
+	tmp = csv.parse(keyword:lower(),' ')
+	words = {}
+	for i,v in pairs(tmp) do
+		if #v > 0 then
+			words[#words + 1] = v
+		end
+	end
+	
+	found = true
+	low_case_str = line:lower()
+	for i,v in pairs(words) do
+		if v:sub(1,1) == '-' then	-- process exclude operator
+			if low_case_str:find(v:sub(2,-1), 1, true) ~= nil then
+				found = found and false
+				break	-- shortcut evaluation
+			else
+				found = found and true
+			end
+		else -- process normal (include) word
+			if low_case_str:find(v, 1, true) ~= nil then
+				found = found and true
+			else
+				found = found and false
+				break	-- shortcut evaluation
+			end
+		end
+	end
+	return found
+end
 
 -- Return table of game category, available in local csv database
 function archive_get_local_category()
@@ -132,7 +184,7 @@ function archive_find_db(keyword)
 	local f, category
 	local no = 0	-- counter of data found matched
 	local nn = 0	-- line number
-	local lower_keyword = keyword:lower()
+	-- local lower_keyword = keyword:lower()
 
 	os.execute("echo \27[0m")	-- activate color in console (Windows)
 	for file in lfs.dir(".") do
@@ -165,7 +217,8 @@ function archive_find_db(keyword)
 					else
 						if line:byte(1) ~= 35 then
 							f = csv.parse(line, '|')
-							if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
+							-- if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
+							if find_in_string(f[2], keyword) then
 								no = no + 1
 								-- print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    File: %s\n    Link: %s%s\n", no, f[2], category, f[3], file, user_url, f[1]))
 								print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    Link: %s%s\n", no, f[2], category, f[3], user_url, f[1]))
@@ -183,7 +236,7 @@ end
 function archive_find_db_and_open(keyword)
 	local f, fo
 	local nn = 0
-	local lower_keyword = keyword:lower()
+	-- local lower_keyword = keyword:lower()
 	
 	fo = io.open("result.htm", "w")
 	if fo == nil then
@@ -351,7 +404,8 @@ table td.plus {
 					else
 						if line:byte(1) ~= 35 and line ~= "" then
 							f = csv.parse(line, '|')
-							if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
+							-- if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
+							if find_in_string(f[2], keyword) then
 								if user_url == nil then print("user_url=nil", line) end
 								fo:write(string.format("<tr><td align='left'><a href='%s%s'>%s</a><br/><p style='color:#AAAAAA;font-size:9px;'>%s</p></td><td>%s</td><td><a href='%s'>%s</a></td></tr>\n", user_url, f[1], f[2], f[3], category, user_url, folder_id))
 							end
