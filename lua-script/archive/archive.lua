@@ -194,8 +194,6 @@ function archive_find_db(keyword)
 	if nn ~= nil then
 		selected_category = keyword:match("^(.-)\:")
 		keyword = keyword:sub(nn+1)
-		print("selected_category", selected_category)
-		print("new keyword", keyword)
 	end
 	
 	for file in lfs.dir(".") do
@@ -214,7 +212,6 @@ function archive_find_db(keyword)
 						fi:close()
 						return false
 					end
-					-- print(line)
 					
 					line = fi:read("*l")
 					user_url = line:match('^#url=(.-)$')
@@ -228,7 +225,6 @@ function archive_find_db(keyword)
 							user_url = user_url.."/"
 						end
 					end
-					-- print(line)
 					
 					if selected_category == nil or selected_category:find(category,1,true) ~= nil then
 						line = fi:read("*l")
@@ -255,7 +251,15 @@ end
 function archive_find_db_and_open(keyword)
 	local f, fo
 	local nn = 0
+	local selected_category = nil
 	-- local lower_keyword = keyword:lower()
+	
+	-- selected_category is requested
+	nn = keyword:find(":")	-- borrow nn variable
+	if nn ~= nil then
+		selected_category = keyword:match("^(.-)\:")
+		keyword = keyword:sub(nn+1)
+	end
 	
 	fo = io.open("result.htm", "w")
 	if fo == nil then
@@ -398,38 +402,45 @@ table td.plus {
 			local user_url
 			
 			if attr.mode == "file" and file:match("%.csv$") then
-				nn = 0
-				for line in io.lines(file) do
-					nn = nn + 1
-					if nn == 1 then 
-						category = line:match("^#category=(.-)$")
-						if category == nil then
-							print(file, "Invalid db. Can't find category")
-							print(line)
-							return false
-						end
-					elseif nn == 2 then
-						user_url = line:match('^#url=(.-)$')
-						folder_id = line:match('download/(.-)/') or line:match('download/(.-)$')
-						if user_url == nil or folder_id == nil then
+				local line
+				local fi = io.open(file, "r")
+				if fi then
+					line = fi:read("*l")
+					category = line:match("^#category=(.-)$")
+					if category == nil then
+						print(file, "Invalid db. Can't find category")
+						print(line)
+						fi:close()
+						return false
+					end
+					
+					line = fi:read("*l")
+					user_url = line:match('^#url=(.-)$')
+					folder_id = line:match('download/(.-)/') or line:match('download/(.-)$')
+					if user_url == nil or folder_id == nil then
 							print(file, "Invalid db. Can't find user_url or folder_id")
-							print(line)
-							return false
-						else
-							if user_url:sub(-1,-1) ~= "/" then
-								user_url = user_url.."/"
-							end
-						end
+						print(line)
+						fi:close()
+						return false
 					else
-						if line:byte(1) ~= 35 and line ~= "" then
-							f = csv.parse(line, '|')
-							-- if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
-							if find_in_string(f[2], keyword) then
-								if user_url == nil then print("user_url=nil", line) end
-								fo:write(string.format("<tr><td align='left'><a href='%s%s'>%s</a><br/><p style='color:#AAAAAA;font-size:9px;'>%s</p></td><td>%s</td><td><a href='%s'>%s</a></td></tr>\n", user_url, f[1], f[2], f[3], category, user_url, folder_id))
-							end
+						if user_url:sub(-1,-1) ~= "/" then
+							user_url = user_url.."/"
 						end
 					end
+					
+					if selected_category == nil or selected_category:find(category,1,true) ~= nil then
+						line = fi:read("*l")
+						while line do
+							if line:byte(1) ~= 35 then	-- first char is not #
+								f = csv.parse(line, '|')
+								if find_in_string(f[2], keyword) then
+									fo:write(string.format("<tr><td align='left'><a href='%s%s'>%s</a><br/><p style='color:#AAAAAA;font-size:9px;'>%s</p></td><td>%s</td><td><a href='%s'>%s</a></td></tr>\n", user_url, f[1], f[2], f[3], category, user_url, folder_id))
+								end
+							end
+							line = fi:read("*l")
+						end
+					end
+					fi:close()
 				end
 			end
 		end
