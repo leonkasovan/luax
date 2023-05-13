@@ -7,7 +7,7 @@
 -- TODO:
 -- Add thumbnail in "open" use "http://thumbnails.libretro.com/"
 -- Enhance "find" and "open" for 2 keyword (done) and optimize it (not yet)
--- Enhance "find" and "open" for filtering based on category
+-- Enhance "find" and "open" for filtering based on category, sample: "snes:street fighter"
 -- Add support read compressed db
 
 
@@ -184,47 +184,66 @@ function archive_find_db(keyword)
 	local f, category
 	local no = 0	-- counter of data found matched
 	local nn = 0	-- line number
+	local selected_category = nil
 	-- local lower_keyword = keyword:lower()
 
 	os.execute("echo \27[0m")	-- activate color in console (Windows)
+	
+	-- selected_category is requested
+	nn = keyword:find(":")	-- borrow nn variable
+	if nn ~= nil then
+		selected_category = keyword:match("^(.-)\:")
+		keyword = keyword:sub(nn+1)
+		print("selected_category", selected_category)
+		print("new keyword", keyword)
+	end
+	
 	for file in lfs.dir(".") do
 		local user_url, folder_id
 		if file ~= "." and file ~= ".." then
 			local attr = lfs.attributes(file)
 			if attr.mode == "file" and file:match("%.csv$") then
-				nn = 0
-				for line in io.lines(file) do
-					nn = nn + 1
-					if nn == 1 then 
-						category = line:match("^#category=(.-)$")
-						if category == nil then
-							print(file, "Invalid db. Can't find category")
-							print(line)
-							return false
-						end
-					elseif nn == 2 then
-						user_url = line:match('^#url=(.-)$')
-						folder_id = line:match('download/(.-)/') or line:match('download/(.-)$')
-						if user_url == nil or folder_id == nil then
-							print(file, "Invalid db. Can't find user_url or folder_id")
-							print(line)
-							return false
-						else
-							if user_url:sub(-1,-1) ~= "/" then
-								user_url = user_url.."/"
-							end
-						end
+				local line
+				local fi = io.open(file, "r")
+				if fi then
+					line = fi:read("*l")
+					category = line:match("^#category=(.-)$")
+					if category == nil then
+						print(file, "Invalid db. Can't find category")
+						print(line)
+						fi:close()
+						return false
+					end
+					-- print(line)
+					
+					line = fi:read("*l")
+					user_url = line:match('^#url=(.-)$')
+					if user_url == nil then
+						print(file, "Invalid db. Can't find user_url")
+						print(line)
+						fi:close()
+						return false
 					else
-						if line:byte(1) ~= 35 then
-							f = csv.parse(line, '|')
-							-- if (f[2]:lower()):find(lower_keyword, 1, true) ~= nil then
-							if find_in_string(f[2], keyword) then
-								no = no + 1
-								-- print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    File: %s\n    Link: %s%s\n", no, f[2], category, f[3], file, user_url, f[1]))
-								print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    Link: %s%s\n", no, f[2], category, f[3], user_url, f[1]))
-							end
+						if user_url:sub(-1,-1) ~= "/" then
+							user_url = user_url.."/"
 						end
 					end
+					-- print(line)
+					
+					if selected_category == nil or selected_category:find(category,1,true) ~= nil then
+						line = fi:read("*l")
+						while line do
+							if line:byte(1) ~= 35 then	-- first char is not #
+								f = csv.parse(line, '|')
+								if find_in_string(f[2], keyword) then
+									no = no + 1
+									print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    Link: %s%s\n", no, f[2], category, f[3], user_url, f[1]))
+								end
+							end
+							line = fi:read("*l")
+						end
+					end
+					fi:close()
 				end
 			end
 		end
