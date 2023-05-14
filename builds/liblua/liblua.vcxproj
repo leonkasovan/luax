@@ -223,6 +223,7 @@
     <ClCompile Include="..\..\lua-library-src\luapcre\pcre_valid_utf8.c" />
     <ClCompile Include="..\..\lua-library-src\luapcre\pcre_version.c" />
     <ClCompile Include="..\..\lua-library-src\luapcre\pcre_xclass.c" />
+    <ClCompile Include="..\..\lua-library-src\luazip\luazip.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\lua-library-src\luapcre\algo.h" />

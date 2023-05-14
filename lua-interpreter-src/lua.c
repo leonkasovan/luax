@@ -111,9 +111,9 @@ static int docall (lua_State *L, int narg, int clear) {
 static void print_version (void) {
   l_message(NULL, LUA_RELEASE "  " LUA_COPYRIGHT);
 #ifdef WIN32
-  l_message(NULL, "with eXtra Library : http iup json pcre csv gzio lfs");
+  l_message(NULL, "with eXtra Library : http iup json pcre csv gzio lfs zip");
 #else
-  l_message(NULL, "with eXtra Library : http json pcre csv gzio lfs");
+  l_message(NULL, "with eXtra Library : http json pcre csv gzio lfs zip");
 #endif
 }
 

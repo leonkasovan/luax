@@ -180,8 +180,49 @@ function archive_generate_db(user_url, category)
 	return true
 end
 
+function find_db(fi, no, selected_category, keyword)
+	local user_url, folder_id, line, category, f
+	
+	line = fi:read("*l")
+	category = line:match("^#category=(.-)$")
+	if category == nil then
+		print(file, "Invalid db. Can't find category")
+		print(line)
+		-- fi:close()
+		return no
+	end
+	
+	line = fi:read("*l")
+	user_url = line:match('^#url=(.-)$')
+	if user_url == nil then
+		print(file, "Invalid db. Can't find user_url")
+		print(line)
+		-- fi:close()
+		return no
+	else
+		if user_url:sub(-1,-1) ~= "/" then
+			user_url = user_url.."/"
+		end
+	end
+	
+	if selected_category == nil or selected_category:find(category,1,true) ~= nil then
+		line = fi:read("*l")
+		while line do
+			if line:byte(1) ~= 35 then	-- first char is not #
+				f = csv.parse(line, '|')
+				if find_in_string(f[2], keyword) then
+					no = no + 1
+					print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    Link: %s%s\n", no, f[2], category, f[3], user_url, f[1]))
+				end
+			end
+			line = fi:read("*l")
+		end
+	end
+
+	return no
+end
+
 function archive_find_db(keyword)
-	local f, category
 	local no = 0	-- counter of data found matched
 	local nn = 0	-- line number
 	local selected_category = nil
@@ -197,48 +238,13 @@ function archive_find_db(keyword)
 	end
 	
 	for file in lfs.dir(".") do
-		local user_url, folder_id
 		if file ~= "." and file ~= ".." then
 			local attr = lfs.attributes(file)
 			if attr.mode == "file" and file:match("%.csv$") then
 				local line
 				local fi = io.open(file, "r")
 				if fi then
-					line = fi:read("*l")
-					category = line:match("^#category=(.-)$")
-					if category == nil then
-						print(file, "Invalid db. Can't find category")
-						print(line)
-						fi:close()
-						return false
-					end
-					
-					line = fi:read("*l")
-					user_url = line:match('^#url=(.-)$')
-					if user_url == nil then
-						print(file, "Invalid db. Can't find user_url")
-						print(line)
-						fi:close()
-						return false
-					else
-						if user_url:sub(-1,-1) ~= "/" then
-							user_url = user_url.."/"
-						end
-					end
-					
-					if selected_category == nil or selected_category:find(category,1,true) ~= nil then
-						line = fi:read("*l")
-						while line do
-							if line:byte(1) ~= 35 then	-- first char is not #
-								f = csv.parse(line, '|')
-								if find_in_string(f[2], keyword) then
-									no = no + 1
-									print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    Link: %s%s\n", no, f[2], category, f[3], user_url, f[1]))
-								end
-							end
-							line = fi:read("*l")
-						end
-					end
+					no = find_db(fi, no, selected_category, keyword)
 					fi:close()
 				end
 			end
@@ -659,6 +665,7 @@ function cylum_archive_generate_db(user_url, category)
 	return true
 end
 
+local t1 = os.clock()
 if #arg == 1 then
 	archive_find_db(arg[1])
 elseif #arg == 2 then
@@ -704,15 +711,15 @@ elseif #arg == 3 then
 		archive_generate_db(arg[2], arg[3])
 	end
 else
-	local nn = 0
-	for file in lfs.dir(".") do
-		if file ~= "." and file ~= ".." then
-			local attr = lfs.attributes(file)
-			if attr.mode == "file" and file:match("%.csv$") then
-				nn = nn + 1
-			end
-		end
-	end
+	-- local nn = 0
+	-- for file in lfs.dir(".") do
+		-- if file ~= "." and file ~= ".." then
+			-- local attr = lfs.attributes(file)
+			-- if attr.mode == "file" and file:match("%.csv$") then
+				-- nn = nn + 1
+			-- end
+		-- end
+	-- end
 	
 	print(string.format("Manage(create, find) archieve database from archieve.org.\nLocal database: "..nn.." csv file(s)\n\nUsage: \n\t#> lua %s [keyword] => Find keyword in local database", arg[0]))
 	print(string.format("\t#> lua %s find [keyword] => Find keyword in local database", arg[0]))
@@ -792,8 +799,8 @@ else
 	-- archive_generate_db(line,"ps2")
 -- end
 
-	for i,v in pairs(archive_get_local_category()) do
-		print(i,v)
-	end
-	return true
+-- for i,v in pairs(archive_get_local_category()) do
+	-- print(i,v)
+-- end
 end
+print('Done in '..(os.clock()-t1)..' seconds')
