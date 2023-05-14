@@ -29,12 +29,16 @@ function find_in_string(line, keyword)
 	end
 	
 	-- split each word in keyword and put in new table with criteria word's length > 0
-	tmp = csv.parse(keyword:lower(),' ')
-	words = {}
-	for i,v in pairs(tmp) do
-		if #v > 0 then
-			words[#words + 1] = v
+	if type(keyword) == "string" then
+		tmp = csv.parse(keyword:lower(),' ')
+		words = {}
+		for i,v in pairs(tmp) do
+			if #v > 0 then
+				words[#words + 1] = v
+			end
 		end
+	else	-- table
+		words = keyword
 	end
 	
 	found = true
@@ -184,20 +188,18 @@ function find_db(fi, no, selected_category, keyword)
 	local user_url, folder_id, line, category, f
 	
 	line = fi:read("*l")
-	category = line:match("^#category=(.-)$")
+	category = line:match("^#category=(.*)$")
 	if category == nil then
-		print(file, "Invalid db. Can't find category")
+		print("Invalid db. Can't find category")
 		print(line)
-		-- fi:close()
 		return no
 	end
 	
 	line = fi:read("*l")
 	user_url = line:match('^#url=(.-)$')
 	if user_url == nil then
-		print(file, "Invalid db. Can't find user_url")
+		print("Invalid db. Can't find user_url")
 		print(line)
-		-- fi:close()
 		return no
 	else
 		if user_url:sub(-1,-1) ~= "/" then
@@ -226,7 +228,6 @@ function archive_find_db(keyword)
 	local no = 0	-- counter of data found matched
 	local nn = 0	-- line number
 	local selected_category = nil
-	-- local lower_keyword = keyword:lower()
 
 	os.execute("echo \27[0m")	-- activate color in console (Windows)
 	
@@ -237,15 +238,38 @@ function archive_find_db(keyword)
 		keyword = keyword:sub(nn+1)
 	end
 	
+	-- split words in here (not in the loop) for speed up 
+	local words = {}
+	for i,v in pairs(csv.parse(keyword:lower(),' ')) do
+		if #v > 0 then
+			words[#words + 1] = v
+		end
+	end	
+	
 	for file in lfs.dir(".") do
 		if file ~= "." and file ~= ".." then
 			local attr = lfs.attributes(file)
 			if attr.mode == "file" and file:match("%.csv$") then
-				local line
 				local fi = io.open(file, "r")
 				if fi then
-					no = find_db(fi, no, selected_category, keyword)
+					no = find_db(fi, no, selected_category, words)
 					fi:close()
+				else
+					print("[Error] Failed to open csv: "..file)
+				end
+			elseif attr.mode == "file" and file:match("%.zip$") then
+				local zipfile = zip.open(file)
+				if zipfile then
+					for entry in zipfile:files() do
+						local fi = zipfile:open(entry.filename)
+						if fi then
+							no = find_db(fi, no, selected_category, words)
+							fi:close()
+						end
+					end
+					zipfile:close()
+				else
+					print("[Error] Failed to open the zip archive: "..file)
 				end
 			end
 		end
