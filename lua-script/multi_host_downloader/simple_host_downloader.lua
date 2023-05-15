@@ -140,7 +140,7 @@ end
 
 -- Get list of url
 local urls = [[
-https://archive.org/download/MAME_2016_Arcade_Romsets/MAME%202016%20XML%20%28Arcade%20Only%29.xml
+https://archive.org/download/MAME_2015_arcade_romsets/mame2015.xml
 ]]
 
 -- Download url(s)
