@@ -140,9 +140,7 @@ end
 
 -- Get list of url
 local urls = [[
-https://archive.org/download/PS3_NOINTRO_USA__5/Marvel%20vs.%20Capcom%202%20-%20New%20Age%20of%20Heroes%20%28USA%29%20%28Trial%29.7z
-https://archive.org/download/PS3_NOINTRO_USA__5/Marvel%20vs.%20Capcom%202%20-%20New%20Age%20of%20Heroes%20%28USA%29%20%28Unlock%20Key%29.zip
-https://archive.org/download/PS3_NOINTRO_USA__5/Marvel%20vs.%20Capcom%202%20-%20New%20Age%20of%20Heroes%20%28USA%29%20%28v1.01%29%20%28Update%29.zip
+https://archive.org/download/MAME_2016_Arcade_Romsets/MAME%202016%20XML%20%28Arcade%20Only%29.xml
 ]]
 
 -- Download url(s)

@@ -142,6 +142,14 @@ function archive_generate_db(user_url, category)
 		return cylum_archive_generate_db(user_url, category)
 	end
 	
+	if user_url:find("MAME_2003-Plus_Reference_Set_2018", 1, true) then
+		return custom1_archive_generate_db(user_url, category)
+	end
+	
+	if user_url:find("MAME_2016_Arcade_Romsets", 1, true) then
+		return custom2_archive_generate_db(user_url, category)
+	end
+	
 	category = category or "general"
 	if user_url:match('/details/') then
 		user_url = user_url:gsub('/details/','/download/')
@@ -681,6 +689,175 @@ function cylum_archive_generate_db(user_url, category)
 				fo:write(string.format("%s|%s|%s\n",w1, w2, w3))
 			else
 				fo:write(string.format("%s|%s|%s - %s/%s - (c)%s %s\n", w1, game_data[5], w3, game_data[3], game_data[4], game_data[1], game_data[2]))
+			end
+			nn = nn + 1
+		end
+	end
+	fo:close()
+	print("Result created db: "..nn.."\n")
+	return true
+end
+
+-- user_url=https://archive.org/details/MAME_2003-Plus_Reference_Set_2018
+function custom1_archive_generate_db(user_url, category)
+	local fo, output_fname, rc, headers, content, nn, game_data, content_format,w1,w2,w3, user_url2
+	local content_format_zipped = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
+	local content_format_folder = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+	
+	if user_url == "" or user_url == nil then
+		return false
+	end
+	
+	print("\n[custom1] Process url: "..user_url)
+	category = category or "mame"
+	
+	user_url2 = "https://archive.org/download/MAME_2003-Plus_Reference_Set_2018/roms/"
+	content_format = content_format_folder
+	output_fname = "MAME_2003-Plus_Reference_Set_2018"
+	
+	print("Downloading Gamelist DAT.xml ...")
+	rc, headers, content = http.request("https://archive.org/download/MAME_2003-Plus_Reference_Set_2018/MAME%202003-Plus%20-%202018-12-31.xml")
+	if rc ~= 0 then
+		print("Error: "..http.error(rc), rc)
+		return false
+	end
+	local list = {}
+	local no = 0
+	local game_id,game_title,game_year,game_publisher,game_player
+	for game_content in content:gmatch('<game name.-</game>') do
+		game_id = game_content:match('game name="(.-)"')
+		game_title = game_content:match('<description>(.-)</description>'):gsub("&amp;", "&")
+		game_year = game_content:match('<year>(.-)</year>') or '19xx'
+		game_publisher = game_content:match('<manufacturer>(.-)</manufacturer>'):gsub("&lt;", "<"):gsub("&gt;", ">")
+		game_player = game_content:match('players="(.-)"')
+		list[game_id] = {game_year, game_publisher, game_player, game_title}
+		no = no + 1
+	end
+	content = nil
+	print("Gamelist Result: "..tostring(no))
+		
+	print("Downloading database content ...")
+	rc, headers, content = http.request(user_url2)
+	if rc ~= 0 then
+		print("Error: "..http.error(rc), rc)
+		return false
+	end
+	
+	output_fname = output_fname:gsub("%W","_")..".csv"
+
+	print("Generating database "..output_fname.." ...")
+	fo = io.open(output_fname, "w")
+	if fo == nil then
+		print('Error open a file '..output_fname)
+		return false
+	end	
+	fo:write("#category="..category.."\n")
+	fo:write("#url="..user_url2.."\n")
+	nn = 0
+	for w1,w2,w3 in content:gmatch(content_format) do
+		if w3:match("%-") or w1 == "../" then	-- skip these
+			-- print("Ignore subfolder: "..w1)
+		else
+			w2 = w2:gsub("&amp;", "&")
+			w2 = w2:gsub("%.%w+$", "")
+			w2 = w2:gsub(".-/", "")
+			-- print("w2: ", w2)
+			game_data = list[w2:gsub("%.zip$","")]
+			if is_string_all_digit(w3) then
+				w3 = format_bytes(w3)
+			end
+			if game_data == nil then
+				fo:write(string.format("%s|%s|%s\n",w1, w2, w3))
+				print(w2)
+			else
+				fo:write(string.format("%s|%s|%s - %sp - (c)%s %s\n", w1, game_data[4], w3, game_data[3], game_data[1], game_data[2]))
+			end
+			nn = nn + 1
+		end
+	end
+	fo:close()
+	print("Result created db: "..nn.."\n")
+	return true
+end
+
+-- user_url=https://archive.org/download/MAME_2016_Arcade_Romsets
+-- user_url=https://archive.org/details/MAME_2016_Arcade_Romsets
+function custom2_archive_generate_db(user_url, category)
+	local fo, output_fname, rc, headers, content, nn, list, game_data, content_format, user_url2
+	local content_format_zipped = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
+	local content_format_folder = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+	
+	if user_url == "" or user_url == nil then
+		return false
+	end
+	
+	print("\n[custom2] Process url: "..user_url)
+	category = category or "mame"
+	
+	user_url2 = "https://archive.org/download/MAME_2016_Arcade_Romsets/roms.zip/"
+	output_fname = "MAME_2016_Arcade_Romsets"
+	content_format = content_format_zipped
+	
+	print("Downloading Gamelist DAT.xml ...")
+	http.set_conf(http.OPT_TIMEOUT, 180)
+	http.set_conf(http.OPT_NOPROGRESS, false)
+	rc, headers, content = http.request("https://archive.org/download/MAME_2016_Arcade_Romsets/MAME%202016%20XML%20%28Arcade%20Only%29.xml")
+	http.set_conf(http.OPT_NOPROGRESS, true)
+	if rc ~= 0 then
+		print("Error: "..http.error(rc), rc)
+		return false
+	end
+	-- content = load_file("gamedat2016.xml")
+	local list = {}
+	local no = 0
+	local game_id,game_title,game_year,game_publisher
+	for game_content in content:gmatch('<machine name.-</machine>') do
+		game_id = game_content:match('machine name="(.-)"')
+		game_title = game_content:match('<description>(.-)</description>'):gsub("&amp;", "&")
+		game_year = game_content:match('<year>(.-)</year>') or '19__'
+		game_publisher = game_content:match('<manufacturer>(.-)</manufacturer>') or 'unknown'
+		game_publisher = game_publisher:gsub("&lt;", "<"):gsub("&gt;", ">"):gsub("&amp;", "&")
+		list[game_id] = {game_year, game_publisher, game_title}
+		no = no + 1
+	end
+	content = nil
+	print("Gamelist Result: "..tostring(no))
+	
+	print("Downloading database content ...")
+	rc, headers, content = http.request(user_url2)
+	if rc ~= 0 then
+		print("Error: "..http.error(rc), rc)
+		return false
+	end
+
+	output_fname = output_fname:gsub("%W","_")..".csv"
+	
+	print("Generating database "..output_fname.." ...")
+	fo = io.open(output_fname, "w")
+	if fo == nil then
+		print('Error open a file '..output_fname)
+		return false
+	end	
+	fo:write("#category="..category.."\n")
+	fo:write("#url="..user_url2.."\n")
+	nn = 0
+	for w1,w2,w3 in content:gmatch(content_format) do
+		if w3 == "" then	-- skip these
+			-- skip
+		else
+			w2 = w2:gsub("&amp;", "&")
+			w2 = w2:gsub("%.%w+$", "")
+			w2 = w2:gsub(".-/", "")
+			-- print("w2: ", w2)
+			game_data = list[w2:gsub("%.zip$","")]
+			if is_string_all_digit(w3) then
+				w3 = format_bytes(w3)
+			end
+			if game_data == nil then
+				fo:write(string.format("%s|%s|%s\n",w1, w2, w3))
+				print(w2)
+			else
+				fo:write(string.format("%s|%s|%s - (c)%s %s\n", w1, game_data[3], w3, game_data[1], game_data[2]))
 			end
 			nn = nn + 1
 		end
