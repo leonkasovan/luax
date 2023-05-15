@@ -6,9 +6,10 @@
 
 -- TODO:
 -- Add thumbnail in "open" use "http://thumbnails.libretro.com/"
--- Enhance "find" and "open" for 2 keyword (done) and optimize it (not yet)
--- Enhance "find" and "open" for filtering based on category, sample: "snes:street fighter"
--- Add support read compressed db
+-- Enhance "find" and "open" for 2 keyword (done) and optimize it (done)
+-- Enhance "find" and "open" for filtering based on category, sample: "snes:street fighter" (done)
+-- Add support read zip compressed db (done)
+-- Done for "find", next edit for "open"
 
 
 dofile('../strict.lua')
