@@ -5,11 +5,10 @@
 -- 19:37 22 April 2023, Dhani Novan, Jakarta, Cempaka Putih
 
 -- TODO:
--- Add thumbnail in "open" use "http://thumbnails.libretro.com/"
+-- Add thumbnail in "open" use "http://thumbnails.libretro.com/" (fix thumbnail - category mapping)
 -- Enhance "find" and "open" for 2 keyword (done) and optimize it (done)
 -- Enhance "find" and "open" for filtering based on category, sample: "snes:street fighter" (done)
 -- Add support read zip compressed db (done)
--- Done for "find", next edit for "open"
 
 dofile('../strict.lua')
 dofile('../common.lua')
@@ -199,7 +198,9 @@ function archive_generate_db(user_url, category)
 	return true
 end
 
-function find_db(fi, no, selected_category, keyword)
+-- fo == nil => console mode
+-- fo ~= nil => browser mode
+function find_db(fi, no, selected_category, keyword, fo)
 	local user_url, folder_id, line, category, f
 	
 	line = fi:read("*l")
@@ -221,24 +222,40 @@ function find_db(fi, no, selected_category, keyword)
 			user_url = user_url.."/"
 		end
 	end
+	folder_id = line:match('download/(.-)/') or line:match('download/(.-)$')
+	if user_url == nil then
+		print("Invalid db. Can't find folder_id")
+		print(line)
+		return no
+	end
 	
 	if selected_category == nil or selected_category:find(category,1,true) ~= nil then
 		line = fi:read("*l")
-		while line do
-			if line:byte(1) ~= 35 then	-- first char is not #
+		if fo == nil then -- output to console mode
+			while line do
 				f = csv.parse(line, '|')
 				if find_in_string(f[2], keyword) then
 					no = no + 1
 					print(string.format("[%d] \27[92m%s\27[0m (%s)\n    Size: %s\n    Link: %s%s\n", no, f[2], category, f[3], user_url, f[1]))
 				end
+				line = fi:read("*l")
 			end
-			line = fi:read("*l")
-		end
+		else -- output to html
+			while line do
+				f = csv.parse(line, '|')
+				if find_in_string(f[2], keyword) then
+					no = no + 1
+					fo:write(string.format("<tr><td align='left'><a href='%s%s'>%s</a><br/><p style='color:#AAAAAA;font-size:9px;'>%s</p><br/><img src='http://thumbnails.libretro.com/Nintendo - Super Nintendo Entertainment System/Named_Snaps/%s.png'></td><td>%s</td><td><a href='%s'>%s</a></td></tr>\n", user_url, f[1], f[2], f[3], f[2], category, user_url, folder_id))
+				end
+				line = fi:read("*l")
+			end
+		end	
 	end
 
 	return no
 end
 
+-- Find in text mode (console)
 function archive_find_db(keyword)
 	local no = 0	-- counter of data found matched
 	local nn = 0	-- line number
@@ -293,6 +310,7 @@ function archive_find_db(keyword)
 	return no
 end
 
+-- Find, generate HTML output and open it in browser
 function archive_find_db_and_open(keyword)
 	local f, fo
 	local nn = 0
@@ -304,6 +322,14 @@ function archive_find_db_and_open(keyword)
 	if nn ~= nil then
 		selected_category = keyword:match("^(.-)\:")
 		keyword = keyword:sub(nn+1)
+	end
+	
+	-- split words in here (not in the loop) for speed up 
+	local words = {}
+	for i,v in pairs(csv.parse(keyword:lower(),' ')) do
+		if #v > 0 then
+			words[#words + 1] = v
+		end
 	end
 	
 	fo = io.open("result.htm", "w")
@@ -439,53 +465,31 @@ table td.plus {
 	</thead>
 	<tbody>
 ]=])
+	local no = 0
 	for file in lfs.dir(".") do
 		if file ~= "." and file ~= ".." then
 			local attr = lfs.attributes(file)
-			local category
-			local folder_id
-			local user_url
-			
 			if attr.mode == "file" and file:match("%.csv$") then
-				local line
 				local fi = io.open(file, "r")
 				if fi then
-					line = fi:read("*l")
-					category = line:match("^#category=(.-)$")
-					if category == nil then
-						print(file, "Invalid db. Can't find category")
-						print(line)
-						fi:close()
-						return false
-					end
-					
-					line = fi:read("*l")
-					user_url = line:match('^#url=(.-)$')
-					folder_id = line:match('download/(.-)/') or line:match('download/(.-)$')
-					if user_url == nil or folder_id == nil then
-							print(file, "Invalid db. Can't find user_url or folder_id")
-						print(line)
-						fi:close()
-						return false
-					else
-						if user_url:sub(-1,-1) ~= "/" then
-							user_url = user_url.."/"
-						end
-					end
-					
-					if selected_category == nil or selected_category:find(category,1,true) ~= nil then
-						line = fi:read("*l")
-						while line do
-							if line:byte(1) ~= 35 then	-- first char is not #
-								f = csv.parse(line, '|')
-								if find_in_string(f[2], keyword) then
-									fo:write(string.format("<tr><td align='left'><a href='%s%s'>%s</a><br/><p style='color:#AAAAAA;font-size:9px;'>%s</p></td><td>%s</td><td><a href='%s'>%s</a></td></tr>\n", user_url, f[1], f[2], f[3], category, user_url, folder_id))
-								end
-							end
-							line = fi:read("*l")
-						end
-					end
+					no = find_db(fi, no, selected_category, words, fo)
 					fi:close()
+				else
+					print("[Error] Failed to open csv: "..file)
+				end
+			elseif attr.mode == "file" and file:match("%.zip$") then
+				local zipfile = zip.open(file)
+				if zipfile then
+					for entry in zipfile:files() do
+						local fi = zipfile:open(entry.filename)
+						if fi then
+							no = find_db(fi, no, selected_category, words, fo)
+							fi:close()
+						end
+					end
+					zipfile:close()
+				else
+					print("[Error] Failed to open the zip archive: "..file)
 				end
 			end
 		end
@@ -499,7 +503,8 @@ table td.plus {
 </html>
 ]=])
 	fo:close()
-	return true
+	print("\n=====================================\nFound "..no.." data")
+	return no
 end
 
 -- url=https://archive.org/download/cylums-snes-rom-collection/Gamelist.txt
