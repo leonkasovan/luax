@@ -27,10 +27,7 @@ function general_download(url, callback_function_write_log, callback_function_on
 		filename = TEMP_FILE
 	end
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	http.set_conf(http.OPT_NOPROGRESS, false)
-	http.set_conf(http.OPT_PROGRESS_TYPE, 3)
 	rc, header = http.request{url = url, output_filename = filename}
-	http.set_conf(http.OPT_NOPROGRESS, true)
 	if rc ~= 0 then
 		write_log("[error][general_download] "..http.error(rc))
 		return false
@@ -172,18 +169,25 @@ else
 end
 
 -- Get list of url
-URLS_ID = 'gWpb9rwj'
-local urls = pastebin.read(URLS_ID)
+LIST_URLS_TITLE = 'list_urls'
+local urls = pastebin.read_by_title(LIST_URLS_TITLE)
 local try
 
 try = 1
 while ((urls == nil) and (try < MAXTRY)) do
-	urls = pastebin.read(URLS_ID)
+	urls = pastebin.read_by_title(LIST_URLS_TITLE)
 	try = try + 1
 end
 if urls == nil then
 	write_log('Fail to grab list of url after '..try..' times trying.')
 	return -1
+end
+
+if #arg == 1 then
+	if os.info() == "Windows" then
+		http.set_conf(http.OPT_PROGRESS_TYPE, 3)
+	end
+	http.set_conf(http.OPT_NOPROGRESS, false)
 end
 
 -- Download url(s)

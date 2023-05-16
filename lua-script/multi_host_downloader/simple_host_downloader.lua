@@ -8,6 +8,11 @@ local MAXTRY = 10
 local TEMP_FILE = "file.tmp"
 local MAXTIMEOUT = 3600	-- set max timeout 30 minutes
 
+-- Get list of url: change here
+local urls = [[
+https://archive.org/download/MAME_2015_arcade_romsets/mame2015.xml
+]]
+
 function write_log(data)
 	print(os.date("%d/%m/%Y %H:%M:%S ")..data)
 end
@@ -27,10 +32,7 @@ function general_download(url, callback_function_write_log, callback_function_on
 		filename = TEMP_FILE
 	end
 	http.set_conf(http.OPT_TIMEOUT, MAXTIMEOUT)
-	http.set_conf(http.OPT_NOPROGRESS, false)
-	http.set_conf(http.OPT_PROGRESS_TYPE, 3)
 	rc, header = http.request{url = url, output_filename = filename}
-	http.set_conf(http.OPT_NOPROGRESS, true)
 	if rc ~= 0 then
 		print("Error: "..http.error(rc), rc)
 		return false
@@ -138,10 +140,12 @@ function verify(url)
 		end
 end
 
--- Get list of url
-local urls = [[
-https://archive.org/download/MAME_2015_arcade_romsets/mame2015.xml
-]]
+if #arg == 1 then
+	if os.info() == "Windows" then
+		http.set_conf(http.OPT_PROGRESS_TYPE, 3)
+	end
+	http.set_conf(http.OPT_NOPROGRESS, false)
+end
 
 -- Download url(s)
 local nurl, url, done, download_library

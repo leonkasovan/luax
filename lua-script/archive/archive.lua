@@ -11,10 +11,12 @@
 -- Add support read zip compressed db (done)
 -- Done for "find", next edit for "open"
 
-
 dofile('../strict.lua')
 dofile('../common.lua')
 
+local content_format_zipped = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
+local content_format_folder = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+	
 -- line = "one two three four"
 -- keyword = "one" return true
 -- keyword = "one two" return true
@@ -564,8 +566,6 @@ end
 -- user_url=https://archive.org/download/cylums-snes-rom-collection
 function cylum_archive_generate_db(user_url, category)
 	local fo, output_fname, rc, headers, content, nn, list, game_data, content_format,w1,w2,w3, user_url2
-	local content_format_zipped = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
-	local content_format_folder = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
 	
 	if user_url == "" or user_url == nil then
 		return false
@@ -705,8 +705,7 @@ end
 -- user_url=https://archive.org/details/MAME_2003-Plus_Reference_Set_2018
 function custom1_archive_generate_db(user_url, category)
 	local fo, output_fname, rc, headers, content, nn, game_data, content_format,w1,w2,w3, user_url2
-	local content_format_zipped = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
-	local content_format_folder = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+	
 	
 	if user_url == "" or user_url == nil then
 		return false
@@ -788,8 +787,6 @@ end
 -- user_url=https://archive.org/details/MAME_2016_Arcade_Romsets
 function custom2_archive_generate_db(user_url, category)
 	local fo, output_fname, rc, headers, content, nn, list, game_data, content_format, user_url2
-	local content_format_zipped = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
-	local content_format_folder = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
 	
 	if user_url == "" or user_url == nil then
 		return false
@@ -803,26 +800,30 @@ function custom2_archive_generate_db(user_url, category)
 	content_format = content_format_zipped
 	
 	print("Downloading Gamelist DAT.xml ...")
-	http.set_conf(http.OPT_TIMEOUT, 180)
-	http.set_conf(http.OPT_NOPROGRESS, false)
-	rc, headers, content = http.request("https://archive.org/download/MAME_2016_Arcade_Romsets/MAME%202016%20XML%20%28Arcade%20Only%29.xml")
-	http.set_conf(http.OPT_NOPROGRESS, true)
-	if rc ~= 0 then
-		print("Error: "..http.error(rc), rc)
-		return false
-	end
-	-- content = load_file("gamedat2016.xml")
+	-- http.set_conf(http.OPT_TIMEOUT, 180)
+	-- http.set_conf(http.OPT_NOPROGRESS, false)
+	-- rc, headers, content = http.request("https://archive.org/download/MAME_2016_Arcade_Romsets/MAME%202016%20XML%20%28Arcade%20Only%29.xml")
+	-- http.set_conf(http.OPT_NOPROGRESS, true)
+	-- if rc ~= 0 then
+		-- print("Error: "..http.error(rc), rc)
+		-- return false
+	-- end
+	content = load_file("gamedat2016.xml")
 	local list = {}
 	local no = 0
-	local game_id,game_title,game_year,game_publisher
+	local game_id,game_title,game_year,game_publisher, runnable
 	for game_content in content:gmatch('<machine name.-</machine>') do
 		game_id = game_content:match('machine name="(.-)"')
-		game_title = game_content:match('<description>(.-)</description>'):gsub("&amp;", "&")
+		game_title = game_content:match('<description>(.-)</description>')
 		game_year = game_content:match('<year>(.-)</year>') or '19__'
 		game_publisher = game_content:match('<manufacturer>(.-)</manufacturer>') or 'unknown'
-		game_publisher = game_publisher:gsub("&lt;", "<"):gsub("&gt;", ">"):gsub("&amp;", "&")
-		list[game_id] = {game_year, game_publisher, game_title}
-		no = no + 1
+		runnable = game_content:find('runnable', 1, true)
+		if runnable == nil then
+			game_title = game_title:gsub("&amp;", "&")
+			game_publisher = game_publisher:gsub("&lt;", "<"):gsub("&gt;", ">"):gsub("&amp;", "&")
+			list[game_id] = {game_year, game_publisher, game_title}
+			no = no + 1
+		end
 	end
 	content = nil
 	print("Gamelist Result: "..tostring(no))
@@ -875,8 +876,6 @@ end
 -- user_url=https://archive.org/details/MAME_2015_arcade_romsets
 function custom3_archive_generate_db(user_url, category)
 	local fo, output_fname, rc, headers, content, nn, list, game_data, content_format, user_url2
-	local content_format_zipped = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
-	local content_format_folder = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
 	
 	if user_url == "" or user_url == nil then
 		return false
