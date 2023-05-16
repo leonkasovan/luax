@@ -1038,6 +1038,7 @@ else
 	print(string.format("\t#> lua %s user aitus95", arg[0]))
 	print(string.format("\t#> lua %s user cylum", arg[0]))
 	print(string.format("\t#> lua %s user t_m_c", arg[0]))
+	print(string.format("\t#> lua %s user samuray433", arg[0]))
 	print(string.format("\t#> lua %s user kodi_amp_spmc_canada", arg[0]))
 	print(string.format("\t#> lua %s create \"https://archive.org/download/nes-roms\" ", arg[0]))
 	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" ", arg[0]))
