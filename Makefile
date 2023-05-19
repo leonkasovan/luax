@@ -14,7 +14,7 @@ CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64
 AR= ar -r
 RANLIB= ranlib
 RM= rm -f
-LIBS= -lm -lz -Wl,-E -ldl -lreadline -lhistory -lncurses -lcurl -lpcre
+LIBS= -lm -lz -Wl,-E -ldl -lreadline -lhistory -lncurses -lcurl -lpcre -lzzip
 
 BSTRINGSRCDIR= ext-library/bstring/
 LIBLUASRCDIR= lua-library-src/liblua/
@@ -37,8 +37,8 @@ $(MYLIBSDIR)bstring.a: $(BSTRING_OBJS)
 
 LIBLUA_SRCS = $(wildcard $(LIBLUASRCDIR)*.c)
 LIBLUA_OBJS = $(LIBLUA_SRCS:.c=.o)
-$(MYLIBSDIR)liblua.a: $(LIBLUA_OBJS) $(MYOBJDIR)lcsvlib.o $(MYOBJDIR)lgziolib.o $(MYOBJDIR)lfs.o $(MYOBJDIR)lhttplib.o $(MYOBJDIR)lua_cjson.o $(MYOBJDIR)lpcre.o $(MYOBJDIR)lpcre_f.o $(MYOBJDIR)common.o
-	$(AR) $@ $(LIBLUA_OBJS) $(MYOBJDIR)lcsvlib.o $(MYOBJDIR)lgziolib.o $(MYOBJDIR)lfs.o $(MYOBJDIR)lhttplib.o $(MYOBJDIR)lua_cjson.o $(MYOBJDIR)lpcre.o $(MYOBJDIR)lpcre_f.o $(MYOBJDIR)common.o
+$(MYLIBSDIR)liblua.a: $(LIBLUA_OBJS) $(MYOBJDIR)luazip.o $(MYOBJDIR)lcsvlib.o $(MYOBJDIR)lgziolib.o $(MYOBJDIR)lfs.o $(MYOBJDIR)lhttplib.o $(MYOBJDIR)lua_cjson.o $(MYOBJDIR)lpcre.o $(MYOBJDIR)lpcre_f.o $(MYOBJDIR)common.o
+	$(AR) $@ $(LIBLUA_OBJS) $(MYOBJDIR)luazip.o $(MYOBJDIR)lcsvlib.o $(MYOBJDIR)lgziolib.o $(MYOBJDIR)lfs.o $(MYOBJDIR)lhttplib.o $(MYOBJDIR)lua_cjson.o $(MYOBJDIR)lpcre.o $(MYOBJDIR)lpcre_f.o $(MYOBJDIR)common.o
 	$(RANLIB) $@
 
 $(MYOBJDIR)lpcre.o: lua-library-src/luapcre/lpcre.c lua-library-src/luapcre/common.h lua-library-src/luapcre/algo.h
@@ -60,6 +60,9 @@ $(MYOBJDIR)lua_cjson.o: lua-library-src/luajson/lua_cjson.c
 	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -o $@ $< -Iinclude
 
 $(MYOBJDIR)lgziolib.o: lua-library-src/luagzio/lgziolib.c
+	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -o $@ $< -Iinclude
+
+$(MYOBJDIR)luazip.o: lua-library-src/luazip/luazip.c
 	$(CC) -O2 -Wall -D_FILE_OFFSET_BITS=64 -c -o $@ $< -Iinclude
 
 $(MYOBJDIR)lfs.o: lua-library-src/luafilesystem/lfs.c
