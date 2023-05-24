@@ -15,6 +15,22 @@ dofile('../common.lua')
 
 local content_format_zipped = '<tr><td><a href=".-%.zip/(.-)">.-/*(.-)</a><td><td>.-<td id="size">(.-)</tr>'
 local content_format_folder = '<td><a href="(.-)">(.-)</a>.-</td>.-<td>.-</td>.-<td>(.-)</td>.-</tr>'
+local category_thumbnail = {
+	snes = "Nintendo - Super Nintendo Entertainment System",
+	nes = "Nintendo - Family Computer Disk System",
+	mame = "MAME",
+	fbneo = "FBNeo - Arcade Games",
+	sega_gen = "Sega - Mega Drive - Genesis",
+	psx = "Sony - PlayStation",
+	ps2 = "Sony - PlayStation 2",
+	ps3 = "Sony - PlayStation 3",
+	psp = "Sony - PlayStation Portable",
+	neogeo = "SNK - Neo Geo",
+	nds = "Nintendo - Nintendo DS",
+	n64 = "Nintendo - Nintendo 64",
+	gba = "Nintendo - Game Boy Advance",
+	["3ds"] = "Nintendo - Nintendo 3DS",
+}
 	
 -- line = "one two three four"
 -- keyword = "one" return true
@@ -245,7 +261,8 @@ function find_db(fi, no, selected_category, keyword, fo)
 				f = csv.parse(line, '|')
 				if find_in_string(f[2], keyword) then
 					no = no + 1
-					fo:write(string.format("<tr><td align='left'><a href='%s%s'>%s</a><br/><p style='color:#AAAAAA;font-size:9px;'>%s</p><br/><img src='http://thumbnails.libretro.com/Nintendo - Super Nintendo Entertainment System/Named_Snaps/%s.png'></td><td>%s</td><td><a href='%s'>%s</a></td></tr>\n", user_url, f[1], f[2], f[3], f[2], category, user_url, folder_id))
+					fo:write(string.format("<tr><td align='left'><a href='%s%s'>%s</a><br/><p style='color:#AAAAAA;font-size:9px;'>%s</p><br/><img src='http://thumbnails.libretro.com/%s/Named_Snaps/%s.png'></td><td>%s</td><td><a href='%s'>%s</a></td></tr>\n"
+					, user_url, f[1], f[2], f[3], category_thumbnail[category] or "none", f[2], category, user_url, folder_id))
 				end
 				line = fi:read("*l")
 			end
@@ -261,7 +278,7 @@ function archive_find_db(keyword)
 	local nn = 0	-- line number
 	local selected_category = nil
 
-	os.execute("echo \27[0m")	-- activate color in console (Windows)
+	os.execute("echo")	-- activate color in console (Windows)
 	
 	-- selected_category is requested
 	nn = keyword:find(":")	-- borrow nn variable
@@ -1039,11 +1056,7 @@ else
 	print(string.format("\t#> lua %s find \"street fighter\" ", arg[0]))
 	print(string.format("\t#> lua %s open tekken ", arg[0]))
 	print(string.format("\t#> lua %s open \"street fighter\" ", arg[0]))
-	print(string.format("\t#> lua %s user aitus95", arg[0]))
-	print(string.format("\t#> lua %s user cylum", arg[0]))
-	print(string.format("\t#> lua %s user t_m_c", arg[0]))
-	print(string.format("\t#> lua %s user samuray433", arg[0]))
-	print(string.format("\t#> lua %s user kodi_amp_spmc_canada", arg[0]))
+	print(string.format("\t#> lua %s user kodi_amp_spmc_canada/samuray433/t_m_c/cylum/aitus95/megaarch1996/emorsso_lim/", arg[0]))
 	print(string.format("\t#> lua %s create \"https://archive.org/download/nes-roms\" ", arg[0]))
 	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" ", arg[0]))
 	print(string.format("\t#> lua %s create \"https://archive.org/details/nes-roms\" \"nes\"", arg[0]))

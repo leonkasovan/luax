@@ -10,7 +10,7 @@ local MAXTIMEOUT = 3600	-- set max timeout 30 minutes
 
 -- Get list of url: change here
 local urls = [[
-https://archive.org/download/MAME_2015_arcade_romsets/mame2015.xml
+https://developer.arm.com/-/media/Files/downloads/gnu/12.2.mpacbti-rel1/binrel/arm-gnu-toolchain-12.2.mpacbti-rel1-mingw-w64-i686-arm-none-eabi.exe?rev=2c8597f70cd94dfc9603560fb5da44a4&hash=13E3D1BE6FB5DAEB7B426ADC72494E10
 ]]
 
 function write_log(data)
