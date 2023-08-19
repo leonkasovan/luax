@@ -16,3 +16,5 @@ bin/*
 Release
 *.csv
 *.tsv
+*.xml
+*.txt

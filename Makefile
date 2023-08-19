@@ -10,7 +10,7 @@ PLAT= none
 CC= gcc
 #CC= aarch64-linux-gnu-gcc
 #CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64 -I/usr/include/aarch64-linux-gnu/
-CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64
+CFLAGS= -O2 -Wall -DLUA_USE_LINUX -Iinclude -D_FILE_OFFSET_BITS=64 -DUNICODE
 AR= ar -r
 RANLIB= ranlib
 RM= rm -f

@@ -1032,15 +1032,15 @@ elseif #arg == 3 then
 		archive_generate_db(arg[2], arg[3])
 	end
 else
-	-- local nn = 0
-	-- for file in lfs.dir(".") do
-		-- if file ~= "." and file ~= ".." then
-			-- local attr = lfs.attributes(file)
-			-- if attr.mode == "file" and file:match("%.csv$") then
-				-- nn = nn + 1
-			-- end
-		-- end
-	-- end
+	 local nn = 0
+	 for file in lfs.dir(".") do
+		 if file ~= "." and file ~= ".." then
+			 local attr = lfs.attributes(file)
+			 if attr.mode == "file" and file:match("%.csv$") then
+				 nn = nn + 1
+			 end
+		 end
+	 end
 	
 	print(string.format("Manage(create, find) archieve database from archieve.org.\nLocal database: "..nn.." csv file(s)\n\nUsage: \n\t#> lua %s [keyword] => Find keyword in local database", arg[0]))
 	print(string.format("\t#> lua %s find [keyword] => Find keyword in local database", arg[0]))
